@@ -1,0 +1,61 @@
+path,records_with_path,coverage_pct,null_count,null_pct,type_mix,distinct_seen,numeric_summary,string_summary,samples
+award[].date,65656,86.72,0,0.0,str:65656,2000,,len_min=19 len_p50=19 len_max=23,2017-07-10T00:04:00 | 2017-12-08T00:01:00 | 2017-12-11T00:02:00
+award[].description,65721,86.81,0,0.0,str:65721,1,,len_min=0 len_p50=0 len_max=0, |  | 
+award[].lotTitle,65721,86.81,0,0.0,str:65721,2000,,len_min=0 len_p50=58 len_max=937,"Ndertimi i kuzhines ne QIRSKP-Shtime | Renovimi i objektit (banjo, WC Zhveshtore, dhoma e berberit,porta dhe depoja e mbeturinave) ne QIRSKP- SHtime | Furnizimi dhe instalimi i pajisjeve të kuzhinës në QIRSKP - Shtime"
+award[].statusID,65721,86.81,0,0.0,str:65721,1,,len_min=36 len_p50=36 len_max=36,cf0288d2-b74e-4e81-be7f-5a0b70d353ad | cf0288d2-b74e-4e81-be7f-5a0b70d353ad | cf0288d2-b74e-4e81-be7f-5a0b70d353ad
+award[].suppliers[].party.id,65721,86.81,0,0.0,str:65721,2000,,len_min=6 len_p50=6 len_max=6,111972 | 111972 | 111537
+award[].suppliers[].party.identity.identificationNumber,61114,80.72,0,0.0,str:61114,2000,,len_min=0 len_p50=9 len_max=50,600209432 | 600209432 | 810394255
+award[].suppliers[].party.identity.legalName,65603,86.65,0,0.0,str:65603,2000,,len_min=0 len_p50=19 len_max=173,""" ERO PROJECT "" SH.P.K. | "" ERO PROJECT "" SH.P.K. | Osa -Termosistem"
+award[].suppliers[].party.identity.orgSchema,65721,86.81,0,0.0,str:65721,1,,len_min=2 len_p50=2 len_max=2,XK | XK | XK
+award[].suppliers[].party.identity.url,65721,86.81,0,0.0,str:65721,1,,len_min=0 len_p50=0 len_max=0, |  | 
+award[].suppliers[].party.name,65603,86.65,0,0.0,str:65603,2000,,len_min=0 len_p50=19 len_max=173,""" ERO PROJECT "" SH.P.K. | "" ERO PROJECT "" SH.P.K. | Osa -Termosistem"
+award[].suppliers[].party.role,65721,86.81,0,0.0,str:65721,1,,len_min=8 len_p50=8 len_max=8,Tenderer | Tenderer | Tenderer
+award[].suppliers[].party.uID,65721,86.81,0,0.0,str:65721,2000,,len_min=36 len_p50=36 len_max=36,7769aa1a-94d5-4d55-896c-52d983262c78 | 7769aa1a-94d5-4d55-896c-52d983262c78 | 058c68f8-d94d-4a0a-8a01-3dba7d363d89
+award[].tenderNumber,65721,86.81,0,0.0,str:65721,2000,,len_min=13 len_p50=17 len_max=41,00220-17-2216-5-2-1 | 00220-17-4779-5-2-1 | 00220-17-5022-1-2-1
+award[].title,65721,86.81,0,0.0,str:65721,2000,,len_min=0 len_p50=60 len_max=1000,"Ndertimi i kuzhines ne QIRSKP-Shtime | Renovimi i objektit (banjo, WC Zhveshtore, dhoma e berberit,porta dhe depoja e mbeturinave) ne QIRSKP- SHtime | Furnizimi dhe instalimi i pajisjeve të kuzhinës në QIRSKP - Shtime"
+award[].uID,65721,86.81,0,0.0,str:65721,2000,,len_min=36 len_p50=36 len_max=36,c7152e9e-716d-4645-b5e4-bc2440880c9b | d0079def-a656-4db1-ab42-8ac478b50575 | d3393196-355a-4c02-9192-892dc66e2da7
+award[].value.amount,65721,86.81,0,0.0,float:65721,0,min=0.01 p50=8780.00 max=56522000.00,,87315.27 | 29975.04 | 36314.85
+award[].value.currency,65721,86.81,0,0.0,str:65721,1,,len_min=3 len_p50=3 len_max=3,EUR | EUR | EUR
+date,75710,100.0,0,0.0,str:75710,2000,,len_min=0 len_p50=25 len_max=25,2017-08-31T00:01:00+01:00 | 2017-05-01T00:01:00+01:00 | 2017-05-26T00:02:00+01:00
+id,75710,100.0,0,0.0,str:75710,2000,,len_min=28 len_p50=55 len_max=79,ocds-uhzcmx-00220-17-4006-1-2-1-2017-08-31T00:01:00+01:00 | ocds-uhzcmx-00220-17-1717-5-2-1-2017-05-01T00:01:00+01:00 | ocds-uhzcmx-00220-17-2216-5-2-1-2017-05-26T00:02:00+01:00
+initiationType,75710,100.0,0,0.0,str:75710,1,,len_min=6 len_p50=6 len_max=6,tender | tender | tender
+ocid,75710,100.0,0,0.0,str:75710,2000,,len_min=25 len_p50=29 len_max=53,ocds-uhzcmx-00220-17-4006-1-2-1 | ocds-uhzcmx-00220-17-1717-5-2-1 | ocds-uhzcmx-00220-17-2216-5-2-1
+parties[].id,211313,279.11,0,0.0,str:211313,2000,,len_min=6 len_p50=6 len_max=6,112354 | 112256 | 111972
+parties[].name,210927,278.6,0,0.0,str:210927,2000,,len_min=0 len_p50=20 len_max=185,"BRAHIM ZEQIRI B.I. | Beni Dona Plast SH.P.K. | "" ERO PROJECT "" SH.P.K."
+parties[].roles[],265446,350.61,0,0.0,str:265446,2,,len_min=8 len_p50=8 len_max=8,tenderer | tenderer | tenderer
+tag[],75710,100.0,0,0.0,str:75710,1,,len_min=8 len_p50=8 len_max=8,compiled | compiled | compiled
+tender.awardCriteria,75710,100.0,0,0.0,str:75710,2,,len_min=8 len_p50=9 len_max=9,priceOnly | priceOnly | priceOnly
+tender.awardCriteriaDetails,75710,100.0,0,0.0,str:75710,2,,len_min=43 len_p50=43 len_max=49,Tenderi i pergjegjshem me cmimin me te lire | Tenderi i pergjegjshem me cmimin me te lire | Tenderi i pergjegjshem me cmimin me te lire
+tender.description,75710,100.0,0,0.0,str:75710,1,,len_min=0 len_p50=0 len_max=0, |  | 
+tender.documents[].documentType,75710,100.0,0,0.0,str:75710,1,,len_min=12 len_p50=12 len_max=12,tenderNotice | tenderNotice | tenderNotice
+tender.documents[].format,75710,100.0,0,0.0,str:75710,1,,len_min=9 len_p50=9 len_max=9,text/html | text/html | text/html
+tender.documents[].id,75710,100.0,0,0.0,str:75710,2000,,len_min=26 len_p50=37 len_max=61,ocds-uhzcmx-00220-17-4006-1-2-1_71731 | ocds-uhzcmx-00220-17-1717-5-2-1_36919 | ocds-uhzcmx-00220-17-2216-5-2-1_44558
+tender.documents[].language,75710,100.0,0,0.0,str:75710,1,,len_min=2 len_p50=2 len_max=2,sq | sq | sq
+tender.documents[].url,75710,100.0,0,0.0,str:75710,2000,,len_min=103 len_p50=109 len_max=110,https://e-prokurimi.rks-gov.net/SPIN_PROD/APPLICATION/IPN/DocumentManagement/DokumentPodaciFrm.aspx?id=71731 | https://e-prokurimi.rks-gov.net/SPIN_PROD/APPLICATION/IPN/DocumentManagement/DokumentPodaciFrm.aspx?id=36919 | https://e-prokurimi.rks-gov.net/SPIN_PROD/APPLICATION/IPN/DocumentManagement/DokumentPodaciFrm.aspx?id=44558
+tender.id,75710,100.0,0,0.0,str:75710,2000,,len_min=13 len_p50=17 len_max=41,00220-17-4006-1-2-1 | 00220-17-1717-5-2-1 | 00220-17-2216-5-2-1
+tender.lots[].description,94787,125.2,0,0.0,str:94787,1,,len_min=0 len_p50=0 len_max=0, |  | 
+tender.lots[].id,94787,125.2,0,0.0,str:94787,2000,,len_min=5 len_p50=5 len_max=6,16840 | 16839 | 13478
+tender.lots[].title,94784,125.19,0,0.0,str:94784,2000,,len_min=0 len_p50=59 len_max=937,Lot 2 | Lot 1 | Ndertimi i kuzhines ne QIRSKP-Shtime
+tender.lots[].value.uID,94787,125.2,0,0.0,str:94787,1,,len_min=36 len_p50=36 len_max=36,00000000-0000-0000-0000-000000000000 | 00000000-0000-0000-0000-000000000000 | 00000000-0000-0000-0000-000000000000
+tender.lots[].value.valueAmount,94786,125.2,0,0.0,float:94786,0,min=0.00 p50=16000.00 max=120000000.00,,30000.0 | 78000.0 | 150000.0
+tender.lots[].value.valueCurrency,94787,125.2,0,0.0,str:94787,1,,len_min=3 len_p50=3 len_max=3,EUR | EUR | EUR
+tender.mainProcurementCategory,75710,100.0,0,0.0,str:75710,3,,len_min=5 len_p50=5 len_max=8,goods | works | works
+tender.minValue.currency,75710,100.0,0,0.0,str:75710,1,,len_min=3 len_p50=3 len_max=3,EUR | EUR | EUR
+tender.procurementMethod,75178,99.3,0,0.0,str:75178,4,,len_min=4 len_p50=4 len_max=9,open | open | open
+tender.procurementMethodDetails,75710,100.0,0,0.0,str:75710,10,,len_min=17 len_p50=17 len_max=47,otvoreni postupak | otvoreni postupak | otvoreni postupak
+tender.procuringEntity.id,75709,100.0,0,0.0,str:75709,2000,,len_min=36 len_p50=36 len_max=36,28fc8b2b-4525-4b09-8046-50063a5f1ec3 | 45ed827c-4307-426c-ba6a-ae0dbdd9ce81 | 44e825cd-d249-4e06-84f5-e3685dca75e0
+tender.procuringEntity.party.id,75709,100.0,0,0.0,str:75709,205,,len_min=6 len_p50=6 len_max=6,120477 | 120477 | 120477
+tender.procuringEntity.party.name,75709,100.0,0,0.0,str:75709,204,,len_min=3 len_p50=26 len_max=95,SHSKUK - SHËRBIMI SPITALOR KLINIK UNIVERZITARE I KOSOVËS | SHSKUK - SHËRBIMI SPITALOR KLINIK UNIVERZITARE I KOSOVËS | SHSKUK - SHËRBIMI SPITALOR KLINIK UNIVERZITARE I KOSOVËS
+tender.procuringEntity.party.role,75709,100.0,0,0.0,str:75709,1,,len_min=16 len_p50=16 len_max=16,Procuring entity | Procuring entity | Procuring entity
+tender.procuringEntity.party.uID,75709,100.0,0,0.0,str:75709,2000,,len_min=36 len_p50=36 len_max=36,85ad3eb4-a070-443c-aa5d-9926e0f89b9c | 85ad3eb4-a070-443c-aa5d-9926e0f89b9c | 85ad3eb4-a070-443c-aa5d-9926e0f89b9c
+tender.status,75710,100.0,0,0.0,str:75710,1,,len_min=6 len_p50=6 len_max=6,active | active | active
+tender.submissionMethodDetails,75710,100.0,0,0.0,str:75710,1,,len_min=21 len_p50=21 len_max=21,electronic submission | electronic submission | electronic submission
+tender.tenderPeriod.durationInDays,75676,99.96,0,0.0,int:75676,0,min=-380.00 p50=11.00 max=492.00,,20 | 22 | 20
+tender.tenderPeriod.endDate,75710,100.0,0,0.0,str:75710,2000,,len_min=25 len_p50=25 len_max=25,2017-09-20T12:00:00+01:00 | 2017-05-23T13:00:00+01:00 | 2017-06-15T13:00:00+01:00
+tender.tenderPeriod.startDate,75710,100.0,0,0.0,str:75710,2000,,len_min=0 len_p50=25 len_max=25,2017-08-31T00:01:00+01:00 | 2017-05-01T00:01:00+01:00 | 2017-05-26T00:02:00+01:00
+tender.tenderers[].id,211313,279.11,0,0.0,str:211313,2000,,len_min=6 len_p50=6 len_max=6,112354 | 112256 | 112048
+tender.tenderers[].name,210927,278.6,0,0.0,str:210927,2000,,len_min=0 len_p50=20 len_max=185,BRAHIM ZEQIRI B.I. | Beni Dona Plast SH.P.K. | Olti Trasing SH.P.K.
+tender.title,75710,100.0,0,0.0,str:75710,2000,,len_min=0 len_p50=62 len_max=937,Furnizim me artikuj ushqimor per QIRSKP - Shtime dhe QSHMSHIB - Prishtine | Ndertimi i kuzhines ne QIRSKP-Shtime | Ndertimi i kuzhines ne QIRSKP-Shtime
+tender.uID,75710,100.0,0,0.0,str:75710,2000,,len_min=36 len_p50=36 len_max=36,91f044e9-1a01-4a1b-aaad-a5d8675a7af9 | 582eb7dd-f161-4480-b446-3aa69a74941e | cec750c5-cf06-4a63-915d-8c8cbc281686
+tender.value.amount,75709,100.0,0,0.0,float:75709,0,min=50.00 p50=18270.00 max=200000000.00,,108000.0 | 150000.0 | 150000.0
+tender.value.currency,75710,100.0,0,0.0,str:75710,1,,len_min=3 len_p50=3 len_max=3,EUR | EUR | EUR

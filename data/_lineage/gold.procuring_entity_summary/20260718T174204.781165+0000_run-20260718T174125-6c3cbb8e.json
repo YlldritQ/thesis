@@ -1,0 +1,55 @@
+{
+  "table": "gold.procuring_entity_summary",
+  "layer": "gold",
+  "rows": 206,
+  "columns": 26,
+  "schema_fingerprint": "5fdc8011a35ba366",
+  "inputs": [
+    {
+      "path": "silver/silver.release.json",
+      "sha256": "856df66f112277dba5cf624112e3598ea1c62133a8d526a6e350854cc3ee2379",
+      "rows": null,
+      "size_bytes": 8848
+    },
+    {
+      "path": "gold/tender_features.parquet",
+      "sha256": "6f776a40a2bd6b71d38e3b683992152fb53f751a11803b107ab77ebf5d95a10e",
+      "rows": null,
+      "size_bytes": 14022508
+    },
+    {
+      "path": "silver/awards.parquet",
+      "sha256": "3498ec4d4157b81db443e41d63d45d88e4d254d47d369196fd63860c6179ffb9",
+      "rows": null,
+      "size_bytes": 12586172
+    }
+  ],
+  "output_path": "gold/procuring_entity_summary.parquet",
+  "output_sha256": "b1437314eadfae6c11f3936992b48a30450acded34247d6c54298c1cedc1275a",
+  "output_size_bytes": 52143,
+  "build_started_at": "2026-07-18T17:42:04.713196+00:00",
+  "build_completed_at": "2026-07-18T17:42:04.781165+00:00",
+  "duration_seconds": 0.084,
+  "git_sha": "unknown",
+  "code_version": "1.3.0",
+  "implementation_fingerprint": "c0a1ee0199de38578e15098152fcf57dc8b396cec8942233fc82a95bbb6dc998",
+  "configuration_fingerprint": "a7e3c914421adf51649fe580583749cb0ac522e301967ddab6a7aecff8a6ba0c",
+  "runtime": {
+    "python": "3.9.6",
+    "python_implementation": "CPython",
+    "platform": "darwin",
+    "package": "1.3.0",
+    "libraries": {
+      "numpy": "1.26.4",
+      "pandas": "2.2.3",
+      "pyarrow": "21.0.0",
+      "scipy": "1.13.1",
+      "scikit_learn": "1.4.2",
+      "shap": "0.49.1",
+      "joblib": "1.5.3"
+    }
+  },
+  "runtime_fingerprint": "81f5e8828e90d85a27aca5a3bfa08b0c9c90071a85f88ca78261113da850f2bc",
+  "pipeline_run_id": "run-20260718T174125-6c3cbb8e",
+  "parameters": {}
+}

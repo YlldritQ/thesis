@@ -1,0 +1,131 @@
+{
+  "suite": "silver_awards",
+  "table": "silver.awards",
+  "passed": true,
+  "error_count": 0,
+  "warning_count": 1,
+  "info_count": 0,
+  "pass_count": 11,
+  "fail_count": 1,
+  "duration_ms": 257.2000026702881,
+  "timestamp": "2026-07-19T12:19:23.414649+00:00",
+  "rows": 62129,
+  "columns": 28,
+  "data_fingerprint": "2f39dbd63b93976c8f6097069911edab682b2ec1632ab7585d5698992995b943",
+  "expectations": [
+    {
+      "name": "row_count_positive",
+      "description": "table has at least one row",
+      "severity": "error",
+      "passed": true,
+      "observed": 62129,
+      "duration_ms": 0.008344650268554688
+    },
+    {
+      "name": "ocid_non_null",
+      "description": "no null ocid",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 2.6068687438964844
+    },
+    {
+      "name": "awarded_value_non_negative",
+      "description": "awarded_value_eur >= 0",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 0.6699562072753906
+    },
+    {
+      "name": "bidder_observation_matches_nullable_count",
+      "description": "enriched bidder observation matches nullable bidder count",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 0.2448558807373047
+    },
+    {
+      "name": "supplier_business_id_coverage",
+      "description": "≥70 % of awards have a usable non-sentinel business id",
+      "severity": "warning",
+      "passed": true,
+      "observed": 0.7055,
+      "duration_ms": 26.55196189880371
+    },
+    {
+      "name": "supplier_business_id_value_coverage",
+      "description": "nonblank business ids cover ≥45 % of awarded value",
+      "severity": "warning",
+      "passed": true,
+      "observed": 0.4808,
+      "duration_ms": 27.85181999206543
+    },
+    {
+      "name": "supplier_robust_identity_coverage",
+      "description": "≥90 % of awards have a valid business id, supplier name or source party id",
+      "severity": "warning",
+      "passed": true,
+      "observed": 1.0,
+      "duration_ms": 67.57593154907227
+    },
+    {
+      "name": "supplier_robust_identity_value_coverage",
+      "description": "business-id/name/source-party identities cover ≥90 % of awarded value",
+      "severity": "warning",
+      "passed": true,
+      "observed": 1.0,
+      "duration_ms": 72.59106636047363
+    },
+    {
+      "name": "supplier_business_id_sentinels_normalized",
+      "description": "known business-ID sentinel strings are retained only in the raw field",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 29.07395362854004
+    },
+    {
+      "name": "source_party_id_coverage",
+      "description": "published source party ID coverage is reported, not treated as legal-ID validation",
+      "severity": "warning",
+      "passed": true,
+      "observed": 1.0,
+      "duration_ms": 20.166873931884766
+    },
+    {
+      "name": "award_lot_title_linkage",
+      "description": "award lot titles should link uniquely to one published tender lot",
+      "severity": "warning",
+      "passed": false,
+      "observed": {
+        "exact_unique": 61260,
+        "no_exact_match": 505,
+        "exact_ambiguous": 244,
+        "missing_title": 120
+      },
+      "duration_ms": 2.3691654205322266
+    },
+    {
+      "name": "award_ocids_reference_tenders",
+      "description": "every award OCID exists in the exact Silver tender OCID population",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "expected_tender_ocids": 75710,
+        "tender_ocid_population_sha256": "dcc3eea156988f0f139363228e9b50247f47b2e4f2ea265c48d2d0272a9d828d",
+        "award_rows": 62129,
+        "orphan_rows": 0,
+        "orphan_ocids": 0,
+        "null_award_ocids": 0,
+        "orphan_ocid_sample": []
+      },
+      "duration_ms": 7.416009902954102
+    }
+  ],
+  "release_binding": {
+    "artifact_path": "silver/awards.parquet",
+    "artifact_sha256": "3498ec4d4157b81db443e41d63d45d88e4d254d47d369196fd63860c6179ffb9",
+    "artifact_size_bytes": 12586172
+  }
+}

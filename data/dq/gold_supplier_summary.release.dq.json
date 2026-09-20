@@ -1,0 +1,102 @@
+{
+  "suite": "gold_supplier_summary",
+  "table": "gold.supplier_summary",
+  "passed": true,
+  "error_count": 0,
+  "warning_count": 0,
+  "info_count": 0,
+  "pass_count": 6,
+  "fail_count": 0,
+  "duration_ms": 432.27481842041016,
+  "timestamp": "2026-07-19T12:19:45.619636+00:00",
+  "rows": 9940,
+  "columns": 23,
+  "data_fingerprint": "ec82b37eb4eb90540c20d4f65a8021a82720eb35c99e0c021d41720eb45bcff1",
+  "expectations": [
+    {
+      "name": "row_count_positive",
+      "description": "supplier summary has at least one identified supplier group",
+      "severity": "error",
+      "passed": true,
+      "observed": 9940,
+      "duration_ms": 0.0040531158447265625
+    },
+    {
+      "name": "supplier_key_unique_non_null",
+      "description": "supplier fallback keys are unique and non-null",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "null": 0,
+        "duplicates": 0
+      },
+      "duration_ms": 2.8290748596191406
+    },
+    {
+      "name": "counts_and_values_non_negative",
+      "description": "supplier counts and monetary summaries are finite and non-negative",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 2.398967742919922
+    },
+    {
+      "name": "percentage_columns_in_range",
+      "description": "supplier shares, coverage and observed single-bidder rates are in [0, 100]",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 1.325845718383789
+    },
+    {
+      "name": "identity_source_declared",
+      "description": "every supplier group discloses the identity fallback used",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "name_fallback": 4851,
+        "business_id": 4576,
+        "source_party_id_fallback": 513
+      },
+      "duration_ms": 0.4410743713378906
+    },
+    {
+      "name": "source_award_reconciliation",
+      "description": "supplier keys, rows, value and recorded identity coverage reconcile to awards",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "source_projection_fingerprint": "91ea015002ebc689ce3f7db7d0a5521bb8346bfafb8b1a0a186d52c5569b3355",
+        "source_missing_columns": [],
+        "summary_missing_columns": [],
+        "source_award_rows": 62129,
+        "identified_award_rows": 62129,
+        "unidentified_award_rows": 0,
+        "total_recorded_awarded_eur": 4765544184.669999,
+        "identified_awarded_eur": 4765544184.669999,
+        "unidentified_awarded_eur": 0.0,
+        "expected_identity_value_coverage_pct": 100.0,
+        "expected_supplier_keys": 9940,
+        "actual_summary_rows": 9940,
+        "missing_supplier_keys": 0,
+        "unexpected_supplier_keys": 0,
+        "missing_supplier_key_sample": [],
+        "unexpected_supplier_key_sample": [],
+        "duplicate_supplier_keys": 0,
+        "null_supplier_keys": 0,
+        "per_key_award_row_mismatches": 0,
+        "per_key_awarded_value_mismatches": 0,
+        "coverage_mismatch_rows": 0,
+        "invalid_numeric_values": 0,
+        "actual_identified_award_rows": 62129.0,
+        "actual_identified_awarded_eur": 4765544184.67
+      },
+      "duration_ms": 425.25219917297363
+    }
+  ],
+  "release_binding": {
+    "artifact_path": "gold/supplier_summary.parquet",
+    "artifact_sha256": "7a2811d4c682299f3a9daa76875c65d710c06cf384be619acdec240d6f3ef1a4",
+    "artifact_size_bytes": 1354410
+  }
+}

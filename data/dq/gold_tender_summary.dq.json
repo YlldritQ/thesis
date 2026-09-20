@@ -1,0 +1,93 @@
+{
+  "suite": "gold_tender_summary",
+  "table": "gold.tender_summary",
+  "passed": true,
+  "error_count": 0,
+  "warning_count": 0,
+  "info_count": 0,
+  "pass_count": 7,
+  "fail_count": 0,
+  "duration_ms": 86.68303489685059,
+  "timestamp": "2026-07-19T12:32:46.388479+00:00",
+  "rows": 75710,
+  "columns": 99,
+  "data_fingerprint": "239cdb97817ef068d880e5ead520a8800d4a498641686611c1cdf24889e98089",
+  "expectations": [
+    {
+      "name": "ocid_unique",
+      "description": "ocid unique in gold layer",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 11.453866958618164
+    },
+    {
+      "name": "rule_score_in_unit_interval",
+      "description": "rule_score ∈ [0, 1]",
+      "severity": "error",
+      "passed": true,
+      "observed": "min=0.0 max=1.0",
+      "duration_ms": 0.4646778106689453
+    },
+    {
+      "name": "expected_score_columns",
+      "description": "all score columns present",
+      "severity": "error",
+      "passed": true,
+      "observed": [],
+      "duration_ms": 0.02574920654296875
+    },
+    {
+      "name": "score_values_non_null",
+      "description": "every detector, proxy, context and ensemble score is non-null",
+      "severity": "error",
+      "passed": true,
+      "observed": {},
+      "duration_ms": 5.469083786010742
+    },
+    {
+      "name": "score_values_finite",
+      "description": "every detector, proxy, context and ensemble score is finite",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 4.283905029296875
+    },
+    {
+      "name": "score_values_in_unit_interval",
+      "description": "every detector, proxy, context and ensemble score is in [0, 1]",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 5.962848663330078
+    },
+    {
+      "name": "ensemble_xai_exact_reconstruction",
+      "description": "persisted detector ranks, agreement fields and ensemble score exactly reconstruct",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "families": [
+          "ocsvm",
+          "iso",
+          "hbos",
+          "knn"
+        ],
+        "max_absolute_delta": 0.0,
+        "column_deltas": {
+          "ensemble_rank_ocsvm": 0.0,
+          "ensemble_rank_iso": 0.0,
+          "ensemble_rank_hbos": 0.0,
+          "ensemble_rank_knn": 0.0,
+          "ensemble_score": 0.0
+        },
+        "integer_mismatches": {
+          "model_agreement_count": 0,
+          "high_confidence": 0
+        },
+        "baseline_score": 0.43699591144885175
+      },
+      "duration_ms": 58.96592140197754
+    }
+  ]
+}

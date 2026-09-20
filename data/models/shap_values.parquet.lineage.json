@@ -1,0 +1,73 @@
+{
+  "table": "models.shap_values",
+  "layer": "model",
+  "rows": 75710,
+  "columns": 22,
+  "schema_fingerprint": "4df92857cf451ddb",
+  "inputs": [
+    {
+      "path": "gold/gold.release.json",
+      "sha256": "d893acf1204f38fe6063bc8609a844783941a59c233b06508b4432c40e4fd5f2",
+      "rows": null,
+      "size_bytes": 10366
+    },
+    {
+      "path": "gold/tender_features.parquet",
+      "sha256": "6f776a40a2bd6b71d38e3b683992152fb53f751a11803b107ab77ebf5d95a10e",
+      "rows": null,
+      "size_bytes": 14022508
+    },
+    {
+      "path": "models/benchmark/benchmark.release.json",
+      "sha256": "12a9ca82afc585044f36ffe17f6dcbbb243b6d7b2ab958e24f51fb5e7fbf51b3",
+      "rows": null,
+      "size_bytes": 9227
+    },
+    {
+      "path": "models/benchmark/results.jsonl",
+      "sha256": "7848f2d8e4acab8428b0ead2566c2fafeeb4f067df66371d761e37957a99417b",
+      "rows": null,
+      "size_bytes": 64605
+    },
+    {
+      "path": "models/benchmark/leaderboard.parquet",
+      "sha256": "7a0d827354df609260be01f1148e9d1c899705bb5809dd26ff18fb38e53553bc",
+      "rows": null,
+      "size_bytes": 32910
+    },
+    {
+      "path": "models/benchmark/champions.json",
+      "sha256": "733b592ab098315ece756e20bc82511d3b7ab20f79043fb453ca53bff6f39571",
+      "rows": null,
+      "size_bytes": 17407
+    }
+  ],
+  "output_path": "models/shap_values.parquet",
+  "output_sha256": "e0772d332e59c97276a7a7de8c4a3f32bfc23777ca7ae5025fa18f2f7ac19104",
+  "output_size_bytes": 3420891,
+  "build_started_at": "2026-07-19T12:29:54.087018+00:00",
+  "build_completed_at": "2026-07-19T12:29:54.146006+00:00",
+  "duration_seconds": 0.067,
+  "git_sha": "unknown",
+  "code_version": "1.3.0",
+  "implementation_fingerprint": "08b5b2ff559bb39a2477163aa9b97e1ea03418dc13e46c466dfee065715d513d",
+  "configuration_fingerprint": "a7e3c914421adf51649fe580583749cb0ac522e301967ddab6a7aecff8a6ba0c",
+  "runtime": {
+    "python": "3.9.6",
+    "python_implementation": "CPython",
+    "platform": "darwin",
+    "package": "1.3.0",
+    "libraries": {
+      "numpy": "1.26.4",
+      "pandas": "2.2.3",
+      "pyarrow": "21.0.0",
+      "scipy": "1.13.1",
+      "scikit_learn": "1.4.2",
+      "shap": "0.49.1",
+      "joblib": "1.5.3"
+    }
+  },
+  "runtime_fingerprint": "81f5e8828e90d85a27aca5a3bfa08b0c9c90071a85f88ca78261113da850f2bc",
+  "pipeline_run_id": "run-20260719T121903-10fc4e60",
+  "parameters": {}
+}

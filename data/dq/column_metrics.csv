@@ -1,0 +1,29 @@
+column,dtype,count,null_pct,unique,unique_ratio,top_values,min,max,p50,mean,p95,zeros,negatives
+ocid,object,75710,0.0,75710,1.0,ocds-uhzcmx-00220-17-4006-1-2-1=1 | ocds-uhzcmx-73350-23-10324-1-3-6=1 | ocds-uhzcmx-73350-23-10091-2-3-6=1,,,,,,,
+release_id,object,75710,0.0,75710,1.0,ocds-uhzcmx-00220-17-4006-1-2-1-2017-08-31T00:01:00+01:00=1 | ocds-uhzcmx-73350-23-10324-1-3-6-2023-09-29T00:52:00+01:00=1 | ocds-uhzcmx-73350-23-10091-2-3-6-2023-09-25T00:41:00+01:00=1,,,,,,,
+release_date,"datetime64[ns, UTC]",75679,0.041,25223,0.3333,,2016-03-25 12:59:00+00:00,2026-03-05 23:42:07+00:00,,,,,
+tender_id,object,75710,0.0,75710,1.0,00220-17-4006-1-2-1=1 | 73350-23-10324-1-3-6=1 | 73350-23-10091-2-3-6=1,,,,,,,
+title,object,75710,0.0,65247,0.8618,Furnizim me pajisje të Teknologjisë Informative=265 | Marrëveshje kornizë Furnizim me pemë dhe perime=79 | Furnizim me barna nga LE për nevojat e SHSKUK-së=74,,,,,,,
+status,object,75710,0.0,1,0.0,active=75710,,,,,,,
+category,object,75710,0.0,3,0.0,goods=37819 | services=20910 | works=16981,,,,,,,
+method,object,75178,0.703,4,0.0001,open=58323 | minimum=12238 | limited=4611,,,,,,,
+method_details,object,75710,0.0,10,0.0001,otvoreni postupak=39650 | postupak bagatelne nabave - javna objava poziva=18383 | postupak minimalne vrednosti=11840,,,,,,,
+award_criteria,object,75710,0.0,2,0.0,priceOnly=74304 | costOnly=1406,,,,,,,
+estimated_value_eur,float64,75709,0.001,15881,0.2098,,50.0,200000000.0,16000.0,138569.45569364278,450000.0,0.0,0.0
+currency,object,75710,0.0,1,0.0,EUR=75710,,,,,,,
+start_date,"datetime64[ns, UTC]",75679,0.041,25223,0.3333,,2016-03-25 12:59:00+00:00,2026-03-05 23:42:07+00:00,,,,,
+end_date,"datetime64[ns, UTC]",75710,0.0,16200,0.214,,2016-04-14 11:00:00+00:00,2026-03-06 13:00:00+00:00,,,,,
+duration_reported_days,float64,75676,0.045,439,0.0058,,-711.0,492.0,11.0,9.871610550240499,39.0,6.0,17345.0
+procuring_entity_id,object,75709,0.001,205,0.0027,110798=4669 | 113463=2117 | 111758=2005,,,,,,,
+procuring_entity_uid,object,75709,0.001,19223,0.2539,2235d70d-f494-4c88-bb61-aca248d6e016=2564 | 31500c48-4db4-4a26-9ada-84672e1fbd4d=1210 | ba53735b-5dee-4a20-ad31-e8f0761c6f07=1156,,,,,,,
+procuring_entity_name,object,75709,0.001,204,0.0027,KORPORATA ENERGJETIKE E KOSOVES sh.a.=4669 | KUVENDI KOMUNAL I PRIZRENIT=2117 | QENDRA KLINIKE UNIVERSITARE E KOSOVES=2005,,,,,,,
+num_lots,int64,75710,0.0,59,0.0008,,0.0,160.0,1.0,1.2519746400739664,2.0,1.0,0.0
+lots_value_sum,float64,75708,0.003,15958,0.2108,,10.0,200000000.0,16000.0,138660.86740133146,450000.0,0.0,0.0
+num_bidders,int64,75710,0.0,51,0.0007,,0.0,103.0,2.0,2.7910844010038303,8.0,6107.0,0.0
+num_suppliers_in_parties,int64,75710,0.0,2,0.0,,0.0,1.0,1.0,0.7150046229031832,1.0,21577.0,0.0
+num_parties,int64,75710,0.0,51,0.0007,,0.0,103.0,2.0,2.7910844010038303,8.0,6107.0,0.0
+num_awards,int64,75710,0.0,42,0.0006,,0.0,2115.0,1.0,0.8680623431514991,1.0,21577.0,0.0
+duration_computed_days,float64,75679,0.041,3848,0.0508,,-710.45,492.56,11.53,10.425656258671493,39.54,0.0,17345.0
+end_before_start,bool,75710,0.0,2,0.0,False=58365 | True=17345,,,,,,,
+year,Int64,75679,0.041,11,0.0001,,2016.0,2026.0,2022.0,2021.6377726978421,2025.0,0.0,0.0
+month,object,75710,0.0,119,0.0016,2023-10=1263 | 2022-10=1233 | 2023-03=1183,,,,,,,

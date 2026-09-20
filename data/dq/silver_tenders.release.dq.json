@@ -1,0 +1,164 @@
+{
+  "suite": "silver_tenders",
+  "table": "silver.tenders",
+  "passed": true,
+  "error_count": 0,
+  "warning_count": 3,
+  "info_count": 0,
+  "pass_count": 13,
+  "fail_count": 3,
+  "duration_ms": 342.9911136627197,
+  "timestamp": "2026-07-19T12:19:22.990352+00:00",
+  "rows": 75710,
+  "columns": 28,
+  "data_fingerprint": "e1ea81ac5f0a1254f8cfd328f6c4550944f5632e2e1ca928b6519053541f26a5",
+  "expectations": [
+    {
+      "name": "row_count_positive",
+      "description": "table has at least one row",
+      "severity": "error",
+      "passed": true,
+      "observed": 75710,
+      "duration_ms": 0.010013580322265625
+    },
+    {
+      "name": "ocid_unique",
+      "description": "every ocid appears exactly once",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 11.107921600341797
+    },
+    {
+      "name": "ocid_non_null",
+      "description": "no null ocid",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 3.0181407928466797
+    },
+    {
+      "name": "tender_id_unique",
+      "description": "tender_id is unique where present",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 15.280961990356445
+    },
+    {
+      "name": "category_in_set",
+      "description": "category ∈ {goods, services, works} or null",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "goods": 37819,
+        "services": 20910,
+        "works": 16981
+      },
+      "duration_ms": 8.162736892700195
+    },
+    {
+      "name": "estimated_value_non_negative",
+      "description": "estimated_value_eur >= 0",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 0.7207393646240234
+    },
+    {
+      "name": "currency_eur_only",
+      "description": "all currencies are EUR (sanity)",
+      "severity": "warning",
+      "passed": true,
+      "observed": {
+        "EUR": 75710
+      },
+      "duration_ms": 5.382299423217773
+    },
+    {
+      "name": "release_date_non_null",
+      "description": "release_date is populated",
+      "severity": "warning",
+      "passed": false,
+      "observed": 31,
+      "duration_ms": 0.2601146697998047
+    },
+    {
+      "name": "release_date_in_window",
+      "description": "populated release_date values are between 2010-01-01 and now+1y",
+      "severity": "warning",
+      "passed": true,
+      "observed": "min=2016-03-25 12:59:00+00:00 max=2026-03-05 23:42:07+00:00",
+      "duration_ms": 1.0449886322021484
+    },
+    {
+      "name": "method_known_or_null",
+      "description": "method is one of the known OCDS values",
+      "severity": "warning",
+      "passed": true,
+      "observed": {
+        "open": 58323,
+        "minimum": 12238,
+        "limited": 4611,
+        "selective": 6
+      },
+      "duration_ms": 5.454063415527344
+    },
+    {
+      "name": "num_bidders_non_negative",
+      "description": "observed num_bidders >= 0; unobserved bidder data remains null",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 1.4562606811523438
+    },
+    {
+      "name": "bidder_observation_matches_nullable_count",
+      "description": "bidder_data_observed is true exactly when num_bidders is populated",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 0.2818107604980469
+    },
+    {
+      "name": "bidder_data_coverage",
+      "description": "at least 90% of tenders publish bidder data",
+      "severity": "warning",
+      "passed": true,
+      "observed": 0.9193,
+      "duration_ms": 0.14209747314453125
+    },
+    {
+      "name": "price_quotation_value_band_conflicts",
+      "description": "code-6 price quotations should be reviewed when estimate is >= EUR 10,000",
+      "severity": "warning",
+      "passed": false,
+      "observed": 7,
+      "duration_ms": 4.698038101196289
+    },
+    {
+      "name": "buyer_name_id_collisions",
+      "description": "normalized buyer names should map to one source ID (diagnostic; no auto-merge)",
+      "severity": "warning",
+      "passed": false,
+      "observed": {
+        "normalized_names_with_multiple_ids": 2,
+        "affected_source_ids": 4
+      },
+      "duration_ms": 284.5888137817383
+    },
+    {
+      "name": "no_future_release",
+      "description": "no release_date is more than 30 days into the future",
+      "severity": "warning",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 1.2710094451904297
+    }
+  ],
+  "release_binding": {
+    "artifact_path": "silver/tenders.parquet",
+    "artifact_sha256": "c4139e1313e612494b4e445c9dce561cdaeb07dffb2ab6e3197033e81968323f",
+    "artifact_size_bytes": 7816358
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "suite": "ml_shap_release",
+  "table": "models.shap_values",
+  "passed": true,
+  "error_count": 0,
+  "warning_count": 0,
+  "info_count": 0,
+  "pass_count": 6,
+  "fail_count": 0,
+  "duration_ms": 25.748014450073242,
+  "timestamp": "2026-07-19T12:29:54.826589+00:00",
+  "rows": 75710,
+  "columns": 22,
+  "data_fingerprint": "7c2bd268ce3592eb695b3fa6056e511842c35ab2acc1dc1a298d35b703477b70",
+  "expectations": [
+    {
+      "name": "exact_columns",
+      "description": "SHAP columns and order exactly match ocid, base_value, and ML_FEATURES",
+      "severity": "error",
+      "passed": true,
+      "observed": [
+        "ocid",
+        "base_value",
+        "log_estimated_eur",
+        "num_lots",
+        "num_bidders",
+        "num_parties",
+        "n_awards",
+        "n_supplier_identities",
+        "log_awarded_eur",
+        "awarded_value_ratio",
+        "days_to_first_award",
+        "days_tender_open",
+        "winner_top_share",
+        "value_rank_within_category",
+        "value_rank_within_method",
+        "value_rank_within_entity",
+        "entity_tender_count",
+        "is_single_bidder",
+        "is_zero_bidder",
+        "was_awarded",
+        "lot_value_mismatch",
+        "end_before_start"
+      ],
+      "duration_ms": 0.019073486328125
+    },
+    {
+      "name": "row_parity_with_gold",
+      "description": "SHAP contains exactly one row for every scored Gold row",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "shap": 75710,
+        "gold": 75710
+      },
+      "duration_ms": 0.0057220458984375
+    },
+    {
+      "name": "exact_ocid_order",
+      "description": "SHAP OCIDs exactly match scored Gold values and row order",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "mismatches": 0,
+        "rows": 75710
+      },
+      "duration_ms": 15.084028244018555
+    },
+    {
+      "name": "numeric_shap_values",
+      "description": "base_value and every SHAP feature column use numeric dtypes",
+      "severity": "error",
+      "passed": true,
+      "observed": [],
+      "duration_ms": 0.3287792205810547
+    },
+    {
+      "name": "finite_shap_values",
+      "description": "base_value and every SHAP value are finite",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 2.4900436401367188
+    },
+    {
+      "name": "rule_proxy_raw_output_additivity",
+      "description": "SHAP base plus feature values reconstruct HGB rule-proxy raw log-odds",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "max_absolute_delta": 3.375077994860476e-14,
+        "target": "rule_proxy_binary_label",
+        "output_space": "raw_log_odds",
+        "does_not_explain": "ensemble_score"
+      },
+      "duration_ms": 7.776021957397461
+    }
+  ],
+  "release_binding": {
+    "artifact_path": "models/shap_values.parquet",
+    "artifact_sha256": "e0772d332e59c97276a7a7de8c4a3f32bfc23777ca7ae5025fa18f2f7ac19104",
+    "artifact_size_bytes": 3420891
+  },
+  "gold_reference_binding": {
+    "artifact_path": "gold/tender_summary.parquet",
+    "artifact_sha256": "1dfdb7155539dfec815ab6ffce067db76209c806c4ef286d1854b87d42f4b510",
+    "artifact_size_bytes": 24190992,
+    "rows": 75710,
+    "columns": 99,
+    "data_fingerprint": "239cdb97817ef068d880e5ead520a8800d4a498641686611c1cdf24889e98089"
+  },
+  "expected_columns": [
+    "ocid",
+    "base_value",
+    "log_estimated_eur",
+    "num_lots",
+    "num_bidders",
+    "num_parties",
+    "n_awards",
+    "n_supplier_identities",
+    "log_awarded_eur",
+    "awarded_value_ratio",
+    "days_to_first_award",
+    "days_tender_open",
+    "winner_top_share",
+    "value_rank_within_category",
+    "value_rank_within_method",
+    "value_rank_within_entity",
+    "entity_tender_count",
+    "is_single_bidder",
+    "is_zero_bidder",
+    "was_awarded",
+    "lot_value_mismatch",
+    "end_before_start"
+  ],
+  "xai_semantics": {
+    "target": "rule_proxy_binary_label",
+    "output_space": "raw_log_odds",
+    "does_not_explain": "ensemble_score"
+  }
+}

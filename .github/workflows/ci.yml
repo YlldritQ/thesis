@@ -1,0 +1,175 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: lint (ruff)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.11.28"
+          enable-cache: true
+      - name: verify lockfile
+        run: uv lock --check
+      - name: install locked dependencies
+        run: uv sync --frozen --extra dev --python "$(command -v python)"
+      - run: uv run --frozen ruff check .
+      - run: uv run --frozen ruff format --check .
+
+  type-check:
+    name: type-check (mypy)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.11.28"
+          enable-cache: true
+      - name: verify lockfile
+        run: uv lock --check
+      - name: install locked dependencies
+        run: uv sync --frozen --extra dev --python "$(command -v python)"
+      - run: uv run --frozen mypy src/thesis
+
+  test:
+    name: pytest (${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.11.28"
+          enable-cache: true
+      - name: verify lockfile
+        run: uv lock --check
+      - name: install locked dependencies
+        run: uv sync --frozen --extra dev --python "$(command -v python)"
+      - name: restore bundled raw snapshot
+        run: gzip -dk data/raw/kosovo_ocds.jsonl.gz
+      - run: uv run --frozen pytest tests/unit tests/contracts -v --cov=thesis --cov-report=xml
+        if: ${{ hashFiles('tests/unit/**', 'tests/contracts/**') != '' }}
+      - run: uv run --frozen pytest tests -v --cov=thesis --cov-report=xml -m "not slow"
+      - uses: codecov/codecov-action@v4
+        if: matrix.python == '3.11'
+        with:
+          files: coverage.xml
+          fail_ci_if_error: false
+
+  smoke-pipeline:
+    name: smoke (mini pipeline)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.11.28"
+          enable-cache: true
+      - name: verify lockfile
+        run: uv lock --check
+      - name: install locked dependencies
+        run: uv sync --frozen --extra dev --python "$(command -v python)"
+      - name: restore bundled raw snapshot
+        run: gzip -dk data/raw/kosovo_ocds.jsonl.gz
+      - name: run integration test (uses bundled fixture)
+        run: uv run --frozen pytest tests/integration -v
+        env:
+          THESIS_LOG_FORMAT: json
+
+  docker-build:
+    name: docker build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          load: true
+          tags: kosovo-procurement-thesis:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: run image version smoke
+        run: |
+          docker run --rm kosovo-procurement-thesis:ci \
+            python -m thesis version
+      - name: start image and wait for HEALTHCHECK
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          container_name="thesis-ci-health-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+
+          cleanup() {
+            status=$?
+            trap - EXIT
+            if [[ $status -ne 0 ]]; then
+              echo "Container failed its HEALTHCHECK; diagnostic output follows." >&2
+              docker logs "$container_name" >&2 || true
+              docker inspect "$container_name" >&2 || true
+            fi
+            docker rm --force "$container_name" >/dev/null 2>&1 || true
+            exit "$status"
+          }
+          trap cleanup EXIT
+
+          docker run --detach --name "$container_name" kosovo-procurement-thesis:ci
+
+          for attempt in $(seq 1 75); do
+            state="$(docker inspect --format '{{.State.Status}}' "$container_name")"
+            health="$(docker inspect --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}missing{{end}}' "$container_name")"
+
+            if [[ $state != "running" ]]; then
+              echo "Container entered state '$state' before becoming healthy." >&2
+              exit 1
+            fi
+
+            case "$health" in
+              healthy)
+                echo "Container became healthy on attempt $attempt."
+                exit 0
+                ;;
+              unhealthy)
+                echo "Container reported an unhealthy status." >&2
+                exit 1
+                ;;
+              starting)
+                sleep 2
+                ;;
+              *)
+                echo "Container has no usable HEALTHCHECK status: '$health'." >&2
+                exit 1
+                ;;
+            esac
+          done
+
+          echo "Timed out waiting for the container HEALTHCHECK." >&2
+          exit 1

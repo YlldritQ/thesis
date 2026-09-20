@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "check": "benchmark_release_semantics",
+  "passed": true,
+  "error_count": 0,
+  "warning_count": 0,
+  "fail_count": 0,
+  "errors": [],
+  "protocol_fingerprint": "0e377abdd3607b8d",
+  "implementation_fingerprint": "f411ec1ea85d2b9fd0089adc8dfa1222ccdeba8aa416bb9bbb878a54bebfb318",
+  "data_fingerprints": [
+    "03e8f6b3d597540b"
+  ],
+  "result_bundle_fingerprint": "e725b89945dfc24781784132b6792c893da16f9c24fc0508022e222827d52818",
+  "leaderboard_bundle_fingerprint": "e725b89945dfc24781784132b6792c893da16f9c24fc0508022e222827d52818",
+  "semantic_fingerprint": "7516c9e49e6a4b975dfeffedff43b504b9b2a46fdb376de46e3f743e91c5a1aa",
+  "checked_at": "2026-07-19T12:28:01.291282+00:00",
+  "rows": 35,
+  "columns": 41,
+  "data_fingerprint": "3b31683ba106f923efade53585267531900e7f788c37e88bea40ab546ea98061",
+  "release_binding": {
+    "artifact_path": "models/benchmark/leaderboard.parquet",
+    "artifact_sha256": "7a0d827354df609260be01f1148e9d1c899705bb5809dd26ff18fb38e53553bc",
+    "artifact_size_bytes": 32910
+  }
+}

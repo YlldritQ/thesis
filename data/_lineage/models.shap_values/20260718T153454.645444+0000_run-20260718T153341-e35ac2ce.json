@@ -1,0 +1,43 @@
+{
+  "table": "models.shap_values",
+  "layer": "model",
+  "rows": 75710,
+  "columns": 22,
+  "schema_fingerprint": "2e346211d372f830",
+  "inputs": [
+    {
+      "path": "/Users/ylldrit/Desktop/thesis/data/gold/gold.release.json",
+      "sha256": "62de29825d6bb4f3d921ee29a4bb49e5e3ac76fb7b7406b118b4b9c5b272eec3",
+      "rows": null,
+      "size_bytes": 2416
+    },
+    {
+      "path": "/Users/ylldrit/Desktop/thesis/data/gold/tender_features.parquet",
+      "sha256": "70e56308f54e54cb1d0445fc3941d2cbe9b73b23e6574612bc3366f06291b630",
+      "rows": null,
+      "size_bytes": 13969464
+    },
+    {
+      "path": "/Users/ylldrit/Desktop/thesis/data/models/benchmark/benchmark.release.json",
+      "sha256": "9a231c9422fc4b7b8e0d37627841d594c07b8f81bece6d0dec82d9881a5d5171",
+      "rows": null,
+      "size_bytes": 1486
+    },
+    {
+      "path": "/Users/ylldrit/Desktop/thesis/data/models/benchmark/champions.json",
+      "sha256": "8e0216719b02a934cf0cdc7714ec038374c02e393cb4e85c04c036d64ca3b41b",
+      "rows": null,
+      "size_bytes": 11200
+    }
+  ],
+  "output_path": "/Users/ylldrit/Desktop/thesis/data/models/shap_values.parquet",
+  "output_sha256": "a514b714dede4d4a965e8edd1d2c96f3534dad695d6d807baf4a363950e1164e",
+  "output_size_bytes": 2584828,
+  "build_started_at": "2026-07-18T15:34:54.604004+00:00",
+  "build_completed_at": "2026-07-18T15:34:54.645444+00:00",
+  "duration_seconds": 0.05,
+  "git_sha": "unknown",
+  "code_version": "1.2.0",
+  "pipeline_run_id": "run-20260718T153341-e35ac2ce",
+  "parameters": {}
+}

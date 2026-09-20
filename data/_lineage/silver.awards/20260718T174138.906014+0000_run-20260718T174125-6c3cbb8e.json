@@ -1,0 +1,49 @@
+{
+  "table": "silver.awards",
+  "layer": "silver",
+  "rows": 62129,
+  "columns": 28,
+  "schema_fingerprint": "6da9854596aa0c73",
+  "inputs": [
+    {
+      "path": "raw/bronze.release.json",
+      "sha256": "ce245df2f25ae98ad85e43bf30604205dd7b3ac59c4578c6f4860c62232f1db3",
+      "rows": null,
+      "size_bytes": 8212
+    },
+    {
+      "path": "raw/kosovo_ocds.jsonl",
+      "sha256": "666d239260114464142db43dfb1b85ed5b9cb508406461321859f7b1037122d4",
+      "rows": null,
+      "size_bytes": 206559018
+    }
+  ],
+  "output_path": "silver/awards.parquet",
+  "output_sha256": "3498ec4d4157b81db443e41d63d45d88e4d254d47d369196fd63860c6179ffb9",
+  "output_size_bytes": 12586172,
+  "build_started_at": "2026-07-18T17:41:38.840384+00:00",
+  "build_completed_at": "2026-07-18T17:41:38.906014+00:00",
+  "duration_seconds": 0.189,
+  "git_sha": "unknown",
+  "code_version": "1.3.0",
+  "implementation_fingerprint": "c0a1ee0199de38578e15098152fcf57dc8b396cec8942233fc82a95bbb6dc998",
+  "configuration_fingerprint": "a7e3c914421adf51649fe580583749cb0ac522e301967ddab6a7aecff8a6ba0c",
+  "runtime": {
+    "python": "3.9.6",
+    "python_implementation": "CPython",
+    "platform": "darwin",
+    "package": "1.3.0",
+    "libraries": {
+      "numpy": "1.26.4",
+      "pandas": "2.2.3",
+      "pyarrow": "21.0.0",
+      "scipy": "1.13.1",
+      "scikit_learn": "1.4.2",
+      "shap": "0.49.1",
+      "joblib": "1.5.3"
+    }
+  },
+  "runtime_fingerprint": "81f5e8828e90d85a27aca5a3bfa08b0c9c90071a85f88ca78261113da850f2bc",
+  "pipeline_run_id": "run-20260718T174125-6c3cbb8e",
+  "parameters": {}
+}

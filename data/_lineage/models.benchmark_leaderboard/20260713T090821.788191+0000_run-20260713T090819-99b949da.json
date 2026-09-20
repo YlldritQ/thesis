@@ -1,0 +1,20 @@
+{
+  "table": "models.benchmark_leaderboard",
+  "layer": "model",
+  "rows": 6,
+  "columns": 30,
+  "schema_fingerprint": "bae7d8ed896bd814",
+  "inputs": [],
+  "output_path": "/Users/ylldrit/Desktop/thesis/data/models/benchmark/leaderboard.parquet",
+  "output_sha256": "ae85162942d4edad8eeff9ad9f0588cc6310938bfd2848b9490d3b154474a36e",
+  "output_size_bytes": 19028,
+  "build_started_at": "2026-07-13T09:08:21.618349+00:00",
+  "build_completed_at": "2026-07-13T09:08:21.788191+00:00",
+  "duration_seconds": 0.17,
+  "git_sha": "unknown",
+  "code_version": "1.0.0",
+  "pipeline_run_id": "run-20260713T090819-99b949da",
+  "parameters": {
+    "fingerprint": "e83e96efda202651"
+  }
+}

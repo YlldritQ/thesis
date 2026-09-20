@@ -1,0 +1,25 @@
+{
+  "table": "gold.supplier_summary",
+  "layer": "gold",
+  "rows": 4582,
+  "columns": 15,
+  "schema_fingerprint": "3f1b8a69d420b136",
+  "inputs": [
+    {
+      "path": "/Users/ylldrit/Desktop/thesis/data/silver/awards.parquet",
+      "sha256": "070ba2a658185c026a28edb1a58fc020e6923e75083678234ee93f79a3213f32",
+      "rows": null,
+      "size_bytes": 12467488
+    }
+  ],
+  "output_path": "/Users/ylldrit/Desktop/thesis/data/gold/supplier_summary.parquet",
+  "output_sha256": "c340645e7cbb91d68cabe8ac02668ce9e4355ae631c8df248955013f95a22c0c",
+  "output_size_bytes": 291257,
+  "build_started_at": "2026-07-13T21:09:30.240358+00:00",
+  "build_completed_at": "2026-07-13T21:09:30.276386+00:00",
+  "duration_seconds": 0.043,
+  "git_sha": "unknown",
+  "code_version": "1.0.0",
+  "pipeline_run_id": "run-20260713T210927-e367ded2",
+  "parameters": {}
+}

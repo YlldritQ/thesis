@@ -1,0 +1,179 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kosovo-procurement-thesis"
+version = "1.3.0"
+description = "Kosovo public-procurement heuristic screening and exploratory anomaly ranking — thesis pipeline + Streamlit demo."
+readme = "README.md"
+requires-python = ">=3.9,<3.13"
+license = { text = "MIT" }
+authors = [{ name = "Thesis author" }]
+keywords = ["procurement", "OCDS", "anomaly-detection", "data-engineering", "Kosovo"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+
+dependencies = [
+    "pandas>=2.0,<2.3",
+    "numpy>=1.24,<2.0",
+    "pyarrow>=14",
+    "scikit-learn>=1.3,<1.5",
+    "shap>=0.44",
+    "pydantic>=2.5",
+    "pydantic-settings>=2.1",
+    "structlog>=24.1",
+    "typer>=0.12",
+    "rich>=13.7",
+    "pandera>=0.20",
+    "tqdm>=4.66",
+    "tabulate>=0.9",
+    "joblib>=1.3",
+    "matplotlib>=3.7",
+    "seaborn>=0.13",
+    "plotly>=5.20",
+    "streamlit>=1.32",
+    "requests>=2.31",
+    "eval_type_backport>=0.2; python_version < '3.10'",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "pytest-xdist>=3.5",
+    "hypothesis>=6.92",
+    "ruff>=0.4",
+    "mypy>=1.9",
+    "pre-commit>=3.6",
+    "types-requests>=2.31",
+    "types-tabulate>=0.9",
+]
+notebooks = [
+    "jupyter>=1.0",
+    "ipykernel>=6.25",
+    "nbformat>=5.10",
+]
+
+[project.scripts]
+thesis = "thesis.cli:app"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+thesis = ["py.typed"]
+
+
+# =====================================================================
+#  RUFF
+# =====================================================================
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+src = ["src", "tests"]
+extend-exclude = [".venv", "data", "notebooks", "build", "dist"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "B",    # flake8-bugbear
+    "UP",   # pyupgrade
+    "N",    # pep8-naming
+    "C4",   # comprehensions
+    "SIM",  # simplify
+    "RET",  # return values
+    "PIE",  # misc lints
+    "ERA",  # commented-out code
+]
+ignore = [
+    "E501",   # line length handled by formatter
+    "B008",   # function calls in defaults (typer needs this)
+    "N803",   # X for matrix is conventional
+    "N806",   # X for matrix is conventional
+    "UP045",  # Optional[X] over X|None — kept for typer runtime on py39
+    "UP007",  # Union syntax — same reason
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["B011", "N802", "B017", "E702"]
+"streamlit_app/**" = ["E402"]   # bootstrap before imports
+"src/thesis/cli.py" = ["B008", "E702"]
+"build_*.py" = ["E402"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["thesis"]
+
+
+# =====================================================================
+#  MYPY
+# =====================================================================
+[tool.mypy]
+python_version = "3.9"
+strict = false
+warn_return_any = true
+warn_unused_configs = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+disallow_untyped_defs = false
+check_untyped_defs = true
+ignore_missing_imports = true
+mypy_path = "src"
+files = ["src/thesis"]
+
+[[tool.mypy.overrides]]
+module = ["shap.*", "sklearn.*", "pandera.*", "joblib.*"]
+ignore_missing_imports = true
+
+
+# =====================================================================
+#  PYTEST
+# =====================================================================
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+]
+markers = [
+    "unit: fast unit tests (default)",
+    "integration: integration tests with disk I/O",
+    "slow: tests that take >5 s",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning:pkg_resources",
+    "ignore::UserWarning:pandas",
+]
+
+
+# =====================================================================
+#  COVERAGE
+# =====================================================================
+[tool.coverage.run]
+source = ["src/thesis"]
+branch = true
+omit = ["*/cli.py", "*/__main__.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]

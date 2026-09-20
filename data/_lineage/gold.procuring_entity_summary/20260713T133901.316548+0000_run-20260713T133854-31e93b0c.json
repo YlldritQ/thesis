@@ -1,0 +1,31 @@
+{
+  "table": "gold.procuring_entity_summary",
+  "layer": "gold",
+  "rows": 206,
+  "columns": 16,
+  "schema_fingerprint": "3dc7161dfa88feef",
+  "inputs": [
+    {
+      "path": "/Users/ylldrit/Desktop/thesis/data/gold/tender_summary.parquet",
+      "sha256": "e2c8eb78805ba36ddcd97f29de95886e2dacf2378cbdcf79e93102cd22f0caed",
+      "rows": null,
+      "size_bytes": 13903700
+    },
+    {
+      "path": "/Users/ylldrit/Desktop/thesis/data/silver/awards.parquet",
+      "sha256": "fdfbc1d49a1f065cb6b049dcc07dff96ed463db3b9cddd80701aade1a5554dbc",
+      "rows": null,
+      "size_bytes": 12813983
+    }
+  ],
+  "output_path": "/Users/ylldrit/Desktop/thesis/data/gold/procuring_entity_summary.parquet",
+  "output_sha256": "90d642b6a37144bd0813f242bb99d6396afd2c36b7e7bce18756ac968ab91b52",
+  "output_size_bytes": 34517,
+  "build_started_at": "2026-07-13T13:39:01.284191+00:00",
+  "build_completed_at": "2026-07-13T13:39:01.316548+00:00",
+  "duration_seconds": 0.046,
+  "git_sha": "unknown",
+  "code_version": "1.0.0",
+  "pipeline_run_id": "run-20260713T133854-31e93b0c",
+  "parameters": {}
+}

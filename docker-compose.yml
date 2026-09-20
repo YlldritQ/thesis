@@ -1,0 +1,44 @@
+version: "3.9"
+
+# Local dev stack:
+#   docker compose up app          - launch Streamlit on http://localhost:8501
+#   docker compose run pipeline    - run the full pipeline once
+#   docker compose run shell       - drop into a Python shell with the package installed
+
+services:
+  app:
+    build: .
+    image: kosovo-procurement-thesis:dev
+    ports: ["8501:8501"]
+    environment:
+      THESIS_LOG_FORMAT: console
+      THESIS_LOG_LEVEL: INFO
+      THESIS_DATA_DIR: /data
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+
+  pipeline:
+    image: kosovo-procurement-thesis:dev
+    profiles: ["one-off"]
+    environment:
+      THESIS_LOG_FORMAT: json
+      THESIS_LOG_LEVEL: INFO
+      THESIS_DATA_DIR: /data
+    volumes:
+      - ./data:/data
+    command: ["python", "-m", "thesis", "pipeline", "run"]
+
+  shell:
+    image: kosovo-procurement-thesis:dev
+    profiles: ["one-off"]
+    environment:
+      THESIS_DATA_DIR: /data
+    volumes:
+      - ./data:/data
+      - ./src:/app/src
+      - ./tests:/app/tests
+      - ./streamlit_app:/app/streamlit_app
+    entrypoint: ["python"]
+    stdin_open: true
+    tty: true

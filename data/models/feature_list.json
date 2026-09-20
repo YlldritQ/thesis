@@ -1,0 +1,106 @@
+{
+  "schema_version": 2,
+  "data_fingerprint": "03e8f6b3d597540b",
+  "protocol_fingerprint": "0e377abdd3607b8d",
+  "benchmark_complete": true,
+  "champions_schema_version": 2,
+  "champions_created_at": "2026-07-19T12:28:01.106923+00:00",
+  "benchmark_implementation_fingerprint": "f411ec1ea85d2b9fd0089adc8dfa1222ccdeba8aa416bb9bbb878a54bebfb318",
+  "benchmark_semantic_fingerprint": "7516c9e49e6a4b975dfeffedff43b504b9b2a46fdb376de46e3f743e91c5a1aa",
+  "ml_features": [
+    "log_estimated_eur",
+    "num_lots",
+    "num_bidders",
+    "num_parties",
+    "n_awards",
+    "n_supplier_identities",
+    "log_awarded_eur",
+    "awarded_value_ratio",
+    "days_to_first_award",
+    "days_tender_open",
+    "winner_top_share",
+    "value_rank_within_category",
+    "value_rank_within_method",
+    "value_rank_within_entity",
+    "entity_tender_count",
+    "is_single_bidder",
+    "is_zero_bidder",
+    "was_awarded",
+    "lot_value_mismatch",
+    "end_before_start"
+  ],
+  "ensemble_families": [
+    "ocsvm",
+    "iso",
+    "hbos",
+    "knn"
+  ],
+  "model_selection": "benchmark champions",
+  "ensemble_explanation": {
+    "schema_version": 1,
+    "target": "ensemble_score",
+    "explanation_type": "exact_additive_component_decomposition",
+    "aggregation": "equal_weight_arithmetic_mean",
+    "rank_scope": "complete_released_snapshot",
+    "rank_method": "average",
+    "detector_transform": "pandas_percentile_rank",
+    "detector_families": [
+      "ocsvm",
+      "iso",
+      "hbos",
+      "knn"
+    ],
+    "detector_score_columns": [
+      "ocsvm_score",
+      "iso_score",
+      "hbos_score",
+      "knn_score"
+    ],
+    "detector_rank_columns": [
+      "ensemble_rank_ocsvm",
+      "ensemble_rank_iso",
+      "ensemble_rank_hbos",
+      "ensemble_rank_knn"
+    ],
+    "fixed_component_columns": [
+      "rule_score",
+      "context_score"
+    ],
+    "component_columns": [
+      "ensemble_rank_ocsvm",
+      "ensemble_rank_iso",
+      "ensemble_rank_hbos",
+      "ensemble_rank_knn",
+      "rule_score",
+      "context_score"
+    ],
+    "component_count": 6,
+    "weights": {
+      "ensemble_rank_ocsvm": 0.16666666666666666,
+      "ensemble_rank_iso": 0.16666666666666666,
+      "ensemble_rank_hbos": 0.16666666666666666,
+      "ensemble_rank_knn": 0.16666666666666666,
+      "rule_score": 0.16666666666666666,
+      "context_score": 0.16666666666666666
+    },
+    "baseline_kind": "component_mean_over_complete_released_snapshot",
+    "component_baselines": {
+      "ensemble_rank_ocsvm": 0.5000066041474046,
+      "ensemble_rank_iso": 0.5000066041474047,
+      "ensemble_rank_hbos": 0.5000066041474047,
+      "ensemble_rank_knn": 0.5000066041474045,
+      "rule_score": 0.0752641658961828,
+      "context_score": 0.5466848862073092
+    },
+    "baseline_score": 0.43699591144885175,
+    "flag_quantile": 0.95,
+    "minimum_models_agreeing": 3,
+    "interpretation": "Exact arithmetic explanation of the published hybrid score; not a causal explanation, probability, legal finding, or independent validation of anomalousness."
+  },
+  "shap_explanation": {
+    "target": "rule_proxy_binary_label",
+    "output_space": "raw_log_odds",
+    "does_not_explain": "ensemble_score"
+  },
+  "shap_base_value": -10.710334624360387
+}

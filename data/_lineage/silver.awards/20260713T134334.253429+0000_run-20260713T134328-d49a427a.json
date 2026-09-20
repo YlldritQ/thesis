@@ -1,0 +1,25 @@
+{
+  "table": "silver.awards",
+  "layer": "silver",
+  "rows": 62128,
+  "columns": 25,
+  "schema_fingerprint": "a7b10a6bacb27031",
+  "inputs": [
+    {
+      "path": "/Users/ylldrit/Desktop/thesis/data/raw/kosovo_ocds.jsonl",
+      "sha256": "666d239260114464142db43dfb1b85ed5b9cb508406461321859f7b1037122d4",
+      "rows": null,
+      "size_bytes": 206559018
+    }
+  ],
+  "output_path": "/Users/ylldrit/Desktop/thesis/data/silver/awards.parquet",
+  "output_sha256": "070ba2a658185c026a28edb1a58fc020e6923e75083678234ee93f79a3213f32",
+  "output_size_bytes": 12467488,
+  "build_started_at": "2026-07-13T13:43:34.030628+00:00",
+  "build_completed_at": "2026-07-13T13:43:34.253429+00:00",
+  "duration_seconds": 0.323,
+  "git_sha": "unknown",
+  "code_version": "1.0.0",
+  "pipeline_run_id": "run-20260713T134328-d49a427a",
+  "parameters": {}
+}

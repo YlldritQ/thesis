@@ -1,0 +1,39 @@
+# Local Python environments and generated package metadata
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+
+# Runtime and development caches
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+*.log
+data/.pipeline.lock
+data/models/benchmark/results.wip*.jsonl
+data/models/benchmark/results.quick*.jsonl
+data/models/benchmark/results.20*.jsonl
+
+# Keep the exact compressed snapshot and manifest; expand the JSONL after cloning.
+data/raw/*
+!data/raw/kosovo_ocds.jsonl.gz
+!data/raw/bronze.release.json
+data/processed/
+
+# Machine-specific files and local credentials
+.DS_Store
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+.idea/
+.vscode/

@@ -1,0 +1,25 @@
+{
+  "table": "models.shap_values",
+  "layer": "model",
+  "rows": 75710,
+  "columns": 22,
+  "schema_fingerprint": "2e346211d372f830",
+  "inputs": [
+    {
+      "path": "/Users/ylldrit/Desktop/thesis/data/gold/tender_summary.parquet",
+      "sha256": "a7d9202023c68cf2e7b23b138c16e32bc036c0668df9e48934ee8d562aef7fcd",
+      "rows": null,
+      "size_bytes": 13899288
+    }
+  ],
+  "output_path": "/Users/ylldrit/Desktop/thesis/data/models/shap_values.parquet",
+  "output_sha256": "eabd607e5a4eeee9f896038f84e0f48d1947e0c6ac235c17dafd462159d61ba3",
+  "output_size_bytes": 2587057,
+  "build_started_at": "2026-07-13T13:44:53.712287+00:00",
+  "build_completed_at": "2026-07-13T13:44:53.786573+00:00",
+  "duration_seconds": 0.084,
+  "git_sha": "unknown",
+  "code_version": "1.0.0",
+  "pipeline_run_id": "run-20260713T134416-0fd394be",
+  "parameters": {}
+}

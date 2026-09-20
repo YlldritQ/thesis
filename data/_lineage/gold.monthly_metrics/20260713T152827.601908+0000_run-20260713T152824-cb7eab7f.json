@@ -1,0 +1,25 @@
+{
+  "table": "gold.monthly_metrics",
+  "layer": "gold",
+  "rows": 121,
+  "columns": 10,
+  "schema_fingerprint": "bc77158383704193",
+  "inputs": [
+    {
+      "path": "/Users/ylldrit/Desktop/thesis/data/gold/tender_summary.parquet",
+      "sha256": "8aaf84eded3ad96cf8a86e7393d60737ecce6b99ec380057a08e8e2af20ad01b",
+      "rows": null,
+      "size_bytes": 13899016
+    }
+  ],
+  "output_path": "/Users/ylldrit/Desktop/thesis/data/gold/monthly_metrics.parquet",
+  "output_sha256": "9322ecd85e9e80b9954de02f8e6e75d39576a3e7f6f8f9d7e7348f5e7a1d8bef",
+  "output_size_bytes": 13794,
+  "build_started_at": "2026-07-13T15:28:27.573720+00:00",
+  "build_completed_at": "2026-07-13T15:28:27.601908+00:00",
+  "duration_seconds": 0.035,
+  "git_sha": "unknown",
+  "code_version": "1.0.0",
+  "pipeline_run_id": "run-20260713T152824-cb7eab7f",
+  "parameters": {}
+}

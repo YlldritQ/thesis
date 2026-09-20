@@ -1,0 +1,512 @@
+{
+  "source": "OSHP (Organi Shqyrtues i Prokurimit) — Lista e Zezë / disqualification requests",
+  "url": "https://oshp.rks-gov.net/sq/Reports/ComplaintByBlackList",
+  "retrieved": "2026-07-14",
+  "note": "Cached source-audit rows containing only operator and authority names. The rows do not include a decision outcome, case/date, tender identifier, or business identifier and therefore MUST NOT be used as tender-level validation labels or expanded to a supplier's historical tenders. Retained only for provenance; see oshp_validation.json for the withdrawal status.",
+  "rows": [
+    {
+      "operator": "Leicon Sh.P.K",
+      "authority": "Policia e Kosovës"
+    },
+    {
+      "operator": "Ida Auto Group Sh.P.K",
+      "authority": "Policia e Kosovës"
+    },
+    {
+      "operator": "Infinit shpk",
+      "authority": "KRM Pastërtia Sh.a"
+    },
+    {
+      "operator": "GENERAL PHARM SH.P.K.",
+      "authority": "SHSKUK"
+    },
+    {
+      "operator": "Erik SH.P.K",
+      "authority": "Universiteti i Prizrenit"
+    },
+    {
+      "operator": "Schafberger Jr. GmbH - Dega në Kosovë",
+      "authority": "Universiteti i Prizrenit"
+    },
+    {
+      "operator": "Pro&Co Group SH.P.K.",
+      "authority": "Ministria e Industrisë, Ndërmarrësisë dhe Tregtisë"
+    },
+    {
+      "operator": "EUROFAMIS Sh.a.",
+      "authority": "Spitali Isa Grezda Gjakovë"
+    },
+    {
+      "operator": "Valmir Zogaj B.I.",
+      "authority": "Spitali Isa Grezda Gjakovë"
+    },
+    {
+      "operator": "Pro Medical SH.P.K.",
+      "authority": "Komuna Drenas"
+    },
+    {
+      "operator": "Nika ProIng SH.P.K.",
+      "authority": "MINISTRIA E KULTURES RS DHE ÇJK"
+    },
+    {
+      "operator": "Norway Travel SH.P.K.",
+      "authority": "Komuna Gjakovë"
+    },
+    {
+      "operator": "Beni Com SH.P.K.",
+      "authority": "Komuna Podujevë"
+    },
+    {
+      "operator": "BONN PROJEKT Sh.p.k",
+      "authority": "Kompania Ujësjellësi Rajonal Prishtina SH.A"
+    },
+    {
+      "operator": "Provit Pharmaceutical Sh.p.k",
+      "authority": "SHSKUK"
+    },
+    {
+      "operator": "PM Group Sh.p.k",
+      "authority": "Komuna Podujevë"
+    },
+    {
+      "operator": "Inno Home Sh.p.k",
+      "authority": "Policia e Kosovës"
+    },
+    {
+      "operator": "Arf SH.P.K.",
+      "authority": "Spitali i Përgjithshëm Gjilan"
+    },
+    {
+      "operator": "Greemed",
+      "authority": "SHSKUK"
+    },
+    {
+      "operator": "Redoni HM SH.P.K.",
+      "authority": "SHSKUK"
+    },
+    {
+      "operator": "Europrint Group SH.P.K.",
+      "authority": "Komisioni Qëndror i Zgjedhjeve"
+    },
+    {
+      "operator": "Interlab Sh.p.k",
+      "authority": "SHSKUK"
+    },
+    {
+      "operator": "Limit Project Sh.p.k",
+      "authority": "Komuna Obiliq"
+    },
+    {
+      "operator": "Model Invest Group Sh.P.K",
+      "authority": "Komuna Lipjan"
+    },
+    {
+      "operator": "Kushtrimi NM SH.P.K.",
+      "authority": "Komuna Hani i Elezit"
+    },
+    {
+      "operator": "Argo Med",
+      "authority": "SHSKUK"
+    },
+    {
+      "operator": "SonFlow GmbH",
+      "authority": "Termokos"
+    },
+    {
+      "operator": "Infinitt SH.P.K.",
+      "authority": "Komisioni Qëndror i Zgjedhjeve"
+    },
+    {
+      "operator": "Hidroing 2SH SH.P.K.",
+      "authority": "Komuna Obiliq"
+    },
+    {
+      "operator": "AS Tech Sh.p.k",
+      "authority": "Posta e Kosovës"
+    },
+    {
+      "operator": "Scorpion Security SH.P.K.",
+      "authority": "Komuna Mitrovica e Veriut"
+    },
+    {
+      "operator": "Prishtina Auto LLC",
+      "authority": "Policia e Kosovës"
+    },
+    {
+      "operator": "Agro Invest 1 SH.P.K.",
+      "authority": "Komuna Shtime"
+    },
+    {
+      "operator": "Lulishtja Labi A SH.P.K",
+      "authority": "Kuvendi i Kosovës"
+    },
+    {
+      "operator": "Goma Pro",
+      "authority": "KRU \"Prishtina\""
+    },
+    {
+      "operator": "ARCHI TIME Sh.p.k",
+      "authority": "Komuna Prizren"
+    },
+    {
+      "operator": "Q SHALA Sh.p.k",
+      "authority": "Komuna Junik"
+    },
+    {
+      "operator": "Edona Sh.p.k",
+      "authority": "Komuna Kaçanik"
+    },
+    {
+      "operator": "D&D Business Suport Center L.L.C",
+      "authority": "Posta e Kosovës"
+    },
+    {
+      "operator": "Andi E.E Sh.P.K",
+      "authority": "Komuna Gjakovë"
+    },
+    {
+      "operator": "Kushtrim Sopaj B.I",
+      "authority": "Komuna Lipjan"
+    },
+    {
+      "operator": "ARCHI TIME Sh.p.k",
+      "authority": "Komuna Prizren"
+    },
+    {
+      "operator": "Mburoya SH.P.K.",
+      "authority": "Posta e Kosovës"
+    },
+    {
+      "operator": "Nika ProIng SH.P.K.",
+      "authority": "Komuna Kamenicë"
+    },
+    {
+      "operator": "Gashi ing shpk",
+      "authority": "Komuna Dragash"
+    },
+    {
+      "operator": "MSI & Jasin Sh.P.K",
+      "authority": "Akademia e Kosovës për Siguri Publike"
+    },
+    {
+      "operator": "Seti Commerc Sh.P.K.",
+      "authority": "Komuna Shtime"
+    },
+    {
+      "operator": "ETEAM SH.P.K",
+      "authority": "Komuna Viti"
+    },
+    {
+      "operator": "Ajani&Adami SH.P.K.",
+      "authority": "Policia e Kosovës"
+    },
+    {
+      "operator": "AL Dushi SH.P.K.",
+      "authority": "Ministria e Punëve të Jashtme"
+    },
+    {
+      "operator": "Andi E.E Sh.P.K",
+      "authority": "Komuna Gjakovë"
+    },
+    {
+      "operator": "Lonx L.L.C",
+      "authority": "Komuna Dragash"
+    },
+    {
+      "operator": "Aritech SH.P.K.",
+      "authority": "Ministria e Punëve të Jashtme"
+    },
+    {
+      "operator": "Kadir Butuc B.I",
+      "authority": "Komuna Lipjan"
+    },
+    {
+      "operator": "Shkelqimi Invest Sh.p.k.",
+      "authority": "Komuna Lipjan"
+    },
+    {
+      "operator": "Eco Clean Corporation & Bejing Yiduchuan Clothing Group Company",
+      "authority": "Policia e Kosovës"
+    },
+    {
+      "operator": "Astra Plan shpk",
+      "authority": "Policia e Kosovës"
+    },
+    {
+      "operator": "7 Ing O.P",
+      "authority": "NH Iber Lepenc Sh.A."
+    },
+    {
+      "operator": "Dauti Komerc SH.P.K",
+      "authority": "Ndërrmarrja Publike Banesore sh.a"
+    },
+    {
+      "operator": "LC Group Sh.p.k",
+      "authority": "Komuna Mamushës"
+    },
+    {
+      "operator": "D&T Group SH.P.K.",
+      "authority": "Ministria e Shëndetësisë"
+    },
+    {
+      "operator": "Krasniqi Sh.p.k",
+      "authority": "Spitali i Përgjithshëm Gjilan"
+    },
+    {
+      "operator": "Letra Com Shpk",
+      "authority": "Agjencia Qendrore e Prokurimit"
+    },
+    {
+      "operator": "Zeqir M. Krasniqi B.I",
+      "authority": "Komuna Mamushë"
+    },
+    {
+      "operator": "Gëzime S. Gashi B.I",
+      "authority": "Komuna Hani i Elezit"
+    },
+    {
+      "operator": "Avni Murtezi B.I.",
+      "authority": "Komuna Dragash"
+    },
+    {
+      "operator": "MEB L.L.C.",
+      "authority": "Agjencia Qendrore e Prokurimit"
+    },
+    {
+      "operator": "D&T Group SH.P.K.",
+      "authority": "Komuna Fushë Kosovë"
+    },
+    {
+      "operator": "Beni Dona Plast Sh.p.k",
+      "authority": "Ministria e Mbrojtjes"
+    },
+    {
+      "operator": "Euro Ing shpk",
+      "authority": "Komuna Gllogoc"
+    },
+    {
+      "operator": "FT Projekt SHPK",
+      "authority": "Qendra Klinike Universitare e Kosovës"
+    },
+    {
+      "operator": "Luigj Kastrati B.I.",
+      "authority": "Komuna Skenderaj"
+    },
+    {
+      "operator": "Naim Shuki B.I.",
+      "authority": "Komuna Mamushë"
+    },
+    {
+      "operator": "Botek shpk",
+      "authority": "Agjencia Qendrore e Prokurimit"
+    },
+    {
+      "operator": "IU Networks LLC",
+      "authority": "Administrata Tatimore e Kosovës"
+    },
+    {
+      "operator": "PUNTEX SH.P.K.",
+      "authority": "Spitali i Përgjithshëm Gjakovë"
+    },
+    {
+      "operator": "FT Projekt SHPK",
+      "authority": "Qendra Klinike Universitare e Kosovës"
+    },
+    {
+      "operator": "B Corp SHPK",
+      "authority": "Komuna Prishtinë"
+    },
+    {
+      "operator": "Avokatura Istrefi",
+      "authority": "Komuna Prishtinë"
+    },
+    {
+      "operator": "Samire Osmani B.I",
+      "authority": "QENDRA E SHENDETIT MENDOR - GJAKOVË"
+    },
+    {
+      "operator": "UNI - LAB SH.P.K.",
+      "authority": "KRU Gjakova sh.a"
+    },
+    {
+      "operator": "Bahri AsllanI B.I",
+      "authority": "Korporata Energjetike e Kosovës"
+    },
+    {
+      "operator": "CV Sh.p.k.",
+      "authority": "Ndërmarrja publike banesore"
+    },
+    {
+      "operator": "Mehmet Peja B.I.",
+      "authority": "Korporata Energjetike e Kosovës"
+    },
+    {
+      "operator": "Mendi-P Sh.p.k",
+      "authority": "Komuna Drenas"
+    },
+    {
+      "operator": "Naim Sopaj B.I",
+      "authority": "Komuna Prizren"
+    },
+    {
+      "operator": "Liria SH.P.K.",
+      "authority": "Policia e Kosovës"
+    },
+    {
+      "operator": "Bujar Shabani B.I",
+      "authority": "Komuna Lipjan"
+    },
+    {
+      "operator": "Konti SH.P.K.",
+      "authority": "Komuna Gjakovë"
+    },
+    {
+      "operator": "Samire Osmani B.I",
+      "authority": "Spitali Sheik Zayed"
+    },
+    {
+      "operator": "AS Tech Sh.p.k",
+      "authority": "Shërbimi Korrektues i Kosovës"
+    },
+    {
+      "operator": "Dino shpk",
+      "authority": "Komuna Lipjan"
+    },
+    {
+      "operator": "Kosova Asfalt Sh.p.k",
+      "authority": "Komuna Lipjan"
+    },
+    {
+      "operator": "Mehmet Peja B.I.",
+      "authority": "Komuna Lipjan"
+    },
+    {
+      "operator": "Company Murseli SH.P.K.",
+      "authority": "Komuna Prishtinë"
+    },
+    {
+      "operator": "Faruk Kunushevci B.I.",
+      "authority": "Ministria e Drejtësisë"
+    },
+    {
+      "operator": "Lis Arm SH.P.K.",
+      "authority": "Korporata Energjetike e Kosovës"
+    },
+    {
+      "operator": "Profitech SH.P.K.",
+      "authority": "Komuna Gjakovë"
+    },
+    {
+      "operator": "Valmir Mustafa B.I.",
+      "authority": "Komuna Hani i Elezit"
+    },
+    {
+      "operator": "N.T. Info Com",
+      "authority": "KRU Gjakova sh.a"
+    },
+    {
+      "operator": "GHM Company shpk",
+      "authority": "Ndërmarrja publike banesore"
+    },
+    {
+      "operator": "Matkos Group SH.P.K.",
+      "authority": "SHSKUK"
+    },
+    {
+      "operator": "Matkos Group SH.P.K.",
+      "authority": "SHSKUK"
+    },
+    {
+      "operator": "NTSH Lablea Team",
+      "authority": "ATK"
+    },
+    {
+      "operator": "Rahovica Comerce Sh.p.k",
+      "authority": "Komuna Vushtrri"
+    },
+    {
+      "operator": "N.T.P. Bletaria Egzoni",
+      "authority": "Agjencioni Veterinarisë dhe Ushqimit"
+    },
+    {
+      "operator": "Sallahu SH.P.K.",
+      "authority": "Ministria e Infrastrukturës"
+    },
+    {
+      "operator": "RSM Company SH.P.K",
+      "authority": "Ministria e Infrastrukturës"
+    },
+    {
+      "operator": "First Solution SH.A.",
+      "authority": "Termokos"
+    },
+    {
+      "operator": "Eing Com SH.P.K.",
+      "authority": "Komuna Rahovec"
+    },
+    {
+      "operator": "NTSH Koslabor",
+      "authority": "Komuna Mamushë"
+    },
+    {
+      "operator": "Vlera SH.P.K.",
+      "authority": "Komuna Prishtinë"
+    },
+    {
+      "operator": "Letra Com Shpk",
+      "authority": "Unknown"
+    },
+    {
+      "operator": "D&T Group SH.P.K.",
+      "authority": "Komuna Gjakovë"
+    },
+    {
+      "operator": "Commando SH.P.K.",
+      "authority": "Komuna Skenderaj"
+    },
+    {
+      "operator": "Bageri",
+      "authority": "Komuna Viti"
+    },
+    {
+      "operator": "Mediatech & Print Sh.p.k",
+      "authority": "Komuna Skenderaj"
+    },
+    {
+      "operator": "D&T Group SH.P.K.",
+      "authority": "Komuna Gjakovë"
+    },
+    {
+      "operator": "Qëndrim Gashi B. I",
+      "authority": "Komuna Skenderaj"
+    },
+    {
+      "operator": "Ballkan Petrol SH.P.K.",
+      "authority": "Policia e Kosovës"
+    },
+    {
+      "operator": "Tosi V shpk",
+      "authority": "Komuna Skenderaj"
+    },
+    {
+      "operator": "N.N.P Elektro",
+      "authority": "Komuna Vushtrri"
+    },
+    {
+      "operator": "Grami SH.P.K",
+      "authority": "KMDK SH.A"
+    },
+    {
+      "operator": "Grami SH.P.K",
+      "authority": "Korporata Energjetike e Kosovës"
+    },
+    {
+      "operator": "Xoni SH.P.K.",
+      "authority": "Komuna Suharekë"
+    },
+    {
+      "operator": "PM Group Sh.p.k",
+      "authority": "Agjencia Qendrore e Prokurimit"
+    }
+  ]
+}

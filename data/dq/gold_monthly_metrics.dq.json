@@ -1,0 +1,101 @@
+{
+  "suite": "gold_monthly_metrics",
+  "table": "gold.monthly_metrics",
+  "passed": true,
+  "error_count": 0,
+  "warning_count": 0,
+  "info_count": 0,
+  "pass_count": 7,
+  "fail_count": 0,
+  "duration_ms": 5.151033401489258,
+  "timestamp": "2026-07-19T12:19:44.127840+00:00",
+  "rows": 122,
+  "columns": 15,
+  "data_fingerprint": "fbd5147dfa5dfb4674084c2cb1fcaadeae2d3d71e21712b64f3dbe69d95ed36a",
+  "expectations": [
+    {
+      "name": "row_count_positive",
+      "description": "monthly summary has at least one period",
+      "severity": "error",
+      "passed": true,
+      "observed": 122,
+      "duration_ms": 0.0050067901611328125
+    },
+    {
+      "name": "period_label_unique_nonblank",
+      "description": "every calendar or unknown-date bucket has one nonblank label",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "blank": 0,
+        "duplicates": 0
+      },
+      "duration_ms": 0.6110668182373047
+    },
+    {
+      "name": "counts_and_values_non_negative",
+      "description": "monthly counts and monetary aggregates are finite and non-negative",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 1.9900798797607422
+    },
+    {
+      "name": "flagged_not_above_tenders",
+      "description": "monthly rule-review counts do not exceed all tenders",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 0.12230873107910156
+    },
+    {
+      "name": "percentage_columns_in_range",
+      "description": "monthly bidder coverage and observed rates are in [0, 100]",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 1.0809898376464844
+    },
+    {
+      "name": "date_known_boolean",
+      "description": "date_known is a non-null boolean indicator",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "true": 121,
+        "false": 1,
+        "null": 0
+      },
+      "duration_ms": 0.3609657287597656
+    },
+    {
+      "name": "source_feature_reconciliation",
+      "description": "monthly tender/value totals and unknown-date bucket reconcile to Gold",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "source_projection_fingerprint": "bd069b44a2534d899f5383cdb711c14fbf5bdfc7c394204fef3f9a596f3b098e",
+        "source_missing_columns": [],
+        "summary_missing_columns": [],
+        "expected_tenders": 75710,
+        "expected_total_estimated_eur": 10490954921.11,
+        "expected_total_awarded_eur": 4765544184.67,
+        "expected_unknown_date_tenders": 31,
+        "expected_unknown_date_estimated_eur": 3002101.76,
+        "expected_unknown_date_awarded_eur": 2443329.37,
+        "expected_unknown_date_rows": 1,
+        "actual_unknown_date_rows": 1,
+        "unknown_date_marker_mismatches": 0,
+        "null_date_known_values": 0,
+        "invalid_numeric_values": 0,
+        "actual_tenders": 75710.0,
+        "actual_total_estimated_eur": 10490954921.109999,
+        "actual_total_awarded_eur": 4765544184.669999,
+        "actual_unknown_date_tenders": 31.0,
+        "actual_unknown_date_estimated_eur": 3002101.76,
+        "actual_unknown_date_awarded_eur": 2443329.37
+      },
+      "duration_ms": 0.9570121765136719
+    }
+  ]
+}

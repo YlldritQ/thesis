@@ -1,0 +1,23 @@
+{
+  "status": "withdrawn",
+  "usable_as_external_validation": false,
+  "source": "OSHP (Organi Shqyrtues i Prokurimit) — Lista e Zezë / disqualification requests",
+  "url": "https://oshp.rks-gov.net/sq/Reports/ComplaintByBlackList",
+  "cached_retrieved": "2026-07-14",
+  "source_sha256": "1860f73969ccc0d3ab22bf1f87a2e2d3e75fe5fc636157c4313c0ab2300f4388",
+  "source_rows": 126,
+  "observed_row_fields": [
+    "authority",
+    "operator"
+  ],
+  "reason": "The cached rows contain operator and authority names only. They do not provide an adjudicated outcome or an exact link to a tender, so supplier-name matches cannot be interpreted as tender-level labels.",
+  "prohibited_inference": "Do not label every historical tender won by a name-matched operator as adjudicated, disqualified, risky, or externally validated.",
+  "minimum_future_evidence": [
+    "explicit decision outcome",
+    "decision or case identifier",
+    "decision date",
+    "exact tender/procurement identifier",
+    "auditable operator identifier or reviewed entity match"
+  ],
+  "computed_metrics": []
+}

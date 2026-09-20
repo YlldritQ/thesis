@@ -1,0 +1,134 @@
+{
+  "suite": "gold_tender_features",
+  "table": "gold.tender_features",
+  "passed": true,
+  "error_count": 0,
+  "warning_count": 0,
+  "info_count": 0,
+  "pass_count": 13,
+  "fail_count": 0,
+  "duration_ms": 140.09809494018555,
+  "timestamp": "2026-07-19T12:19:44.856449+00:00",
+  "rows": 75710,
+  "columns": 82,
+  "data_fingerprint": "2c58ae397acbdde2a57bed4b7195b997df5733fade45c39521d6593fd608d0dd",
+  "expectations": [
+    {
+      "name": "row_count_positive",
+      "description": "table has at least one row",
+      "severity": "error",
+      "passed": true,
+      "observed": 75710,
+      "duration_ms": 0.011920928955078125
+    },
+    {
+      "name": "ocid_unique",
+      "description": "ocid unique in base gold layer",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 14.110088348388672
+    },
+    {
+      "name": "ocid_non_null",
+      "description": "no null ocid in base gold layer",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 4.532098770141602
+    },
+    {
+      "name": "expected_ml_feature_columns",
+      "description": "all declared ML feature columns are present",
+      "severity": "error",
+      "passed": true,
+      "observed": [],
+      "duration_ms": 0.03695487976074219
+    },
+    {
+      "name": "procurement_semantic_columns",
+      "description": "bidder observation, supplier identity and buyer-collision facts are present",
+      "severity": "error",
+      "passed": true,
+      "observed": [],
+      "duration_ms": 0.010013580322265625
+    },
+    {
+      "name": "expected_rule_columns",
+      "description": "all declared indicator columns and rule_score are present",
+      "severity": "error",
+      "passed": true,
+      "observed": [],
+      "duration_ms": 0.03981590270996094
+    },
+    {
+      "name": "ml_features_numeric_or_null",
+      "description": "declared ML features contain only numeric values or nulls",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 9.27877426147461
+    },
+    {
+      "name": "ml_features_no_infinity",
+      "description": "declared ML features contain no positive/negative infinity",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 7.795095443725586
+    },
+    {
+      "name": "rule_indicators_binary_non_null",
+      "description": "every declared indicator is non-null and boolean",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 61.979055404663086
+    },
+    {
+      "name": "rule_score_finite_in_unit_interval",
+      "description": "rule_score is non-null, finite and in [0, 1]",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "null_or_non_numeric": 0,
+        "outside_unit_interval": 0
+      },
+      "duration_ms": 0.6198883056640625
+    },
+    {
+      "name": "procedure_subtype_nonblank",
+      "description": "every row has a source-aware procedure subtype",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 22.840023040771484
+    },
+    {
+      "name": "bidder_observation_matches_nullable_count",
+      "description": "gold preserves missing bidder counts rather than converting them to zero",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "duration_ms": 0.2110004425048828
+    },
+    {
+      "name": "silver_to_gold_ocid_parity",
+      "description": "base gold has exactly the silver tender OCID population",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "expected_rows": 75710,
+        "actual_rows": 75710,
+        "missing_ocids": 0,
+        "unexpected_ocids": 0
+      },
+      "duration_ms": 18.559932708740234
+    }
+  ],
+  "release_binding": {
+    "artifact_path": "gold/tender_features.parquet",
+    "artifact_sha256": "6f776a40a2bd6b71d38e3b683992152fb53f751a11803b107ab77ebf5d95a10e",
+    "artifact_size_bytes": 14022508
+  }
+}

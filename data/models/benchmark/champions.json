@@ -1,0 +1,709 @@
+{
+  "schema_version": 2,
+  "data_fingerprint": "03e8f6b3d597540b",
+  "benchmark_protocol": {
+    "protocol_version": "2026-07-r6-implementation-bound-semantic-election",
+    "library_versions": {
+      "numpy": "1.26.4",
+      "pandas": "2.2.3",
+      "scikit_learn": "1.4.2"
+    },
+    "thresholds": {
+      "rule_label_threshold": 0.4,
+      "rule_score_priority_threshold": 0.7,
+      "benchmark_flag_quantile": 0.95,
+      "benchmark_precision_at": 500
+    },
+    "election_settings": {
+      "random_seed": 7,
+      "benchmark_bootstrap_runs": 4,
+      "benchmark_extra_seeds": 2,
+      "benchmark_supervised_seeds": 2,
+      "benchmark_cv_folds": 5,
+      "benchmark_oot_train_max_year": 2023,
+      "benchmark_top_k_families": 4,
+      "iso_forest_contamination": 0.05,
+      "lof_contamination": 0.05,
+      "elliptic_envelope_contamination": 0.05,
+      "ocsvm_subsample_size": 10000
+    },
+    "seed_schedule": {
+      "base_random_seed": 7,
+      "bootstrap_refit_offset": 100,
+      "extra_seed_refit_offset": 500,
+      "supervised_fold_seed_rule": "base_random_seed + repetition_index"
+    },
+    "grids": {
+      "unsupervised_full": [
+        {
+          "family": "iso",
+          "params": {
+            "n_estimators": 100
+          }
+        },
+        {
+          "family": "iso",
+          "params": {
+            "n_estimators": 300
+          }
+        },
+        {
+          "family": "iso",
+          "params": {
+            "n_estimators": 500
+          }
+        },
+        {
+          "family": "lof",
+          "params": {
+            "n_neighbors": 10
+          }
+        },
+        {
+          "family": "lof",
+          "params": {
+            "n_neighbors": 30
+          }
+        },
+        {
+          "family": "lof",
+          "params": {
+            "n_neighbors": 50
+          }
+        },
+        {
+          "family": "lof",
+          "params": {
+            "n_neighbors": 100
+          }
+        },
+        {
+          "family": "ee",
+          "params": {}
+        },
+        {
+          "family": "ocsvm",
+          "params": {
+            "nu": 0.03
+          }
+        },
+        {
+          "family": "ocsvm",
+          "params": {
+            "nu": 0.05
+          }
+        },
+        {
+          "family": "ocsvm",
+          "params": {
+            "nu": 0.1
+          }
+        },
+        {
+          "family": "pca",
+          "params": {
+            "n_components": 5
+          }
+        },
+        {
+          "family": "pca",
+          "params": {
+            "n_components": 10
+          }
+        },
+        {
+          "family": "pca",
+          "params": {
+            "n_components": 15
+          }
+        },
+        {
+          "family": "gmm",
+          "params": {
+            "n_components": 2
+          }
+        },
+        {
+          "family": "gmm",
+          "params": {
+            "n_components": 4
+          }
+        },
+        {
+          "family": "gmm",
+          "params": {
+            "n_components": 8
+          }
+        },
+        {
+          "family": "knn",
+          "params": {
+            "n_neighbors": 5
+          }
+        },
+        {
+          "family": "knn",
+          "params": {
+            "n_neighbors": 10
+          }
+        },
+        {
+          "family": "knn",
+          "params": {
+            "n_neighbors": 20
+          }
+        },
+        {
+          "family": "hbos",
+          "params": {
+            "n_bins": 10
+          }
+        },
+        {
+          "family": "hbos",
+          "params": {
+            "n_bins": 20
+          }
+        },
+        {
+          "family": "hbos",
+          "params": {
+            "n_bins": 50
+          }
+        }
+      ],
+      "supervised_full": [
+        {
+          "family": "hgb",
+          "params": {
+            "max_depth": 3,
+            "learning_rate": 0.05,
+            "max_iter": 300
+          }
+        },
+        {
+          "family": "hgb",
+          "params": {
+            "max_depth": 3,
+            "learning_rate": 0.08,
+            "max_iter": 300
+          }
+        },
+        {
+          "family": "hgb",
+          "params": {
+            "max_depth": 4,
+            "learning_rate": 0.05,
+            "max_iter": 300
+          }
+        },
+        {
+          "family": "hgb",
+          "params": {
+            "max_depth": 4,
+            "learning_rate": 0.08,
+            "max_iter": 300
+          }
+        },
+        {
+          "family": "hgb",
+          "params": {
+            "max_depth": 6,
+            "learning_rate": 0.05,
+            "max_iter": 300
+          }
+        },
+        {
+          "family": "hgb",
+          "params": {
+            "max_depth": 6,
+            "learning_rate": 0.08,
+            "max_iter": 300
+          }
+        },
+        {
+          "family": "rf",
+          "params": {
+            "n_estimators": 200,
+            "max_depth": null
+          }
+        },
+        {
+          "family": "rf",
+          "params": {
+            "n_estimators": 200,
+            "max_depth": 12
+          }
+        },
+        {
+          "family": "logreg",
+          "params": {
+            "C": 0.1
+          }
+        },
+        {
+          "family": "logreg",
+          "params": {
+            "C": 1.0
+          }
+        },
+        {
+          "family": "logreg",
+          "params": {
+            "C": 10.0
+          }
+        },
+        {
+          "family": "extratrees",
+          "params": {
+            "n_estimators": 300
+          }
+        }
+      ],
+      "unsupervised_quick": [
+        {
+          "family": "iso",
+          "params": {
+            "n_estimators": 100
+          }
+        },
+        {
+          "family": "lof",
+          "params": {
+            "n_neighbors": 10
+          }
+        },
+        {
+          "family": "pca",
+          "params": {
+            "n_components": 5
+          }
+        },
+        {
+          "family": "hbos",
+          "params": {
+            "n_bins": 20
+          }
+        }
+      ],
+      "supervised_quick": [
+        {
+          "family": "hgb",
+          "params": {
+            "max_depth": 4,
+            "learning_rate": 0.08,
+            "max_iter": 100
+          }
+        },
+        {
+          "family": "logreg",
+          "params": {
+            "C": 1.0
+          }
+        }
+      ]
+    },
+    "model_election": {
+      "declared_composite_weights": {
+        "proxy_auc_07": 0.45,
+        "stability_jaccard": 0.35,
+        "seed_consistency": 0.2
+      },
+      "alternate_composite_weights": {
+        "balanced": {
+          "proxy_auc_07": 0.34,
+          "stability_jaccard": 0.33,
+          "seed_consistency": 0.33
+        },
+        "stability_emphasis": {
+          "proxy_auc_07": 0.3,
+          "stability_jaccard": 0.5,
+          "seed_consistency": 0.2
+        },
+        "proxy_emphasis": {
+          "proxy_auc_07": 0.6,
+          "stability_jaccard": 0.25,
+          "seed_consistency": 0.15
+        }
+      },
+      "family_tie_break": "config_key ascending",
+      "ensemble_tie_break": "family ascending",
+      "precision_rank_sensitivity": "precision_at_k descending; config_key ascending"
+    },
+    "implementation": {
+      "fingerprint": "f411ec1ea85d2b9fd0089adc8dfa1222ccdeba8aa416bb9bbb878a54bebfb318",
+      "manifest": {
+        "src/thesis/anomaly/benchmark.py": "90769693decbfdc32e466dc998e994ba96bb415a88de2fdf7ba3a69f2fc06186",
+        "src/thesis/anomaly/detectors.py": "e56de2dfe1687a1b94d3442d1ab852a689b3c2514c3acb9204d34d2c64047abb",
+        "src/thesis/anomaly/models.py": "dcb8a1dc515f24f1c0854c40d0f6132313f269fa60437ca4873bb8789da7ee59",
+        "src/thesis/anomaly/validation.py": "7b7a3fb4f8589c40c20003364582ead8d0bd01a85c30709507f7ef426de3b25e",
+        "src/thesis/config.py": "e3ce62d84c38c0281b86d0785990041e5a2aaa5c60673c6f114d4222fbeb7cce",
+        "src/thesis/domain/features.py": "8524d815e06045fab71c5015ecb7ef5d3e4321cc814a918140c024025cee8b6b",
+        "src/thesis/jsonutil.py": "048197f09854fd24c14ce74455d0b2d762435a8d75325c0d23883cec27f0b4fe",
+        "src/thesis/pipeline/benchmark.py": "47d2ac4c3d0d3b076959951b3c699c6dd9a0489e2681a9da9a0aa3b7b6654494",
+        "src/thesis/provenance.py": "c438f9462b9447e17e4b7bffa40431fefa285f764c6452cf304fc8364d796785"
+      }
+    }
+  },
+  "protocol_fingerprint": "0e377abdd3607b8d",
+  "implementation_fingerprint": "f411ec1ea85d2b9fd0089adc8dfa1222ccdeba8aa416bb9bbb878a54bebfb318",
+  "created_at": "2026-07-19T12:28:01.106923+00:00",
+  "quick": false,
+  "completeness": {
+    "quick": false,
+    "expected_config_keys": [
+      "05cb79428e0182bd",
+      "1aa88e0aee28054b",
+      "2e1acb35b4f4be24",
+      "3201f87f139ef361",
+      "33308d68fdb1efb9",
+      "3566bbd40b8500ba",
+      "386c08213b0f306c",
+      "38b251e31b5a809b",
+      "47498dbbabe446c6",
+      "475bbff5b981ab13",
+      "54228c8bb16fc6e4",
+      "58bdfe4dc53487eb",
+      "599f4cfc6d022e93",
+      "6fd73a5a648717de",
+      "76dc1e0debc14c0d",
+      "7bb084890009f7ae",
+      "7c7338df2053f39d",
+      "82e9c1670ade2959",
+      "8dafb9449e0afeee",
+      "a8776d666bc7d94e",
+      "ba93482b78387e0c",
+      "bd5e81f32fb87ad5",
+      "bdfb3bfe69c7ce85",
+      "be53609fb5b1f527",
+      "c06e12e49723fd12",
+      "c44ad18d2cef63d8",
+      "ccc2c5cb74977bf4",
+      "d30276eb746b9a47",
+      "e8f4690a141c8384",
+      "eca77f525ef6665b",
+      "ee4fb4b7a3b77b94",
+      "ef2587fe6bd0d492",
+      "f02e378a9d3ec6a9",
+      "f48fea1f670715bb",
+      "f696f1a9f76eb386"
+    ],
+    "expected_total": 35,
+    "expected_unsupervised_total": 23,
+    "expected_supervised_total": 12,
+    "expected_unsupervised_families": [
+      "ee",
+      "gmm",
+      "hbos",
+      "iso",
+      "knn",
+      "lof",
+      "ocsvm",
+      "pca"
+    ],
+    "expected_supervised_families": [
+      "extratrees",
+      "hgb",
+      "logreg",
+      "rf"
+    ],
+    "complete": true,
+    "observed_total": 35,
+    "successful_total": 35,
+    "successful_config_keys": [
+      "05cb79428e0182bd",
+      "1aa88e0aee28054b",
+      "2e1acb35b4f4be24",
+      "3201f87f139ef361",
+      "33308d68fdb1efb9",
+      "3566bbd40b8500ba",
+      "386c08213b0f306c",
+      "38b251e31b5a809b",
+      "47498dbbabe446c6",
+      "475bbff5b981ab13",
+      "54228c8bb16fc6e4",
+      "58bdfe4dc53487eb",
+      "599f4cfc6d022e93",
+      "6fd73a5a648717de",
+      "76dc1e0debc14c0d",
+      "7bb084890009f7ae",
+      "7c7338df2053f39d",
+      "82e9c1670ade2959",
+      "8dafb9449e0afeee",
+      "a8776d666bc7d94e",
+      "ba93482b78387e0c",
+      "bd5e81f32fb87ad5",
+      "bdfb3bfe69c7ce85",
+      "be53609fb5b1f527",
+      "c06e12e49723fd12",
+      "c44ad18d2cef63d8",
+      "ccc2c5cb74977bf4",
+      "d30276eb746b9a47",
+      "e8f4690a141c8384",
+      "eca77f525ef6665b",
+      "ee4fb4b7a3b77b94",
+      "ef2587fe6bd0d492",
+      "f02e378a9d3ec6a9",
+      "f48fea1f670715bb",
+      "f696f1a9f76eb386"
+    ],
+    "missing_config_keys": [],
+    "extra_config_keys": [],
+    "invalid_config_keys": [],
+    "stale_protocol_config_keys": [],
+    "failed_config_keys": [],
+    "unsupervised_families": [
+      "ee",
+      "gmm",
+      "hbos",
+      "iso",
+      "knn",
+      "lof",
+      "ocsvm",
+      "pca"
+    ],
+    "supervised_families": [
+      "extratrees",
+      "hgb",
+      "logreg",
+      "rf"
+    ]
+  },
+  "unsupervised": {
+    "ee": {
+      "config_key": "e8f4690a141c8384",
+      "params": {},
+      "election_score": 0.7952,
+      "composite": 0.7952,
+      "proxy_auc_07": 0.8503,
+      "precision_at_k": 0.002,
+      "stability_jaccard": 0.6079,
+      "seed_consistency": 0.9993
+    },
+    "gmm": {
+      "config_key": "05cb79428e0182bd",
+      "params": {
+        "n_components": 8
+      },
+      "election_score": 0.8542,
+      "composite": 0.8542,
+      "proxy_auc_07": 0.9048,
+      "precision_at_k": 0.006,
+      "stability_jaccard": 0.7919,
+      "seed_consistency": 0.8494
+    },
+    "hbos": {
+      "config_key": "386c08213b0f306c",
+      "params": {
+        "n_bins": 50
+      },
+      "election_score": 0.8761,
+      "composite": 0.8761,
+      "proxy_auc_07": 0.8439,
+      "precision_at_k": 0.0,
+      "stability_jaccard": 0.8468,
+      "seed_consistency": 1.0
+    },
+    "iso": {
+      "config_key": "ba93482b78387e0c",
+      "params": {
+        "n_estimators": 500
+      },
+      "election_score": 0.8977,
+      "composite": 0.8977,
+      "proxy_auc_07": 0.9115,
+      "precision_at_k": 0.0,
+      "stability_jaccard": 0.8244,
+      "seed_consistency": 0.9951
+    },
+    "knn": {
+      "config_key": "bd5e81f32fb87ad5",
+      "params": {
+        "n_neighbors": 20
+      },
+      "election_score": 0.8721,
+      "composite": 0.8721,
+      "proxy_auc_07": 0.8494,
+      "precision_at_k": 0.002,
+      "stability_jaccard": 0.8335,
+      "seed_consistency": 0.9905
+    },
+    "lof": {
+      "config_key": "475bbff5b981ab13",
+      "params": {
+        "n_neighbors": 100
+      },
+      "election_score": 0.8173,
+      "composite": 0.8173,
+      "proxy_auc_07": 0.8713,
+      "precision_at_k": 0.002,
+      "stability_jaccard": 0.6435,
+      "seed_consistency": 1.0
+    },
+    "ocsvm": {
+      "config_key": "ccc2c5cb74977bf4",
+      "params": {
+        "nu": 0.1
+      },
+      "election_score": 0.9272,
+      "composite": 0.9272,
+      "proxy_auc_07": 0.9101,
+      "precision_at_k": 0.002,
+      "stability_jaccard": 0.9095,
+      "seed_consistency": 0.9969
+    },
+    "pca": {
+      "config_key": "58bdfe4dc53487eb",
+      "params": {
+        "n_components": 10
+      },
+      "election_score": 0.8214,
+      "composite": 0.8214,
+      "proxy_auc_07": 0.7278,
+      "precision_at_k": 0.0,
+      "stability_jaccard": 0.8397,
+      "seed_consistency": 1.0
+    }
+  },
+  "ensemble_families": [
+    "ocsvm",
+    "iso",
+    "hbos",
+    "knn"
+  ],
+  "supervised_champion": {
+    "family": "hgb",
+    "config_key": "47498dbbabe446c6",
+    "params": {
+      "learning_rate": 0.05,
+      "max_depth": 4,
+      "max_iter": 300
+    },
+    "oot_rocauc": 1.0,
+    "cv_rocauc_mean": 1.0,
+    "cv_prauc_mean": 0.9933
+  },
+  "explainer": {
+    "family": "hgb",
+    "config_key": "47498dbbabe446c6",
+    "params": {
+      "learning_rate": 0.05,
+      "max_depth": 4,
+      "max_iter": 300
+    },
+    "oot_rocauc": 1.0
+  },
+  "model_election_sensitivity": {
+    "status": "rank_sensitivity_only",
+    "declared_ensemble_families": [
+      "ocsvm",
+      "iso",
+      "hbos",
+      "knn"
+    ],
+    "alternate_weight_scenarios": {
+      "balanced": {
+        "weights": {
+          "proxy_auc_07": 0.34,
+          "stability_jaccard": 0.33,
+          "seed_consistency": 0.33
+        },
+        "ensemble_families": [
+          "ocsvm",
+          "iso",
+          "hbos",
+          "knn"
+        ],
+        "top_k_jaccard_vs_declared": 1.0,
+        "changed_family_configuration_count": 1,
+        "family_config_keys": {
+          "ee": "e8f4690a141c8384",
+          "gmm": "54228c8bb16fc6e4",
+          "hbos": "386c08213b0f306c",
+          "iso": "ba93482b78387e0c",
+          "knn": "bd5e81f32fb87ad5",
+          "lof": "475bbff5b981ab13",
+          "ocsvm": "ccc2c5cb74977bf4",
+          "pca": "58bdfe4dc53487eb"
+        }
+      },
+      "stability_emphasis": {
+        "weights": {
+          "proxy_auc_07": 0.3,
+          "stability_jaccard": 0.5,
+          "seed_consistency": 0.2
+        },
+        "ensemble_families": [
+          "ocsvm",
+          "gmm",
+          "iso",
+          "hbos"
+        ],
+        "top_k_jaccard_vs_declared": 0.6,
+        "changed_family_configuration_count": 1,
+        "family_config_keys": {
+          "ee": "e8f4690a141c8384",
+          "gmm": "54228c8bb16fc6e4",
+          "hbos": "386c08213b0f306c",
+          "iso": "ba93482b78387e0c",
+          "knn": "bd5e81f32fb87ad5",
+          "lof": "475bbff5b981ab13",
+          "ocsvm": "ccc2c5cb74977bf4",
+          "pca": "58bdfe4dc53487eb"
+        }
+      },
+      "proxy_emphasis": {
+        "weights": {
+          "proxy_auc_07": 0.6,
+          "stability_jaccard": 0.25,
+          "seed_consistency": 0.15
+        },
+        "ensemble_families": [
+          "ocsvm",
+          "iso",
+          "gmm",
+          "hbos"
+        ],
+        "top_k_jaccard_vs_declared": 0.6,
+        "changed_family_configuration_count": 0,
+        "family_config_keys": {
+          "ee": "e8f4690a141c8384",
+          "gmm": "05cb79428e0182bd",
+          "hbos": "386c08213b0f306c",
+          "iso": "ba93482b78387e0c",
+          "knn": "bd5e81f32fb87ad5",
+          "lof": "475bbff5b981ab13",
+          "ocsvm": "ccc2c5cb74977bf4",
+          "pca": "58bdfe4dc53487eb"
+        }
+      }
+    },
+    "precision_at_k_ranking": {
+      "ensemble_families": [
+        "gmm",
+        "iso",
+        "lof",
+        "ee"
+      ],
+      "top_k_jaccard_vs_declared": 0.1429,
+      "pairwise_rank_conflicts_within_declared_top_k": 3,
+      "family_config_keys": {
+        "ee": "e8f4690a141c8384",
+        "gmm": "05cb79428e0182bd",
+        "hbos": "3201f87f139ef361",
+        "iso": "c44ad18d2cef63d8",
+        "knn": "7bb084890009f7ae",
+        "lof": "33308d68fdb1efb9",
+        "ocsvm": "599f4cfc6d022e93",
+        "pca": "c06e12e49723fd12"
+      }
+    },
+    "interpretation": "Sensitivity of the proxy/stability rank election on this snapshot; it is not validation against fraud, corruption, or external outcomes."
+  },
+  "composite_weights": {
+    "proxy_auc_07": 0.45,
+    "stability_jaccard": 0.35,
+    "seed_consistency": 0.2
+  },
+  "composite_formula": "0.45×proxy_auc_07 + 0.35×stability_jaccard + 0.20×seed_consistency"
+}

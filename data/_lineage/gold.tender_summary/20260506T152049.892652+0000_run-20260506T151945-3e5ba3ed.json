@@ -1,0 +1,52 @@
+{
+  "table": "gold.tender_summary",
+  "layer": "gold",
+  "rows": 75710,
+  "columns": 79,
+  "schema_fingerprint": "64eee63d65d6e30b",
+  "inputs": [
+    {
+      "path": "/Users/ylldrit/Desktop/thesis/data/models/isolation_forest.joblib",
+      "sha256": "d651a425041a5b6819a6970dd4fd4cfc461d6082c2fd86dc6fed19ff0943d6ef",
+      "rows": null,
+      "size_bytes": 3069663
+    },
+    {
+      "path": "/Users/ylldrit/Desktop/thesis/data/models/lof.joblib",
+      "sha256": "3a2b7936bfea7721a2fec5023aba57945622877a56b773ee28bfcf0c2a02655c",
+      "rows": null,
+      "size_bytes": 31498365
+    },
+    {
+      "path": "/Users/ylldrit/Desktop/thesis/data/models/elliptic_envelope.joblib",
+      "sha256": "5fd7ce6d311793fbc4d139099250accb1137edb2d749d09ee916e35456065e0e",
+      "rows": null,
+      "size_bytes": 770173
+    },
+    {
+      "path": "/Users/ylldrit/Desktop/thesis/data/models/one_class_svm.joblib",
+      "sha256": "d1cd35d83950749ca7983107525f723db74c73ebcadbd1eaa0c6ad0d3d4c3469",
+      "rows": null,
+      "size_bytes": 97472
+    },
+    {
+      "path": "/Users/ylldrit/Desktop/thesis/data/models/hgb_classifier.joblib",
+      "sha256": "0b596b94b5a7f561a92bc30a39ce27be0538458ee3c37b0532ad1c66720911ea",
+      "rows": null,
+      "size_bytes": 335866
+    }
+  ],
+  "output_path": "/Users/ylldrit/Desktop/thesis/data/gold/tender_summary.parquet",
+  "output_sha256": "5537e168548edb01835927609f89564b8ee8263857ab9c4171c784685e2714d0",
+  "output_size_bytes": 18330496,
+  "build_started_at": "2026-05-06T15:20:49.661356+00:00",
+  "build_completed_at": "2026-05-06T15:20:49.892652+00:00",
+  "duration_seconds": 0.25,
+  "git_sha": "unknown",
+  "code_version": "1.0.0",
+  "pipeline_run_id": "run-20260506T151945-3e5ba3ed",
+  "parameters": {
+    "random_seed": 7,
+    "rule_label_threshold": 0.4
+  }
+}

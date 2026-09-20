@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "stage": "benchmark",
+  "release_id": "run-20260719T121903-10fc4e60",
+  "generation_fingerprint": "8a6235fa00234bb7c4c555211f5eaa20ec8323e0bac7ae2963b187c3dbd131ed",
+  "created_at": "2026-07-19T12:28:02.605855+00:00",
+  "inputs": [
+    {
+      "path": "gold/gold.release.json",
+      "sha256": "d893acf1204f38fe6063bc8609a844783941a59c233b06508b4432c40e4fd5f2",
+      "size_bytes": 10366
+    },
+    {
+      "path": "gold/tender_features.parquet",
+      "sha256": "6f776a40a2bd6b71d38e3b683992152fb53f751a11803b107ab77ebf5d95a10e",
+      "size_bytes": 14022508
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "models/benchmark/results.jsonl",
+      "sha256": "7848f2d8e4acab8428b0ead2566c2fafeeb4f067df66371d761e37957a99417b",
+      "size_bytes": 64605
+    },
+    {
+      "path": "models/benchmark/champions.json",
+      "sha256": "733b592ab098315ece756e20bc82511d3b7ab20f79043fb453ca53bff6f39571",
+      "size_bytes": 17407
+    },
+    {
+      "path": "models/benchmark/leaderboard.parquet",
+      "sha256": "7a0d827354df609260be01f1148e9d1c899705bb5809dd26ff18fb38e53553bc",
+      "size_bytes": 32910
+    },
+    {
+      "path": "models/benchmark/leaderboard.md",
+      "sha256": "850134a619a29aab5abaae821bed821d04d71e5d87cc38946a0e42eca45073b0",
+      "size_bytes": 11907
+    },
+    {
+      "path": "models/benchmark/leaderboard.parquet.lineage.json",
+      "sha256": "55021633b78e97e310a9e781bc9047c2583848f6a60f1739280954519779603c",
+      "size_bytes": 1678
+    }
+  ],
+  "checks": [
+    {
+      "path": "dq/benchmark.release.dq.json",
+      "sha256": "1c47d121d79a75c1ed4baa35cabbc6bbb6f1cf0ac46dc9d86cae72fc92850031",
+      "size_bytes": 1044,
+      "passed": true
+    }
+  ],
+  "metadata": {
+    "data_fingerprint": "03e8f6b3d597540b",
+    "protocol_fingerprint": "0e377abdd3607b8d",
+    "implementation_fingerprint": "f411ec1ea85d2b9fd0089adc8dfa1222ccdeba8aa416bb9bbb878a54bebfb318",
+    "semantic_fingerprint": "7516c9e49e6a4b975dfeffedff43b504b9b2a46fdb376de46e3f743e91c5a1aa",
+    "lineage_sidecars": true,
+    "provenance": {
+      "implementation_fingerprint": "08b5b2ff559bb39a2477163aa9b97e1ea03418dc13e46c466dfee065715d513d",
+      "implementation_manifest": {
+        "pyproject.toml": "bca10d361c7efe6b83d666d95f69ea1e6096b44e52c4779ae68184b867ac4159",
+        "requirements-lock.txt": "2b40d619a3834d2f596cdcc6dd9aa2dfd0d3bc4678017b9cae21f842e34e60fc",
+        "requirements.txt": "a84da885dd594d0923536e1ca048329bd2f289aafdd0b687b3621f8926bb0ca0",
+        "src/thesis/__init__.py": "e6a4e4a7b8bdd4103d6d0473a45ea12e4c90cb39d8a005800f8f6a5eec56240c",
+        "src/thesis/__main__.py": "498bde78201ad5124532e411ccd1ccec8a6b40872813c190a59b5b23967778d6",
+        "src/thesis/anomaly/__init__.py": "5d0915d3c32261c1237d35ea7262d75a94836889068a9dab165d88b85ddebe36",
+        "src/thesis/anomaly/artifact_integrity.py": "2d6436a37a4e3b8a7ebe921d1a315a960a541c2d0c1b03dab104deb996d4c00f",
+        "src/thesis/anomaly/benchmark.py": "90769693decbfdc32e466dc998e994ba96bb415a88de2fdf7ba3a69f2fc06186",
+        "src/thesis/anomaly/comparison.py": "c8a76183bed74e4ef880d7d9e04ea6750714c3a10d0b2dfe00d200bc64908cba",
+        "src/thesis/anomaly/detectors.py": "e56de2dfe1687a1b94d3442d1ab852a689b3c2514c3acb9204d34d2c64047abb",
+        "src/thesis/anomaly/ensemble.py": "4873add42b1fcec9a8868f973cbd2e0e3a64517dc7ae989c91e3450200088cc7",
+        "src/thesis/anomaly/explanations.py": "0326192dc66da2c4e6fac28d91a90f273f069f821848a4cb1dc3622f6b62093c",
+        "src/thesis/anomaly/models.py": "dcb8a1dc515f24f1c0854c40d0f6132313f269fa60437ca4873bb8789da7ee59",
+        "src/thesis/anomaly/rules.py": "0653976db5db9efaf3e8c67429d8687242156c5f59c5f319d28b21044a8923a2",
+        "src/thesis/anomaly/validation.py": "7b7a3fb4f8589c40c20003364582ead8d0bd01a85c30709507f7ef426de3b25e",
+        "src/thesis/audit.py": "a9d4fe330a9a6ee14d01ecd2108fe7eec248e0b1a07479fce8f84cbf1972b639",
+        "src/thesis/cli.py": "e53763a2ab7d7cade066d3797c0d4b186edd632b02193358d4780c947a173fe7",
+        "src/thesis/config.py": "e3ce62d84c38c0281b86d0785990041e5a2aaa5c60673c6f114d4222fbeb7cce",
+        "src/thesis/domain/__init__.py": "99bccce708fb6477af3cb553e58f254670aa938262113f80d00db13aa8bbd313",
+        "src/thesis/domain/contracts.py": "4d9a9cf30c3d7444d9779cc20db413e10f1535622c2129c8cf50d07a85ea0442",
+        "src/thesis/domain/features.py": "8524d815e06045fab71c5015ecb7ef5d3e4321cc814a918140c024025cee8b6b",
+        "src/thesis/domain/procedures.py": "d1dae6c8f0fee89a91638a1e4139f81ffe8fa9df02bf16c478dfe8f499c13455",
+        "src/thesis/domain/schemas.py": "ad5fb4778cc571a7d09b11fc56bcc68b477a06a28b4934f1617c0d4dbefd7297",
+        "src/thesis/dq/__init__.py": "6d20a38e999cef0d543a77eca39eed05b2b4371537105bfda98cdd283926dbde",
+        "src/thesis/dq/framework.py": "daded3b5b3732b5847af78593159c112c023ef0c85017ccd9d4043f616555d1a",
+        "src/thesis/dq/suites.py": "4c320b2de663a3331dde5ae16a9a12b17ed02e5429a8f8a23ea4eb5691825ed7",
+        "src/thesis/external/__init__.py": "e01266a92c8411d96f1f15e59535ca03043cee698417e5dfde35ec355e96c555",
+        "src/thesis/external/oshp.py": "f96e59f2f6edb154ce89dc4613c02c48a9d1d2db743a989bd4ee111361810dd6",
+        "src/thesis/io/__init__.py": "a12248123df33b677aebcbfed94f0646bc95bb198c43ed0dd2afc5b364bba02c",
+        "src/thesis/io/readers.py": "23408835d16e43730d8267348613c1312bcfc774810ce1296291ac0a81264f0d",
+        "src/thesis/io/writers.py": "cfd211995747fad1a7b52ac2a050f2d68a9e8c4a66af9888e5f62bb24a7c2162",
+        "src/thesis/jsonutil.py": "048197f09854fd24c14ce74455d0b2d762435a8d75325c0d23883cec27f0b4fe",
+        "src/thesis/lineage.py": "69c7ccc07b4d7109fedb37f582a372495ed9bfd97254c719f02823a278fef29d",
+        "src/thesis/locking.py": "40258250b162089582b7e6afa944f2437224fb84b75cca840dea8b2a29e3a692",
+        "src/thesis/logging.py": "68941c18774da197a77ccb0eaafabf924048ac18c65b31b2b7d34dcd4c6e1a68",
+        "src/thesis/narrative.py": "211194939b0710562b07b47a61a4cbf8931cdddb8382c919c34bf88c8b2ecc73",
+        "src/thesis/paths.py": "544786e87cbbeb9a5f10e49a3ed9d359fb8c29bf68f2096cff87d6572356932d",
+        "src/thesis/pipeline/__init__.py": "807d9a89bb865864cdaa4854c50d50b0a9b4a6bed52cc9c8b15405c21eed8b9e",
+        "src/thesis/pipeline/benchmark.py": "47d2ac4c3d0d3b076959951b3c699c6dd9a0489e2681a9da9a0aa3b7b6654494",
+        "src/thesis/pipeline/bronze.py": "92359d81977f0a3f64b56590561eb69a9fae536bfa4fc554a9364e27a391a298",
+        "src/thesis/pipeline/dag.py": "2282a8843ef5ace1393844c87e224a0aef6cacb33edfab7899efb8a21a4baaa7",
+        "src/thesis/pipeline/gold.py": "3402ba1215fbb246a7d468f9f030fd7ef815074265b25c9455dc5d16729d079c",
+        "src/thesis/pipeline/ml.py": "cbea959876d2188aebb4a7e303d27d800e59befd2fe60a78cfda19e6d5430432",
+        "src/thesis/pipeline/silver.py": "645e9a39362d4a370426cfe86d7e2a3d5c7c7ff04983f0c958fbc9165b0fd059",
+        "src/thesis/provenance.py": "c438f9462b9447e17e4b7bffa40431fefa285f764c6452cf304fc8364d796785",
+        "src/thesis/release.py": "1908288f58ec94df626a8f62d31f0c6d70f41c21fb1991ec948b8e8c776894a7",
+        "src/thesis/reporting.py": "bd27394dce53b9628981cc51206e5521ba8b16d96b162f8db04aa65b4338675d",
+        "src/thesis/viz.py": "2d91774078787b0479a11e6c9e5709c344471a5710e34848ee577a5a3d62ce5c",
+        "uv.lock": "3eb6ba316b42c2a75c6aa5ec33e7d2daf39251c0461887ee6ea4c8d09d948a0c"
+      },
+      "configuration_fingerprint": "a7e3c914421adf51649fe580583749cb0ac522e301967ddab6a7aecff8a6ba0c",
+      "configuration": {
+        "benchmark_bootstrap_runs": 4,
+        "benchmark_cv_folds": 5,
+        "benchmark_extra_seeds": 2,
+        "benchmark_flag_quantile": 0.95,
+        "benchmark_oot_train_max_year": 2023,
+        "benchmark_precision_at": 500,
+        "benchmark_supervised_seeds": 2,
+        "benchmark_top_k_families": 4,
+        "bootstrap_samples": 20,
+        "cv_folds": 5,
+        "elliptic_envelope_contamination": 0.05,
+        "ensemble_score_review_threshold": 0.5,
+        "fail_fast_on_dq": false,
+        "hgb_max_depth": 4,
+        "hgb_n_estimators": 300,
+        "iso_forest_contamination": 0.05,
+        "iso_forest_n_estimators": 300,
+        "lof_contamination": 0.05,
+        "lof_n_neighbors": 30,
+        "minimum_models_agreeing_for_high_confidence": 3,
+        "ocds_chunk_bytes": 1048576,
+        "ocds_publication_url": "https://data.open-contracting.org/en/publication/115/download?name=full.jsonl.gz",
+        "ocds_request_timeout_s": 600,
+        "ocsvm_nu": 0.05,
+        "ocsvm_subsample_size": 10000,
+        "random_seed": 7,
+        "rule_label_threshold": 0.4,
+        "rule_score_priority_threshold": 0.7,
+        "rule_score_review_threshold": 0.5,
+        "write_lineage_sidecars": true
+      },
+      "runtime": {
+        "python": "3.9.6",
+        "python_implementation": "CPython",
+        "platform": "darwin",
+        "package": "1.3.0",
+        "libraries": {
+          "numpy": "1.26.4",
+          "pandas": "2.2.3",
+          "pyarrow": "21.0.0",
+          "scipy": "1.13.1",
+          "scikit_learn": "1.4.2",
+          "shap": "0.49.1",
+          "joblib": "1.5.3"
+        }
+      },
+      "runtime_fingerprint": "81f5e8828e90d85a27aca5a3bfa08b0c9c90071a85f88ca78261113da850f2bc"
+    }
+  }
+}

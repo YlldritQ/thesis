@@ -1,0 +1,622 @@
+{
+  "schema_version": 2,
+  "data_fingerprint": "03e8f6b3d597540b",
+  "protocol_fingerprint": "0e377abdd3607b8d",
+  "benchmark_complete": true,
+  "champions_schema_version": 2,
+  "champions_created_at": "2026-07-19T12:28:01.106923+00:00",
+  "benchmark_implementation_fingerprint": "f411ec1ea85d2b9fd0089adc8dfa1222ccdeba8aa416bb9bbb878a54bebfb318",
+  "benchmark_semantic_fingerprint": "7516c9e49e6a4b975dfeffedff43b504b9b2a46fdb376de46e3f743e91c5a1aa",
+  "n_records": 75710,
+  "n_features": 20,
+  "features": [
+    "log_estimated_eur",
+    "num_lots",
+    "num_bidders",
+    "num_parties",
+    "n_awards",
+    "n_supplier_identities",
+    "log_awarded_eur",
+    "awarded_value_ratio",
+    "days_to_first_award",
+    "days_tender_open",
+    "winner_top_share",
+    "value_rank_within_category",
+    "value_rank_within_method",
+    "value_rank_within_entity",
+    "entity_tender_count",
+    "is_single_bidder",
+    "is_zero_bidder",
+    "was_awarded",
+    "lot_value_mismatch",
+    "end_before_start"
+  ],
+  "ensemble_models": [
+    "ocsvm",
+    "iso",
+    "hbos",
+    "knn"
+  ],
+  "all_detector_families": [
+    "iso",
+    "lof",
+    "ee",
+    "ocsvm",
+    "pca",
+    "gmm",
+    "knn",
+    "hbos"
+  ],
+  "model_selection": "benchmark champions",
+  "supervised_model": "hgb (HistGradientBoosting on rule_score >= threshold)",
+  "rule_label_threshold": 0.4,
+  "IMPORTANT_metrics_are_faithfulness_to_rules_not_detection": true,
+  "circularity_note": "y = (rule_score >= threshold). The proxy is built from inputs that are mostly present directly or via closely overlapping raw features in X, so near-perfect ROC-AUC/PR-AUC/OOT measures proxy faithfulness rather than independent generalization. Use ONLY for raw-feature attribution via SHAP; these are NOT detection-performance figures.",
+  "cross_validation": {
+    "n_splits": 5,
+    "params": {
+      "max_depth": 4,
+      "max_iter": 300,
+      "learning_rate": 0.05
+    },
+    "rocauc_mean": 0.9999775887464496,
+    "rocauc_std": 2.4268192265779312e-05,
+    "prauc_mean": 0.9925059269080931,
+    "prauc_std": 0.008019742153517678,
+    "rocauc_per_fold": [
+      0.9999809715771742,
+      0.9999323433855088,
+      1.0,
+      0.9999971809743962,
+      0.9999774477951696
+    ],
+    "prauc_per_fold": [
+      0.9936585545292858,
+      0.9776601443435777,
+      1.0,
+      0.99910404406217,
+      0.992106891605432
+    ]
+  },
+  "rule_only_baseline_and_confusion": {
+    "note": "The rule layer is the auditable heuristic baseline. This table shows how much the unsupervised ensemble AGREES with it. A large ML-only or rule-demoted count means the ensemble is NOT a corroboration of the rules — its added value over the rule-only baseline is unvalidated (no external ground truth).",
+    "rule_flag_threshold": 0.5,
+    "ensemble_flag_threshold": 0.5,
+    "rule_flagged_total": 235,
+    "ensemble_flagged_total": 24690,
+    "confusion": {
+      "both_flagged": 235,
+      "rule_only_demoted_by_ensemble": 0,
+      "ensemble_only_ml_unvalidated": 24455,
+      "neither": 51020
+    },
+    "pct_rule_flags_demoted": 0.0,
+    "pct_ensemble_that_is_ml_only": 0.9905,
+    "ensemble_hi_total": 6505
+  },
+  "stability_by_ensemble_family": {
+    "ocsvm": {
+      "runs": 4,
+      "sample_frac": 0.8,
+      "flag_quantile": 0.95,
+      "mean_flagged_count": 3786.0,
+      "mean_jaccard": 0.888094949969714,
+      "mean_top_overlap": 0.9405705229793978,
+      "duration_seconds": 16.94,
+      "params": {
+        "nu": 0.1,
+        "subsample_size": 10000
+      },
+      "deployed": true
+    },
+    "iso": {
+      "runs": 4,
+      "sample_frac": 0.8,
+      "flag_quantile": 0.95,
+      "mean_flagged_count": 3786.0,
+      "mean_jaccard": 0.835035687408587,
+      "mean_top_overlap": 0.9100633914421553,
+      "duration_seconds": 10.89,
+      "params": {
+        "n_estimators": 500,
+        "contamination": 0.05
+      },
+      "deployed": true
+    },
+    "hbos": {
+      "runs": 4,
+      "sample_frac": 0.8,
+      "flag_quantile": 0.95,
+      "mean_flagged_count": 3786.0,
+      "mean_jaccard": 0.8347733286603941,
+      "mean_top_overlap": 0.9097112167635149,
+      "duration_seconds": 1.21,
+      "params": {
+        "n_bins": 50
+      },
+      "deployed": true
+    },
+    "knn": {
+      "runs": 4,
+      "sample_frac": 0.8,
+      "flag_quantile": 0.95,
+      "mean_flagged_count": 3786.0,
+      "mean_jaccard": 0.823132437290814,
+      "mean_top_overlap": 0.902271526677232,
+      "duration_seconds": 4.41,
+      "params": {
+        "n_neighbors": 20
+      },
+      "deployed": true
+    }
+  },
+  "limited_replication_note": "Benchmark stability uses 4 bootstrap refits and stochastic-family consistency uses 2 extra seeds. These limited repeats are snapshot repeatability diagnostics, not uncertainty estimates or external validation.",
+  "inter_model_agreement": {
+    "models": [
+      "iso_score",
+      "lof_score",
+      "ee_score",
+      "ocsvm_score",
+      "pca_score",
+      "gmm_score",
+      "knn_score",
+      "hbos_score"
+    ],
+    "spearman_matrix": {
+      "iso_score": {
+        "iso_score": 1.0,
+        "lof_score": 0.287,
+        "ee_score": 0.671,
+        "ocsvm_score": 0.748,
+        "pca_score": 0.709,
+        "gmm_score": 0.615,
+        "knn_score": 0.369,
+        "hbos_score": 0.664
+      },
+      "lof_score": {
+        "iso_score": 0.287,
+        "lof_score": 1.0,
+        "ee_score": 0.481,
+        "ocsvm_score": 0.181,
+        "pca_score": 0.242,
+        "gmm_score": 0.38,
+        "knn_score": 0.603,
+        "hbos_score": 0.293
+      },
+      "ee_score": {
+        "iso_score": 0.671,
+        "lof_score": 0.481,
+        "ee_score": 1.0,
+        "ocsvm_score": 0.465,
+        "pca_score": 0.687,
+        "gmm_score": 0.696,
+        "knn_score": 0.723,
+        "hbos_score": 0.514
+      },
+      "ocsvm_score": {
+        "iso_score": 0.748,
+        "lof_score": 0.181,
+        "ee_score": 0.465,
+        "ocsvm_score": 1.0,
+        "pca_score": 0.629,
+        "gmm_score": 0.378,
+        "knn_score": 0.065,
+        "hbos_score": 0.415
+      },
+      "pca_score": {
+        "iso_score": 0.709,
+        "lof_score": 0.242,
+        "ee_score": 0.687,
+        "ocsvm_score": 0.629,
+        "pca_score": 1.0,
+        "gmm_score": 0.533,
+        "knn_score": 0.371,
+        "hbos_score": 0.276
+      },
+      "gmm_score": {
+        "iso_score": 0.615,
+        "lof_score": 0.38,
+        "ee_score": 0.696,
+        "ocsvm_score": 0.378,
+        "pca_score": 0.533,
+        "gmm_score": 1.0,
+        "knn_score": 0.625,
+        "hbos_score": 0.383
+      },
+      "knn_score": {
+        "iso_score": 0.369,
+        "lof_score": 0.603,
+        "ee_score": 0.723,
+        "ocsvm_score": 0.065,
+        "pca_score": 0.371,
+        "gmm_score": 0.625,
+        "knn_score": 1.0,
+        "hbos_score": 0.483
+      },
+      "hbos_score": {
+        "iso_score": 0.664,
+        "lof_score": 0.293,
+        "ee_score": 0.514,
+        "ocsvm_score": 0.415,
+        "pca_score": 0.276,
+        "gmm_score": 0.383,
+        "knn_score": 0.483,
+        "hbos_score": 1.0
+      }
+    },
+    "mean_pairwise": 0.48164480183937824,
+    "min_pairwise": 0.06526863568907239,
+    "max_pairwise": 0.7476863885753056,
+    "note": "Pairwise Spearman describes rank similarity among detectors. Low correlation is diversity, not evidence that the ensemble reduces false positives or improves detection."
+  },
+  "rank_agreement_quantile_sensitivity": {
+    "status": "rank_membership_sensitivity_only",
+    "minimum_models_agreeing": 3,
+    "declared_quantile": 0.95,
+    "declared_flagged_count": 2453,
+    "quantiles": {
+      "q0.90": {
+        "quantile": 0.9,
+        "flagged_count": 5008,
+        "flagged_share": 0.066147,
+        "membership_jaccard_vs_declared": 0.4898
+      },
+      "q0.95": {
+        "quantile": 0.95,
+        "flagged_count": 2453,
+        "flagged_share": 0.0324,
+        "membership_jaccard_vs_declared": 1.0
+      },
+      "q0.99": {
+        "quantile": 0.99,
+        "flagged_count": 425,
+        "flagged_share": 0.005614,
+        "membership_jaccard_vs_declared": 0.1733
+      }
+    },
+    "interpretation": "This reports sensitivity of an unlabeled review-set definition. It is not confidence calibration or detection validation."
+  },
+  "deployed_score_feature_ablation": {
+    "status": "rank_stability_only",
+    "top_set_definition": "rank percentile >= 0.95",
+    "subsets": {
+      "raw_fact_only": {
+        "declared_features": [
+          "log_estimated_eur",
+          "num_lots",
+          "num_bidders",
+          "num_parties",
+          "n_awards",
+          "n_supplier_identities",
+          "log_awarded_eur",
+          "days_to_first_award",
+          "days_tender_open"
+        ],
+        "features_used": [
+          "log_estimated_eur",
+          "num_lots",
+          "num_bidders",
+          "num_parties",
+          "n_awards",
+          "n_supplier_identities",
+          "log_awarded_eur",
+          "days_to_first_award",
+          "days_tender_open"
+        ],
+        "missing_features": [],
+        "families": {
+          "ocsvm": {
+            "status": "ok",
+            "spearman_rank_correlation": 0.8427,
+            "top_5pct_reference_count": 3786,
+            "top_5pct_ablation_count": 3786,
+            "top_5pct_overlap_count": 2929,
+            "top_5pct_jaccard": 0.6308
+          },
+          "iso": {
+            "status": "ok",
+            "spearman_rank_correlation": 0.8585,
+            "top_5pct_reference_count": 3786,
+            "top_5pct_ablation_count": 3786,
+            "top_5pct_overlap_count": 2472,
+            "top_5pct_jaccard": 0.4847
+          },
+          "hbos": {
+            "status": "ok",
+            "spearman_rank_correlation": 0.8883,
+            "top_5pct_reference_count": 3786,
+            "top_5pct_ablation_count": 3786,
+            "top_5pct_overlap_count": 3072,
+            "top_5pct_jaccard": 0.6827
+          },
+          "knn": {
+            "status": "ok",
+            "spearman_rank_correlation": 0.844,
+            "top_5pct_reference_count": 3786,
+            "top_5pct_ablation_count": 3786,
+            "top_5pct_overlap_count": 3025,
+            "top_5pct_jaccard": 0.6653
+          }
+        },
+        "status": "ok",
+        "ensemble_comparison": {
+          "spearman_rank_correlation": 0.905,
+          "top_5pct_reference_count": 3786,
+          "top_5pct_ablation_count": 3786,
+          "top_5pct_overlap_count": 3161,
+          "top_5pct_jaccard": 0.7166
+        }
+      },
+      "pre_outcome_fields_snapshot": {
+        "declared_features": [
+          "log_estimated_eur",
+          "num_lots",
+          "num_bidders",
+          "days_tender_open",
+          "value_rank_within_category",
+          "value_rank_within_method",
+          "value_rank_within_entity",
+          "entity_tender_count",
+          "is_single_bidder",
+          "is_zero_bidder",
+          "lot_value_mismatch",
+          "end_before_start"
+        ],
+        "features_used": [
+          "log_estimated_eur",
+          "num_lots",
+          "num_bidders",
+          "days_tender_open",
+          "value_rank_within_category",
+          "value_rank_within_method",
+          "value_rank_within_entity",
+          "entity_tender_count",
+          "is_single_bidder",
+          "is_zero_bidder",
+          "lot_value_mismatch",
+          "end_before_start"
+        ],
+        "missing_features": [],
+        "families": {
+          "ocsvm": {
+            "status": "ok",
+            "spearman_rank_correlation": 0.8186,
+            "top_5pct_reference_count": 3786,
+            "top_5pct_ablation_count": 3786,
+            "top_5pct_overlap_count": 2570,
+            "top_5pct_jaccard": 0.5138
+          },
+          "iso": {
+            "status": "ok",
+            "spearman_rank_correlation": 0.6463,
+            "top_5pct_reference_count": 3786,
+            "top_5pct_ablation_count": 3786,
+            "top_5pct_overlap_count": 1937,
+            "top_5pct_jaccard": 0.3437
+          },
+          "hbos": {
+            "status": "ok",
+            "spearman_rank_correlation": 0.8023,
+            "top_5pct_reference_count": 3786,
+            "top_5pct_ablation_count": 3786,
+            "top_5pct_overlap_count": 2051,
+            "top_5pct_jaccard": 0.3715
+          },
+          "knn": {
+            "status": "ok",
+            "spearman_rank_correlation": 0.7821,
+            "top_5pct_reference_count": 3786,
+            "top_5pct_ablation_count": 3786,
+            "top_5pct_overlap_count": 2256,
+            "top_5pct_jaccard": 0.4244
+          }
+        },
+        "status": "ok",
+        "ensemble_comparison": {
+          "spearman_rank_correlation": 0.8136,
+          "top_5pct_reference_count": 3786,
+          "top_5pct_ablation_count": 3786,
+          "top_5pct_overlap_count": 2594,
+          "top_5pct_jaccard": 0.5211
+        }
+      }
+    },
+    "interpretation": "Models were refit on declared feature subsets. Spearman and top-5% overlap measure ranking dependence on feature families, not model accuracy, causal importance, or external validation. The pre-outcome-field subset is still computed on a static full-period snapshot and therefore does not establish temporal generalization."
+  },
+  "model_election_sensitivity": {
+    "status": "rank_sensitivity_only",
+    "declared_ensemble_families": [
+      "ocsvm",
+      "iso",
+      "hbos",
+      "knn"
+    ],
+    "alternate_weight_scenarios": {
+      "balanced": {
+        "weights": {
+          "proxy_auc_07": 0.34,
+          "stability_jaccard": 0.33,
+          "seed_consistency": 0.33
+        },
+        "ensemble_families": [
+          "ocsvm",
+          "iso",
+          "hbos",
+          "knn"
+        ],
+        "top_k_jaccard_vs_declared": 1.0,
+        "changed_family_configuration_count": 1,
+        "family_config_keys": {
+          "ee": "e8f4690a141c8384",
+          "gmm": "54228c8bb16fc6e4",
+          "hbos": "386c08213b0f306c",
+          "iso": "ba93482b78387e0c",
+          "knn": "bd5e81f32fb87ad5",
+          "lof": "475bbff5b981ab13",
+          "ocsvm": "ccc2c5cb74977bf4",
+          "pca": "58bdfe4dc53487eb"
+        }
+      },
+      "stability_emphasis": {
+        "weights": {
+          "proxy_auc_07": 0.3,
+          "stability_jaccard": 0.5,
+          "seed_consistency": 0.2
+        },
+        "ensemble_families": [
+          "ocsvm",
+          "gmm",
+          "iso",
+          "hbos"
+        ],
+        "top_k_jaccard_vs_declared": 0.6,
+        "changed_family_configuration_count": 1,
+        "family_config_keys": {
+          "ee": "e8f4690a141c8384",
+          "gmm": "54228c8bb16fc6e4",
+          "hbos": "386c08213b0f306c",
+          "iso": "ba93482b78387e0c",
+          "knn": "bd5e81f32fb87ad5",
+          "lof": "475bbff5b981ab13",
+          "ocsvm": "ccc2c5cb74977bf4",
+          "pca": "58bdfe4dc53487eb"
+        }
+      },
+      "proxy_emphasis": {
+        "weights": {
+          "proxy_auc_07": 0.6,
+          "stability_jaccard": 0.25,
+          "seed_consistency": 0.15
+        },
+        "ensemble_families": [
+          "ocsvm",
+          "iso",
+          "gmm",
+          "hbos"
+        ],
+        "top_k_jaccard_vs_declared": 0.6,
+        "changed_family_configuration_count": 0,
+        "family_config_keys": {
+          "ee": "e8f4690a141c8384",
+          "gmm": "05cb79428e0182bd",
+          "hbos": "386c08213b0f306c",
+          "iso": "ba93482b78387e0c",
+          "knn": "bd5e81f32fb87ad5",
+          "lof": "475bbff5b981ab13",
+          "ocsvm": "ccc2c5cb74977bf4",
+          "pca": "58bdfe4dc53487eb"
+        }
+      }
+    },
+    "precision_at_k_ranking": {
+      "ensemble_families": [
+        "gmm",
+        "iso",
+        "lof",
+        "ee"
+      ],
+      "top_k_jaccard_vs_declared": 0.1429,
+      "pairwise_rank_conflicts_within_declared_top_k": 3,
+      "family_config_keys": {
+        "ee": "e8f4690a141c8384",
+        "gmm": "05cb79428e0182bd",
+        "hbos": "3201f87f139ef361",
+        "iso": "c44ad18d2cef63d8",
+        "knn": "7bb084890009f7ae",
+        "lof": "33308d68fdb1efb9",
+        "ocsvm": "599f4cfc6d022e93",
+        "pca": "c06e12e49723fd12"
+      }
+    },
+    "interpretation": "Sensitivity of the proxy/stability rank election on this snapshot; it is not validation against fraud, corruption, or external outcomes."
+  },
+  "supervised_calibration": {
+    "bins": [
+      {
+        "low": -1e-09,
+        "high": 0.013420253588385318,
+        "n": 14632,
+        "mean_pred": 0.013400225174722422,
+        "mean_actual": 0.0,
+        "abs_gap": 0.013400225174722422
+      },
+      {
+        "low": 0.013420253588385318,
+        "high": 1.000000001,
+        "n": 510,
+        "mean_pred": 0.139929925298929,
+        "mean_actual": 0.09215686274509804,
+        "abs_gap": 0.04777306255383096
+      }
+    ],
+    "ece": 0.01455794192702366,
+    "n_bins_used": 2
+  },
+  "ensemble_explanation": {
+    "schema_version": 1,
+    "target": "ensemble_score",
+    "explanation_type": "exact_additive_component_decomposition",
+    "aggregation": "equal_weight_arithmetic_mean",
+    "rank_scope": "complete_released_snapshot",
+    "rank_method": "average",
+    "detector_transform": "pandas_percentile_rank",
+    "detector_families": [
+      "ocsvm",
+      "iso",
+      "hbos",
+      "knn"
+    ],
+    "detector_score_columns": [
+      "ocsvm_score",
+      "iso_score",
+      "hbos_score",
+      "knn_score"
+    ],
+    "detector_rank_columns": [
+      "ensemble_rank_ocsvm",
+      "ensemble_rank_iso",
+      "ensemble_rank_hbos",
+      "ensemble_rank_knn"
+    ],
+    "fixed_component_columns": [
+      "rule_score",
+      "context_score"
+    ],
+    "component_columns": [
+      "ensemble_rank_ocsvm",
+      "ensemble_rank_iso",
+      "ensemble_rank_hbos",
+      "ensemble_rank_knn",
+      "rule_score",
+      "context_score"
+    ],
+    "component_count": 6,
+    "weights": {
+      "ensemble_rank_ocsvm": 0.16666666666666666,
+      "ensemble_rank_iso": 0.16666666666666666,
+      "ensemble_rank_hbos": 0.16666666666666666,
+      "ensemble_rank_knn": 0.16666666666666666,
+      "rule_score": 0.16666666666666666,
+      "context_score": 0.16666666666666666
+    },
+    "baseline_kind": "component_mean_over_complete_released_snapshot",
+    "component_baselines": {
+      "ensemble_rank_ocsvm": 0.5000066041474046,
+      "ensemble_rank_iso": 0.5000066041474047,
+      "ensemble_rank_hbos": 0.5000066041474047,
+      "ensemble_rank_knn": 0.5000066041474045,
+      "rule_score": 0.0752641658961828,
+      "context_score": 0.5466848862073092
+    },
+    "baseline_score": 0.43699591144885175,
+    "flag_quantile": 0.95,
+    "minimum_models_agreeing": 3,
+    "interpretation": "Exact arithmetic explanation of the published hybrid score; not a causal explanation, probability, legal finding, or independent validation of anomalousness."
+  },
+  "shap_explanation": {
+    "target": "rule_proxy_binary_label",
+    "output_space": "raw_log_odds",
+    "does_not_explain": "ensemble_score"
+  },
+  "shap_base_value": -10.710334624360387
+}

@@ -1,0 +1,44 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-added-large-files
+        args: [--maxkb=2000]
+        # Published research artifacts are intentionally bundled with the thesis.
+        exclude: '^data/(raw/kosovo_ocds\.jsonl\.gz|(?:silver|gold|models)/.*\.(?:parquet|joblib))$'
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: debug-statements
+      - id: mixed-line-ending
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.10
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.9.0
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          - pydantic>=2
+          - pydantic-settings>=2
+          - types-requests
+          - types-tabulate
+        files: ^src/thesis/
+
+  - repo: local
+    hooks:
+      - id: pytest-fast
+        name: pytest -k 'not slow'
+        entry: pytest -k "not slow" -q
+        language: system
+        pass_filenames: false
+        types: [python]
+        stages: [pre-push]

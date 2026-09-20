@@ -1,0 +1,11 @@
+{
+  "total_records": 75710,
+  "records_with_dangling_tenderer_refs": 0,
+  "dangling_refs_total": 0,
+  "tender_id_duplicates": [],
+  "ocid_duplicates": [],
+  "parties_id_collision_across_records": 0,
+  "distinct_tender_ids": 75710,
+  "tender_ids_appearing_more_than_once": 0,
+  "distinct_ocids": 75710
+}

@@ -1,0 +1,47 @@
+{
+  "status": "awaiting_human_review",
+  "labels_completed": 0,
+  "source_artifact": "/Users/ylldrit/Desktop/thesis/data/gold/tender_summary.parquet",
+  "source_sha256": "1dfdb7155539dfec815ab6ffce067db76209c806c4ef286d1854b87d42f4b510",
+  "document_source_artifact": "/Users/ylldrit/Desktop/thesis/data/raw/kosovo_ocds.jsonl",
+  "document_source_sha256": "666d239260114464142db43dfb1b85ed5b9cb508406461321859f7b1037122d4",
+  "random_seed": 7,
+  "requested_per_quadrant": 50,
+  "rule_threshold": 0.5,
+  "ensemble_threshold": 0.5,
+  "population_by_quadrant": {
+    "both_flagged": 235,
+    "rule_only": 0,
+    "ensemble_only": 24455,
+    "neither": 51020
+  },
+  "sample_by_quadrant": {
+    "both_flagged": 50,
+    "rule_only": 0,
+    "ensemble_only": 50,
+    "neither": 50
+  },
+  "empty_quadrants": [
+    "rule_only"
+  ],
+  "warning": "This file is an unlabeled stratified review queue. Empty review fields must not be interpreted as negative labels; empty source quadrants are reported as zero and are not synthetically filled.",
+  "completion_status": "awaiting_human_review",
+  "completion_definition": "nonblank review_relevant_concern",
+  "review_population": 150,
+  "labels_remaining": 150,
+  "rows_with_any_review_data": 0,
+  "label_state_sha256": "662e9fbaef0dbc09087a4d0ceae1503c2fa6673eba642a652fc5c08009fcb403",
+  "sample_definition_sha256": "2fe81e694927ce8b52d5e36f5f053839535cbc51ff6b18edac4a8fc130a035e4",
+  "source_document_url_status_counts": {
+    "structurally_valid_unverified": 124,
+    "invalid_source_url": 26
+  },
+  "source_document_url_nonblank_count": 150,
+  "source_document_url_count": 124,
+  "source_document_url_coverage_pct": 82.67,
+  "labels_preserved_field_count": 0,
+  "reviewed_rows_preserved": 0,
+  "previous_sample_sha256": "02672e2040e6199eb8fc8bef3cad04338c0c07b03bf4ec15deebe055f13fa79b",
+  "previous_label_state_sha256": "662e9fbaef0dbc09087a4d0ceae1503c2fa6673eba642a652fc5c08009fcb403",
+  "sample_sha256": "02672e2040e6199eb8fc8bef3cad04338c0c07b03bf4ec15deebe055f13fa79b"
+}
