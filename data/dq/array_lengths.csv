@@ -1,9 +1,0 @@
-path,occurrences,total_elements,min_len,p50_len,p95_len,max_len,empty_count
-parties[].roles[],211313,265446,1,1,2,2,0
-parties[],69603,211313,1,2,8,103,0
-tender.tenderers[],69603,211313,1,2,8,103,0
-tender.lots[],75709,94787,1,1,2,160,0
-tag[],75710,75710,1,1,1,1,0
-tender.documents[],75710,75710,1,1,1,1,0
-award[],54133,65721,1,1,2,2115,0
-award[].suppliers[],65721,65721,1,1,1,1,0

@@ -1,246 +1,199 @@
-# Operations Runbook
+# Operations
 
-Day-2 operational procedures for the Kosovo procurement pipeline.
+The project ships a static, published research dataset and its dashboard.
+Opening those results and rebuilding them are separate workflows. All commands
+below run from the project root; the CLI also provides `--help` for each command.
 
-## Pipeline overview
+## Open the bundled dashboard
 
+CI and Docker use uv 0.11.28. Create a locked Python 3.11 environment:
+
+```bash
+uv sync --frozen --python 3.11
 ```
-bronze ─► silver ─► gold/tender_features ─► benchmark ─► ml/tender_summary
-                                                                  ▼
-                                                             streamlit
-```
 
-* **Local execution**: `python -m thesis pipeline run`
-* **Scheduled-deployment example**: Airflow DAG
-  `kosovo_procurement_pipeline` (configured for daily 04:00 UTC if deployed)
-* **Dashboard**: Docker container exposing port 8501
-
-## Healthchecks
-
-| Check                      | Where                              | Frequency  |
-|----------------------------|------------------------------------|------------|
-| Streamlit liveness         | `GET /_stcore/health`              | every 30 s |
-| Pipeline freshness         | `python -m thesis pipeline status` | on demand  |
-| Release integrity          | `python -m thesis pipeline validate-releases` | every run |
-| DQ suites                  | `python -m thesis dq run`          | every run  |
-| Model-generation binding   | recursive ML release validation   | every read |
-
-## Common operations
-
-### Restore the bundled snapshot after cloning
-
-Git includes the original compressed source, its bronze manifest, and the
-published downstream data and models. The expanded raw JSONL exceeds GitHub's
-per-file limit, so it is intentionally ignored. On a fresh clone, restore it:
+If `data/raw/kosovo_ocds.jsonl` is missing, restore the exact original source:
 
 ```bash
 gzip -dk data/raw/kosovo_ocds.jsonl.gz
 ```
 
-Run this only when `data/raw/kosovo_ocds.jsonl` is absent. Decompression restores
-the exact bytes recorded in the bronze manifest while preserving the archive.
-Every dashboard reader validates this raw-to-model chain, so restoring the raw
-file is required even when only viewing the existing results. A newer download
-cannot replace this file without intentionally rebuilding the downstream stages.
-
-### Force a full rebuild
+The compressed archive is preserved. The expanded file is required because
+readers verify the complete raw-to-model release chain, even when opening
+existing results. Do not replace it with a newer download just to run the UI.
 
 ```bash
-python -m thesis pipeline run --force
+uv run --no-sync python -m thesis ui
 ```
 
-### Re-train the ML layer only (e.g. after parameter tweak)
+Open [localhost:8501](http://localhost:8501). Use `--port 8502` if the default port
+is occupied. No pipeline run or model training is needed for normal viewing.
+
+The package supports Python 3.9–3.12. An alternative editable development
+installation is `python -m pip install -e '.[dev,notebooks]'` inside an activated
+virtual environment. The quoted extras work in shells such as zsh; this command
+resolves allowed versions rather than reproducing the committed lockfile.
+
+## Understand release and runtime checks
+
+The release chain is:
+
+```text
+bronze → silver → gold/tender_features → benchmark → ml/tender_summary → dashboard
+```
+
+Readers verify artifact hashes, input and lineage bindings, publication DQ
+evidence, configuration and implementation fingerprints. Every upstream release
+is checked recursively. A partial or inconsistent generation is rejected.
+
+| Operation | Runtime policy |
+| --- | --- |
+| Dashboard and other read-only artifact readers | Validate the runtime recorded inside the release, but allow a different compatible host runtime. Source, configuration and artifact checks still apply. |
+| `pipeline status` | Uses exact runtime matching when deciding whether a stage is fresh. A readable snapshot can therefore appear stale on another machine. |
+| `pipeline validate-releases` | Requires the current Python, platform and recorded library versions to match the published runtime, in addition to all integrity checks. |
+| Pipeline stages consuming upstream releases | Require upstream releases from the current runtime. Rebuild the chain from Bronze when intentionally changing runtime or implementation. |
+
+The bundled generation records CPython 3.9.6 on macOS. `requirements-lock.txt`
+captures that audited environment; it is not a portable cross-platform lock.
+`uv.lock` resolves the supported environments used by CI and Docker. Installing
+it on Python 3.11 does not make the host identical to the original runtime.
+
+The implementation fingerprint covers all `src/thesis/**/*.py` files and
+`pyproject.toml`, `requirements.txt`, `requirements-lock.txt` and `uv.lock`.
+Even a reporting-only edit under `src/thesis/` can invalidate Bronze and every
+downstream stage. Display-only changes in `streamlit_app/` and edits to docs or
+tests are outside that fingerprint.
+
+## Inspect and test without rebuilding
 
 ```bash
-python -m thesis pipeline run --only ml --force
+uv run --no-sync python -m thesis info
+uv run --no-sync python -m thesis pipeline status
 ```
 
-This is valid only when the Gold and full benchmark releases still validate
-against the current implementation/configuration, the data fingerprint matches,
-and the release-bound semantic election check can re-derive `champions.json` from
-the checkpoint/leaderboard. After a rule, feature, protocol, or relevant source
-change, rerun benchmark before ML; stale or manually altered champions are
-rejected. A `--quick` run is never a deployable benchmark input.
-
-### Run only DQ checks (no rebuild)
+`info` lists settings and artifact presence; it does not certify their integrity.
+To exercise the dashboard readers and pages, install development dependencies
+and run:
 
 ```bash
-python -m thesis dq run
+uv sync --frozen --extra dev --python 3.11
+uv run --no-sync pytest tests/test_streamlit_pages.py tests/test_dashboard_presentations.py -q
 ```
 
-This refreshes the general DQ reports only. Each published generation also
-contains immutable, release-owned copies of its publication-gate evidence.
-
-### Verify every publication generation
+For the strict publication check, use the runtime recorded by the release:
 
 ```bash
 python -m thesis pipeline validate-releases
 ```
 
-The command verifies file sizes and hashes, lineage input/output bindings,
-DQ evidence, effective configuration, implementation fingerprint, and every
-upstream release recursively. It fails closed when code, configuration, an
-upstream file, or a required artifact no longer matches the published chain.
+Do not edit a manifest to make a runtime or hash mismatch disappear. Restore the
+matching files/environment, or deliberately rebuild a new generation.
 
-### Concurrency, runtime, and invalidation policy
-
-All supported mutating entry points (the DAG and individual CLI stages) hold
-one interprocess lock at `data/.pipeline.lock` for the complete run/stage.
-Parquet/JSON files are replaced atomically and the stage manifest is published
-last. During the short multi-file replacement window an existing reader can
-fail validation; it cannot accept a hybrid as a valid release. This static
-package does not claim lock-free, continuously available live publication.
-
-Mutating stages and `pipeline validate-releases` require an exact match to the
-recorded Python/package runtime. Read-only dashboard readers still verify the
-release's internally consistent runtime plus current source/configuration, but
-allow a different compatible host runtime so a release can be inspected on a
-different machine. No mutation is authorized under that relaxed read policy.
-
-The implementation fingerprint deliberately hashes the complete
-`src/thesis/**/*.py` tree rather than trying to infer a precise stage-level
-dependency graph. This is conservative: a reporting-only source change can
-invalidate Bronze and cascade a full rebuild. Treat that as over-invalidation,
-not evidence that the current provenance system identifies minimal stage
-dependencies.
-
-### Inspect lineage of a single artifact
+To rerun DQ checks against validated existing tables:
 
 ```bash
-cat data/silver/tenders.parquet.lineage.json | jq .
+uv run --no-sync python -m thesis dq run
 ```
 
-The chronological history is in `data/_lineage/<table>/`.
+This refreshes general reports under `data/dq/` but does not publish new data or
+replace immutable release-owned DQ evidence. Errors cause a nonzero exit status;
+warnings also do so when `THESIS_FAIL_FAST_ON_DQ=true`. Changing that setting can
+itself invalidate an existing configuration fingerprint.
 
-### Bring up the Streamlit container locally
+## Intentionally rebuild from the preserved source
+
+Keep a copy of the published dataset before replacing a research generation.
+Use one environment for every stage. With the bundled gzip and JSONL both
+present, these commands reuse the local source without requesting a newer copy:
 
 ```bash
-docker compose up app
-# now browse http://localhost:8501
+uv run --no-sync python -m thesis pipeline bronze
+uv run --no-sync python -m thesis pipeline run --from silver --force
+uv run --no-sync python -m thesis pipeline validate-releases
+uv run --no-sync python -m thesis report findings
 ```
 
-### Run the integration test
+The first command validates the local gzip/JSONL pair and republishes Bronze
+provenance when required. The second rebuilds Silver, Gold, the full benchmark
+and ML in order. The full benchmark uses checkpoints; duration depends on
+hardware, data and reusable work. There is no fixed completion-time guarantee.
+`report findings` regenerates `docs/findings.md` from the resulting validated
+artifacts.
+
+When upstream releases already match the current code, configuration and
+runtime, narrower rebuilds are available:
 
 ```bash
-pytest tests/integration -v
+# Rebuild the benchmark and then ML.
+uv run --no-sync python -m thesis pipeline run --from benchmark --force
+
+# Refit ML only, using the valid full benchmark release.
+uv run --no-sync python -m thesis pipeline run --only ml --force
 ```
 
-## Troubleshooting
+`--only` does not rebuild dependencies. ML rejects stale or edited champion
+metadata and re-derives the model election from release-bound benchmark evidence.
+`pipeline benchmark --quick` is a development smoke run; its output cannot
+replace the full benchmark consumed by ML.
 
-### "ModuleNotFoundError: thesis"
+## Intentionally refresh from the remote publication
 
-The package isn't installed. From the repo root:
+The ordinary DAG command always checks the remote Bronze publication, even when
+other stages are fresh. It can replace the bundled source and derived results:
 
 ```bash
-pip install -e .[dev]
+uv run --no-sync python -m thesis pipeline run
 ```
 
-### Streamlit page raises an exception
+Add `--force` to rerun every stage. `pipeline check-updates` refreshes Bronze
+only; downstream results then require rebuilding when the source changes.
+`pipeline bronze --force` also forces a fresh download and extraction. These
+commands are maintenance operations, not prerequisites for opening the dashboard.
 
-Check `streamlit_app/_bootstrap.py` first — every page imports through
-it. Run the page-render smoke test:
+## Docker and scheduling
+
+Restore the raw JSONL before starting the Compose app:
 
 ```bash
-PYTHONPATH=src pytest tests/test_streamlit_pages.py -v
+docker compose up --build app
 ```
 
-### A DQ suite fails
+Compose mounts the local `data/` directory at `/data` and exposes port 8501.
+The image uses a locked Python 3.11 environment, so the bundled results use the
+compatible read-only policy described above. The image does not contain the
+dataset by itself.
 
-Look at `data/dq/<suite_name>.dq.md` for a per-expectation breakdown.
-A `severity == "error"` row means the artifact violates a contract and always
-blocks canonical publication in the producing stage. A `severity == "warning"`
-is recorded but normally non-blocking; it also blocks when
-`THESIS_FAIL_FAST_ON_DQ=true`. The standalone `thesis dq run` command writes
-and displays evidence but does not itself republish an artifact.
+`GET /_stcore/health` checks whether Streamlit is alive. Docker polls it every
+30 seconds; a healthy process does not prove that a page can read its data.
+Use the page tests or open the dashboard to verify that separately.
 
-### Bronze download times out
+`airflow_dags/` is an optional orchestration example. It is not started by the
+Compose app and does not make this submitted snapshot a live monitoring service.
 
-Tune the request timeout:
+## Troubleshooting and maintenance
 
-```bash
-THESIS_OCDS_REQUEST_TIMEOUT_S=1800 python -m thesis pipeline bronze --force
-```
+| Symptom | Action |
+| --- | --- |
+| `ModuleNotFoundError: thesis` | Run the environment setup from the project root and launch through `uv run --no-sync`. |
+| Missing raw JSONL | Restore it with `gzip -dk data/raw/kosovo_ocds.jsonl.gz` if absent. |
+| “Produced with a different runtime” | For viewing, use the dashboard's compatible read-only path. For strict validation, restore the recorded runtime; for new results, rebuild from Bronze. |
+| Hash, source or configuration mismatch | Check the named file and local `THESIS_*` settings. Restore the matching release or intentionally rebuild; do not patch its hashes. |
+| A DQ suite fails | Read `data/dq/<suite_name>.dq.md`. ERROR expectations block publication; WARNING expectations block it when fail-fast is enabled. |
+| A dashboard page raises an exception | Run the page tests above and inspect `streamlit_app/_bootstrap.py` and the reported traceback. |
+| Upstream download times out | For an intentional download, set `THESIS_OCDS_REQUEST_TIMEOUT_S`; it is part of the recorded pipeline configuration. |
 
-### Pipeline says "task fresh, skipping" but you want it to rerun
+Pipeline writers hold the interprocess lock `data/.pipeline.lock` for the
+complete stage/run. Files are replaced atomically and the stage manifest is
+published last. A concurrent reader can temporarily fail validation during a
+multi-file replacement; continuous availability is not guaranteed. Do not
+remove a lock file to bypass an active writer.
 
-Pass `--force`. Freshness is content- and provenance-based; changing only a
-timestamp does not create a valid generation:
+Structured logs include an event, timestamp, level and run identifier, plus
+context-specific fields such as task and duration. Set `THESIS_LOG_FORMAT=json`
+for machine-readable log events. CLI tables and summaries may still be printed
+alongside those events, so redirected CLI output is not necessarily pure JSONL.
 
-```bash
-python -m thesis pipeline run --from silver
-# or, to rebuild even when the release is valid:
-python -m thesis pipeline run --from silver --force
-```
-
-### A model behaves unexpectedly after retraining
-
-First run release validation. Then compare an intentionally retained copy of
-the prior report with the new `validation_report.json`. Metrics against
-rule-derived labels measure agreement with those labels, not independently
-observed correctness. Investigate:
-
-1. whether the rule-label distribution shifted (`python -m thesis info`),
-2. whether feature or detector code changed (implementation fingerprint),
-3. whether data or configuration changed (release input/configuration hashes),
-4. whether resampling stability, detector agreement, or feature-family
-   ablations changed materially.
-
-## Capacity & SLOs
-
-| Metric                              | Target                       |
-|-------------------------------------|------------------------------|
-| Bronze fetch time                   | < 5 min (single 23 MB blob)  |
-| Silver build time                   | < 60 s                       |
-| Gold build time                     | < 5 s                        |
-| ML training + SHAP + validation     | < 90 s on 4-core CPU         |
-| Full benchmark                     | checkpointed; hardware/data dependent |
-| End-to-end pipeline (cold start)    | no fixed SLO; includes full benchmark |
-| Streamlit page first paint          | < 2 s                        |
-| Streamlit page interactive (search) | < 200 ms                     |
-
-## Log conventions
-
-All logs are structured (structlog). Production runs ship JSON
-(`THESIS_LOG_FORMAT=json`). Each line carries:
-
-* `event` — short snake_case identifier (e.g. `silver.parse.progress`)
-* `run_id` — auto-generated per pipeline run (`run-YYYYMMDDTHHMMSS-<8hex>`)
-* `stage` — `bronze` / `silver` / `gold` / `benchmark` / `ml`
-* `task` — the DAG task name when invoked through the runner
-* extra fields specific to the event
-
-Useful jq one-liners:
-
-```bash
-# all errors from one run
-jq -c 'select(.run_id=="run-20260506T151945-3e5ba3ed" and .level=="error")' < pipeline.log
-
-# task durations
-jq -c 'select(.event=="task.done") | {task, duration_s}' < pipeline.log
-```
-
-## Disaster recovery
-
-* Preserve the validated bronze snapshot. It can be reacquired with
-  `python -m thesis pipeline bronze --force` only while the same upstream
-  publication remains available.
-* Preserve `data/review/` once people add audit judgements. Derived silver,
-  gold, benchmark, and model artifacts can be rebuilt; human review cannot.
-* A full rebuild includes the checkpointed benchmark and has no fixed
-  seven-minute recovery promise.
-* Preserve `uv.lock` with an archived release. Docker installs from it with
-  `uv sync --frozen`; `requirements-lock.txt` remains an exact capture of the
-  audited local Python 3.9 environment and is not the cross-platform resolver.
-  Platform-specific reproduction can still be blocked when a locked wheel is
-  unavailable.
-* Release manifests and lineage sidecars record output/input hashes and schemas.
-  A changed byte hash warrants investigation; semantic equivalence must be
-  checked from rows, values, schema and protocol metadata rather than assumed
-  from Parquet byte identity across library versions.
-* If the upstream OCDS publication changes URL, edit
-  `THESIS_OCDS_PUBLICATION_URL` in the environment / secret store.
-* The current Bronze manifest binds the exact gzip/JSONL hashes and records the
-  configured expected source URL. Historical HTTP retrieval time, ETag, and
-  Last-Modified headers were unavailable for the pre-existing snapshot and are
-  intentionally not inferred. Future forced downloads record the actual HTTP
-  acquisition metadata returned by the source.
+`make clean` removes development caches and coverage output, preserving research
+data and model results. Preserve the compressed raw snapshot, current release
+manifests, lineage sidecars, lockfiles and any human judgements in `data/review/`
+when archiving the project. Derived data can be rebuilt; human review cannot.

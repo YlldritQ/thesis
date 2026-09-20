@@ -1,5 +1,3 @@
-version: "3.9"
-
 # Local dev stack:
 #   docker compose up app          - launch Streamlit on http://localhost:8501
 #   docker compose run pipeline    - run the full pipeline once

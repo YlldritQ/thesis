@@ -1,76 +1,121 @@
 # Contributing
 
-Thanks for considering a contribution. This is a thesis-grade reference
-project with strict standards — please read this before opening a PR.
+This is a research project for a thesis on public procurement in Kosovo.
+Changes should remain reproducible and distinguish signals for review from
+proven findings. Read the [methodology](docs/methodology.md) and
+[responsible-use guidance](docs/responsible_use.md) before changing the analysis.
 
-## Quick start
+## Set up a development environment
+
+Run commands from the project root. CI and Docker use **uv 0.11.28**; Python
+3.11 is the recommended development version. Package metadata supports Python
+3.9–3.12. Pipeline locking supports macOS and Linux; use Docker on Windows.
 
 ```bash
-git clone <repo>
-cd kosovo-procurement-thesis
-python -m venv .venv && source .venv/bin/activate
-pip install -e .[dev,notebooks]
-pre-commit install
-pytest
+uv sync --frozen --extra dev --python 3.11
 ```
 
-## Development workflow
+This creates or updates `.venv` using the committed `uv.lock`. Use a separate
+checkout if you need to preserve an existing audited environment. The locked
+Python 3.11 environment can read the bundled results; it does not reproduce the
+original Python 3.9.6/macOS runtime recorded in their manifests.
 
-1. **Branch** from `main`. Use a descriptive name: `feature/…`,
-   `fix/…`, `docs/…`.
-2. **Write tests first** when fixing a bug or adding a feature. We aim
-   to keep the test suite < 60 s end-to-end so it stays runnable
-   pre-push.
-3. **Run the local checks** before pushing:
-   ```bash
-   ruff check . && ruff format --check .
-   mypy src/thesis
-   pytest -m "not slow"
-   ```
-   `pre-commit` runs the first two automatically on every commit.
-4. **Open a PR** with:
-   - a one-line summary,
-   - a list of behavioural changes,
-   - a screenshot if the change is visible in the Streamlit UI,
-   - `closes #N` if it fixes an issue.
+Restore the original raw file **only if** `data/raw/kosovo_ocds.jsonl` is absent:
 
-## Architectural rules
+```bash
+gzip -dk data/raw/kosovo_ocds.jsonl.gz
+```
 
-- **No I/O in `domain/`.** It is pure transforms over DataFrames.
-- **All disk I/O goes through `io/`.** New readers register a cache
-  decorator. New writers emit a lineage sidecar.
-- **No bare `print`.** Use `thesis.logging.get_logger(__name__)`.
-- **No hard-coded paths.** Import from `thesis.paths`.
-- **No hard-coded numbers.** Add to `thesis.config.Settings`, document
-  the env var in `.env.example`.
-- **Every new pipeline stage** must:
-  - live under `thesis.pipeline.<name>` with a `run()` entrypoint,
-  - declare its inputs and outputs in `thesis.pipeline.dag.default_dag()`,
-  - emit a lineage sidecar via `thesis.io.writers.write_parquet`,
-  - have at least one happy-path test in `tests/unit/`.
-- **Every new public function** has a Google-style docstring.
+Then open the existing dashboard without rebuilding:
 
-## Anomaly rules
+```bash
+uv run --no-sync python -m thesis ui
+```
 
-The rule book is conservative on purpose. New rules require:
-- a citation in the `reference` field,
-- a weight in `[0.3, 1.0]` (the higher the weight, the stronger the
-  evidence required),
-- a unit test in `tests/unit/test_rules.py`,
-- an entry in `docs/methodology.md`.
+In a Git checkout, install the optional local hooks:
 
-## Sensitive subject
+```bash
+uv run --no-sync pre-commit install
+uv run --no-sync pre-commit install --hook-type pre-push
+```
 
-This project surfaces public-procurement *signals*, not fraud verdicts.
-No PR may:
+For notebook work, include the optional notebook dependencies:
 
-- introduce a "fraud probability" column or any framing that conflates
-  anomaly score with fraud,
-- remove the caveat banner from Streamlit pages,
-- weaken `docs/responsible_use.md`,
-- silence DQ failures — they should escalate as warnings or errors.
+```bash
+uv sync --frozen --extra dev --extra notebooks --python 3.11
+```
 
-## Releases
+The notebooks are exploratory templates with cleared outputs.
+`scripts/build_notebook.py` regenerates only `notebooks/01_eda.ipynb`; it is not
+part of dashboard startup or the canonical data pipeline.
 
-We follow SemVer. Tag a release with `git tag v$NEW && git push --tags`.
-GitHub Actions builds and publishes the Docker image automatically.
+## Choose the right layer
+
+- **Dashboard text, layout and charts:** edit `streamlit_app/`. Shared display
+  helpers are `_bootstrap.py`, `_charts.py` and `_narrative.py`.
+- **Data transformations and procurement features:** use `src/thesis/domain/`
+  for transformations, `src/thesis/io/` for readers and writers, and
+  `src/thesis/pipeline/` for orchestration. Use paths from `thesis.paths` and
+  configuration from `thesis.config`.
+- **Rules and models:** edit `src/thesis/anomaly/`; document the rationale,
+  thresholds, weights and limitations. Diagnostic rules may have zero weight.
+- **Evidence:** `docs/findings.md` is generated from validated artifacts. Change
+  its generator or input data, then regenerate it; do not hand-edit its figures.
+
+Published releases hash **all** Python files under `src/thesis/`, plus
+`pyproject.toml`, `requirements.txt`, `requirements-lock.txt` and `uv.lock`.
+Changing any of these invalidates the existing release chain. Presentation,
+test and documentation edits outside those paths do not change that fingerprint.
+See [operations](docs/operations.md) for an intentional rebuild; do not alter
+manifests to conceal a mismatch.
+
+A new pipeline stage must declare its inputs, outputs and dependencies in
+`src/thesis/pipeline/dag.py`, publish the required release/DQ evidence, and use
+the existing single-writer and atomic-publication mechanisms. Add tests for the
+new behavior and failure cases.
+
+## Verify changes
+
+Run targeted tests during development, then the checks relevant to the change:
+
+```bash
+uv run --no-sync ruff check .
+uv run --no-sync ruff format --check .
+uv run --no-sync mypy src/thesis
+uv run --no-sync pytest tests/unit tests/contracts -q
+uv run --no-sync pytest tests/integration -q
+uv run --no-sync pytest tests/test_streamlit_pages.py tests/test_dashboard_presentations.py -q
+```
+
+The dashboard tests require the restored, valid bundled snapshot. After a
+provenance-bound source change, use unit/fixture tests while developing and
+rebuild the release chain before expecting snapshot-dependent checks to pass.
+The full suite is `uv run --no-sync pytest tests -q`; CI also runs it with
+`-m "not slow"`. Test duration depends on the environment and selected checks.
+
+For UI changes, open the affected pages and check filters, empty results,
+missing values and chart labels. For rule changes, relevant tests include
+`tests/unit/test_features_and_rules.py`, `test_narrative.py` and
+`test_ensemble_explanations.py`.
+
+`make clean` removes development caches and coverage output. It preserves the
+bundled data, model artifacts, reports and human review records.
+
+## Submit a focused change
+
+Explain the problem, resulting behavior and checks performed. Include a
+screenshot for visible UI changes and state whether published data or model
+outputs need rebuilding. Keep generated artifacts consistent with their release
+manifests.
+
+Preserve these interpretation rules:
+
+- Anomaly scores are relative review signals, not fraud probabilities.
+- A recorded award decision is not proof of a signed or paid contract.
+- Missing bidder data is not zero bidders.
+- Rule-derived labels measure agreement with the rules, not independently
+  verified detection accuracy.
+- DQ failures and the dashboard's “Anomalia ≠ mashtrim” notice remain visible.
+
+The current GitHub Actions workflow checks code, tests the project and builds a
+Docker image. It does **not** publish images or create releases automatically.

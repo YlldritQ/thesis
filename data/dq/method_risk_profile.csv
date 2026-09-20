@@ -1,5 +1,0 @@
-method,tenders,awarded,single_bidder,zero_bidder,end_before_start,median_value,total_value_eur,awarded_pct,single_bidder_pct,zero_bidder_pct,end_before_start_pct
-open,58323,37214,13671,6093,13,26400.0,9769921748.44,63.81,23.44,10.45,0.02
-minimum,12238,12200,9451,1,12234,980.0,22518518.93,99.69,77.23,0.01,99.97
-limited,4611,4187,3940,12,4569,19979.36,649828845.31,90.8,85.45,0.26,99.09
-selective,6,5,0,0,0,510000.0,24409118.0,83.33,0.0,0.0,0.0

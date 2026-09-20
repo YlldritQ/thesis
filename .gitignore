@@ -22,6 +22,8 @@ data/.pipeline.lock
 data/models/benchmark/results.wip*.jsonl
 data/models/benchmark/results.quick*.jsonl
 data/models/benchmark/results.20*.jsonl
+# Historical run copies are local; canonical sidecars remain versioned.
+data/_lineage/**/*.json
 
 # Keep the exact compressed snapshot and manifest; expand the JSONL after cloning.
 data/raw/*

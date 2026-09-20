@@ -2,7 +2,7 @@
 
 Regenerates the findings numbers from the live gold layer and asserts:
 * no unresolved ``[X]`` / ``€[`` placeholders,
-* the committed Markdown exactly matches the deterministic live render,
+* the committed Markdown matches the live render except for its input-mtime timestamp,
 * every artifact read by the report is declared in its input hashes,
 * the rule count matches the code,
 * headline numbers are internally consistent with the gold parquet.
@@ -12,7 +12,9 @@ Skips when the gold layer is absent (e.g. a fresh checkout without data).
 
 from __future__ import annotations
 
+import re
 import sys
+from datetime import datetime
 from pathlib import Path
 
 import pytest
@@ -27,6 +29,61 @@ pytestmark = pytest.mark.skipif(
     not paths.GOLD_TENDERS.exists(),
     reason="gold layer not built",
 )
+
+
+def _normalized_findings(markdown: str) -> str:
+    """Ignore only the validated timestamp of the generated-report header."""
+    # The renderer uses the latest input mtime. Git checkout assigns new mtimes,
+    # even when all input bytes and hashes match the original publication.
+    # Keep every hash, numeric result and other header/body character exact.
+    pattern = (
+        r"(?m)^(> \*\*Auto-generated from the live gold layer\*\* at `)"
+        r"([^`\n]+)(` by `thesis report findings`\.)"
+    )
+
+    def replace_timestamp(match: re.Match) -> str:
+        timestamp = datetime.fromisoformat(match.group(2).replace("Z", "+00:00"))
+        assert timestamp.tzinfo is not None, "Findings timestamp must include a timezone"
+        return f"{match.group(1)}<generated-at>{match.group(3)}"
+
+    normalized, count = re.subn(
+        pattern, replace_timestamp, markdown.replace("\r\n", "\n").rstrip("\n")
+    )
+    assert count == 1, "Findings must contain exactly one generated timestamp header"
+    return normalized
+
+
+def test_findings_normalization_preserves_content_and_input_hashes():
+    published_time = "2026-07-19T12:30:35.687388+00:00"
+    checkout_time = "2026-09-20T19:16:20.141963+00:00"
+    published = (
+        f"> **Auto-generated from the live gold layer** at `{published_time}` "
+        "by `thesis report findings`. Do not hand-edit.\n"
+        "> Input hashes: `tenders.parquet:abc123`\n"
+        "- Tenders: **10**\n"
+        f"- Source timestamp: `{published_time}`\n"
+    )
+    checked_out = published.replace(published_time, checkout_time, 1)
+    assert _normalized_findings(published) == _normalized_findings(checked_out)
+    for original, changed in (
+        ("abc123", "def456"),
+        ("**10**", "**11**"),
+        ("Do not hand-edit.", "Changed description."),
+        (f"- Source timestamp: `{published_time}`", f"- Source timestamp: `{checkout_time}`"),
+    ):
+        assert _normalized_findings(published) != _normalized_findings(
+            published.replace(original, changed)
+        )
+
+
+@pytest.mark.parametrize("timestamp", ["not-a-date", "2026-07-19T12:30:35"])
+def test_findings_normalization_rejects_invalid_timestamps(timestamp):
+    markdown = (
+        f"> **Auto-generated from the live gold layer** at `{timestamp}` "
+        "by `thesis report findings`."
+    )
+    with pytest.raises((AssertionError, ValueError)):
+        _normalized_findings(markdown)
 
 
 def test_findings_render_has_no_placeholder():
@@ -44,10 +101,7 @@ def test_committed_findings_exactly_matches_live_render():
 
     committed = (paths.DOCS / "findings.md").read_text()
 
-    def normalized(markdown: str) -> str:
-        return markdown.replace("\r\n", "\n").rstrip("\n")
-
-    assert normalized(committed) == normalized(generate(write=False)), (
+    assert _normalized_findings(committed) == _normalized_findings(generate(write=False)), (
         "docs/findings.md is stale; run `thesis report findings`"
     )
 

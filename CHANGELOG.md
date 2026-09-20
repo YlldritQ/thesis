@@ -4,6 +4,24 @@ All notable changes to this project. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versioning
 follows [SemVer](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Reorganized documentation around setup, dashboard use, development,
+  methodology, explainability, and the bundled data's retention requirements.
+- Removed superseded review drafts, prototype DQ reports, and historical
+  lineage copies; current publication artifacts and sidecars are preserved.
+  Earlier review material remains available in Git history.
+- Moved the EDA notebook generator to `scripts/build_notebook.py`.
+- Made `make clean` remove development caches only and removed `clean_all`;
+  routine cleanup now preserves data, models, review work, and the environment.
+- Documented opening the existing dashboard without retraining or checking
+  for newer source data.
+- Fixed the findings-report drift check on fresh Git checkouts: only its
+  validated input-file timestamp may differ; all numerical content and input
+  hashes must still match the committed report exactly.
+
 ## [1.3.0] — 2026-07-18 — Review R3 semantic and generation integrity
 
 ### Changed
@@ -24,8 +42,9 @@ follows [SemVer](https://semver.org/spec/v2.0.0.html).
 
 ### Verification
 
-- See `THESIS_REVIEW_R3.md` and `THESIS_REMEDIATION_R3.md` for the final commands,
-  exact hashes, row counts, reconciliation, and evidence limitations.
+- The original R3 review and remediation reports are preserved in Git history.
+  For current checks and limitations, see [the project review](docs/project_review_2026_09.md)
+  and [the generated findings](docs/findings.md).
 
 ## [1.2.0] — 2026-07-18 — Review R2 defensibility and pipeline safety
 
