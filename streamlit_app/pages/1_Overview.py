@@ -24,7 +24,7 @@ from _charts import (
 
 st.set_page_config(page_title="Përmbledhja · Prokurimi në Kosovë", page_icon="📊", layout="wide")
 page_header(
-    "Përmbledhja e prokurimit",
+    "📊 Përmbledhja e prokurimit",
     "Si ndryshojnë numri, vlera dhe konkurrenca në tenderët e përzgjedhur?",
 )
 
@@ -35,7 +35,7 @@ st.caption(
 )
 if filtered.empty:
     st.info(
-        "Asnjë tender nuk përputhet me filtrat. Zgjidh një periudhë më të gjerë ose përdor ‘Pastro filtrat’."
+        "Asnjë tender nuk përputhet me filtrat. Zgjidhni një periudhë më të gjerë ose përdorni «Pastro filtrat»."
     )
     st.stop()
 
@@ -79,7 +79,7 @@ with activity:
         use_container_width=True,
     )
     st.caption(
-        "Procedura përcaktohet nga kodi i prokurimit dhe përshkrimi në burim. Rastet pa klasifikim mbeten të dukshme si ‘E papërcaktuar’."
+        "Procedura përcaktohet nga kodi i prokurimit dhe përshkrimi në burim. Rastet pa klasifikim mbeten të dukshme si «E papërcaktuar»."
     )
 
 with competition:

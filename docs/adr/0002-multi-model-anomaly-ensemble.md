@@ -18,9 +18,9 @@ as independent corroboration.
 
 Adopt a layered, **exploratory ranking**:
 
-1. **Rule layer** (`thesis.anomaly.rules.RULES`) — the auditable source of
-   truth. The current registry contains 15 boolean review signals with
-   fixed heuristic weights. A rule hit is not proof of wrongdoing.
+1. **Rule layer** (`thesis.anomaly.rules.RULES`) — the auditable heuristic
+   baseline. The current registry contains 15 boolean indicators: 4 weighted
+   review signals and 11 zero-weight data-quality or operational diagnostics. A rule hit is not proof of wrongdoing.
 2. **Unsupervised ensemble** — the benchmark compares 23 configurations
    across 8 detector families and elects four families. They are fitted on
    the 20 features listed by `ML_FEATURES`; the exact elected bundle is stored

@@ -38,6 +38,28 @@ from thesis.release import canonical_release_contract, validate_canonical_releas
 
 # ---------------------------------------------------------------- cached loads
 
+SOURCE_TZ = "Etc/GMT-1"  # fixed UTC+01:00, the offset the KRPP source publishes
+
+
+def _to_source_local_time(frame: pd.DataFrame) -> pd.DataFrame:
+    """Show and bucket dates in the source's published +01:00 offset, not UTC.
+
+    The stored instants are unchanged; only their display zone moves. ``year``
+    and ``month`` are presentation buckets and follow the local publication date.
+    Naive date columns are left as they are.
+    """
+    out = frame.copy()
+    for column in out.columns:
+        if isinstance(out[column].dtype, pd.DatetimeTZDtype):
+            out[column] = out[column].dt.tz_convert(SOURCE_TZ)
+    if "release_date" in out and isinstance(out["release_date"].dtype, pd.DatetimeTZDtype):
+        local = out["release_date"]
+        if "year" in out:
+            out["year"] = local.dt.year.astype("Int64")
+        if "month" in out:
+            out["month"] = local.dt.strftime("%Y-%m").where(local.notna())
+    return out
+
 
 def _release_token(manifest: Path) -> str:
     """Validate the release chain, then return its exact manifest cache key.
@@ -58,7 +80,7 @@ def _release_token(manifest: Path) -> str:
 @st.cache_data(show_spinner="Po ngarkohen tenderët…")
 def _cached_tenders(release_token: str) -> pd.DataFrame:
     del release_token
-    return readers.load_silver_tenders()
+    return _to_source_local_time(readers.load_silver_tenders())
 
 
 def cached_tenders() -> pd.DataFrame:
@@ -68,7 +90,7 @@ def cached_tenders() -> pd.DataFrame:
 @st.cache_data(show_spinner="Po ngarkohen vendimet e dhënies…")
 def _cached_awards(release_token: str) -> pd.DataFrame:
     del release_token
-    return readers.load_silver_awards()
+    return _to_source_local_time(readers.load_silver_awards())
 
 
 def cached_awards() -> pd.DataFrame:
@@ -78,7 +100,7 @@ def cached_awards() -> pd.DataFrame:
 @st.cache_data(show_spinner="Po ngarkohet përmbledhja e tenderëve…")
 def _cached_gold(release_token: str) -> pd.DataFrame:
     del release_token
-    return readers.load_gold_tenders()
+    return _to_source_local_time(readers.load_gold_tenders())
 
 
 def cached_gold() -> pd.DataFrame:
@@ -88,7 +110,7 @@ def cached_gold() -> pd.DataFrame:
 @st.cache_data(show_spinner="Po ngarkohet përmbledhja e furnizuesve…")
 def _cached_suppliers(release_token: str) -> pd.DataFrame:
     del release_token
-    return readers.load_gold_suppliers()
+    return _to_source_local_time(readers.load_gold_suppliers())
 
 
 def cached_suppliers() -> pd.DataFrame:
@@ -98,14 +120,14 @@ def cached_suppliers() -> pd.DataFrame:
 @st.cache_data(show_spinner="Po ngarkohen autoritetet kontraktuese…")
 def _cached_entities(release_token: str) -> pd.DataFrame:
     del release_token
-    return readers.load_gold_entities()
+    return _to_source_local_time(readers.load_gold_entities())
 
 
 def cached_entities() -> pd.DataFrame:
     return _cached_entities(_release_token(paths.GOLD_RELEASE))
 
 
-@st.cache_data(show_spinner="po ngarkohen metrikat mujore ...")
+@st.cache_data(show_spinner="Po ngarkohen metrikat mujore…")
 def _cached_monthly(release_token: str) -> pd.DataFrame:
     del release_token
     return readers.load_monthly()
@@ -115,7 +137,7 @@ def cached_monthly() -> pd.DataFrame:
     return _cached_monthly(_release_token(paths.GOLD_RELEASE))
 
 
-@st.cache_data(show_spinner="po ngarkohen vlerat SHAP ...")
+@st.cache_data(show_spinner="Po ngarkohen vlerat SHAP…")
 def _cached_shap(release_token: str) -> pd.DataFrame:
     del release_token
     return readers.load_shap_values()
@@ -125,7 +147,7 @@ def cached_shap() -> pd.DataFrame:
     return _cached_shap(_release_token(paths.ML_RELEASE))
 
 
-@st.cache_data(show_spinner="po ngarkohen të dhënat e lidhura të panelit ...")
+@st.cache_data(show_spinner="Po ngarkohen të dhënat e panelit…")
 def _cached_dashboard_bundle(
     silver_release_token: str,
     gold_release_token: str,
@@ -134,10 +156,14 @@ def _cached_dashboard_bundle(
     include_model_metadata: bool,
 ) -> dict[str, Any]:
     del silver_release_token, gold_release_token, ml_release_token
-    return readers.load_dashboard_bundle(
+    bundle = readers.load_dashboard_bundle(
         include_shap=include_shap,
         include_model_metadata=include_model_metadata,
     )
+    return {
+        key: _to_source_local_time(value) if isinstance(value, pd.DataFrame) else value
+        for key, value in bundle.items()
+    }
 
 
 def cached_dashboard_bundle(
@@ -155,7 +181,7 @@ def cached_dashboard_bundle(
     )
 
 
-@st.cache_data(show_spinner="po ngarkohet raporti i validimit ...")
+@st.cache_data(show_spinner="Po ngarkohet raporti i kontrolleve…")
 def _cached_validation_report(release_token: str) -> dict:
     del release_token
     return readers.load_validation_report()
@@ -225,7 +251,7 @@ def sidebar_filters(df: pd.DataFrame) -> pd.DataFrame:
             year_options,
             key="filter_years",
             placeholder="Të gjitha vitet",
-            help="Viti i publikimit. 'E papërcaktuar' përfshin tenderët pa datë publikimi.",
+            help="Viti i publikimit. «E papërcaktuar» përfshin tenderët pa datë publikimi.",
         )
         cats = _dimension_options(df["category"])
         sel_cats = st.multiselect(
@@ -251,7 +277,7 @@ def sidebar_filters(df: pd.DataFrame) -> pd.DataFrame:
             ent_names,
             key="filter_ent",
             placeholder="Të gjitha autoritetet",
-            help="Lëre bosh për të gjitha.",
+            help="Lëreni bosh për të gjitha.",
         )
 
         with st.expander("Vlera e parashikuar (€)"):
@@ -271,7 +297,7 @@ def sidebar_filters(df: pd.DataFrame) -> pd.DataFrame:
                 key="filter_value_max",
                 placeholder="Pa kufi të sipërm",
             )
-            st.caption("Kur vendos kufij, tenderët pa vlerë të publikuar përjashtohen.")
+            st.caption("Kur vendosni kufij, tenderët pa vlerë të publikuar përjashtohen.")
         if min_value is not None and max_value is not None and min_value > max_value:
             st.warning("Kufiri i poshtëm duhet të jetë më i vogël se kufiri i sipërm.")
             return df.iloc[:0].copy()
@@ -344,6 +370,7 @@ def page_header(title: str, subtitle: str = "", caveat: bool = True) -> None:
       [data-testid="stMetricValue"] {font-size:1.65rem;letter-spacing:-.025em}
       [data-testid="stMetricLabel"] {white-space:normal}
       [data-testid="stMetricLabel"] p {white-space:normal;overflow:visible}
+      [data-testid^="stMetricDeltaIcon"] {display:none}
       .brand {font-size:1.1rem;font-weight:750;letter-spacing:-.025em;margin-bottom:2px}
       .brand-note {font-size:.75rem;opacity:.65;margin-bottom:24px}
       .nav-heading {font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;opacity:.6;margin:20px 0 8px}

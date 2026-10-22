@@ -13,13 +13,15 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 from _bootstrap import cached_validation_report, page_header
-from _charts import fmt_number
+from _charts import fmt_columns, fmt_number
 
 from thesis.viz import PALETTE
 
-st.set_page_config(page_title="Kontrollet e modeleve · OCDS Kosova", page_icon="🧪", layout="wide")
+st.set_page_config(
+    page_title="Kontrollet e modeleve · Prokurimi në Kosovë", page_icon="🧪", layout="wide"
+)
 page_header(
-    "🧪 Sa të qëndrueshme janë rezultatet?",
+    "🧪 Kontrollet e modeleve",
     "Kontrolle të modeleve: përsëritshmëria, ngjashmëria e renditjeve dhe lidhja me rregullat.",
 )
 
@@ -69,7 +71,12 @@ st.warning(
 )
 c1, c2, c3 = st.columns(3)
 c1.metric("Tenderë të vlerësuar", fmt_number(report.get("n_records")))
-c2.metric("Tregues për tender", str(report.get("n_features", "—")))
+c2.metric(
+    "Veçori hyrëse të modeleve",
+    str(report.get("n_features", "—")),
+    help="Variablat numerike që marrin modelet statistikore për çdo tender. "
+    "Nuk janë të njëjtat me treguesit e rregullave të paraqitur te Sinjalet për shqyrtim.",
+)
 c3.metric("Modele në kombinim", str(len(report.get("ensemble_models", []))))
 
 tab_agreement, tab_stability, tab_details = st.tabs(
@@ -119,21 +126,39 @@ with tab_agreement:
             showlegend=False,
         )
         fig.update_layout(separators=", ")
+        fig.update_xaxes(tickformat=",~f")
         st.plotly_chart(fig, use_container_width=True)
         st.caption(
-            f"Pragu i pikëve të rregullave: {baseline.get('rule_flag_threshold', '—')} · "
-            f"Pragu i pikëve të kombinuara: {baseline.get('ensemble_flag_threshold', '—')}. "
+            f"Pragu i pikëve të rregullave: {fmt_number(baseline.get('rule_flag_threshold'), 1)} · "
+            f"Pragu i pikëve të kombinuara: {fmt_number(baseline.get('ensemble_flag_threshold'), 1)}. "
             "Këto pragje janë zgjedhje të analizës, jo kufij ligjorë."
         )
         ensemble_only_share = baseline.get("pct_ensemble_that_is_ml_only")
         if isinstance(ensemble_only_share, (int, float)):
+            total = int(comparison["Tenderë"].sum())
+            ensemble_set = confusion.get("both_flagged", 0) + confusion.get(
+                "ensemble_only_ml_unvalidated", 0
+            )
+            rule_set = confusion.get("both_flagged", 0) + confusion.get(
+                "rule_only_demoted_by_ensemble", 0
+            )
+            nested = (
+                " Të gjithë tenderët e sinjalizuar nga rregullat janë edhe mbi pragun e pikëve "
+                "të kombinuara; grupet nuk kundërshtojnë njëri-tjetrin, por ndryshojnë shumë në madhësi."
+                if confusion.get("rule_only_demoted_by_ensemble", 0) == 0
+                else ""
+            )
             st.info(
                 f"{fmt_number(ensemble_only_share * 100, 1)}% e tenderëve mbi pragun e pikëve të kombinuara "
                 "nuk e kalojnë pragun e rregullave. Kjo tregon dallim në përzgjedhje, "
-                "jo shkelje të reja të zbuluara."
+                "jo shkelje të reja të zbuluara. Pragu 0,5 i pikëve të kombinuara përfshin "
+                f"{fmt_number(100 * ensemble_set / max(total, 1), 1)}% të tenderëve, ndërsa pragu "
+                f"i rregullave {fmt_number(100 * rule_set / max(total, 1), 1)}%." + nested
             )
         with st.expander("Shifrat e krahasimit"):
-            st.dataframe(comparison, hide_index=True, use_container_width=True)
+            st.dataframe(
+                fmt_columns(comparison, {"Tenderë": 0}), hide_index=True, use_container_width=True
+            )
     st.subheader("Çfarë duhet për verifikim të mëtejshëm?")
     st.markdown(
         "Një shqyrtues duhet të lexojë dokumentet e një mostre tenderësh, duke përfshirë "
@@ -194,7 +219,20 @@ with tab_stability:
             "Nuk jep intervale të pasigurisë dhe nuk vërteton rezultatet në të dhëna të reja."
         )
         with st.expander("Parametrat dhe matjet e përsëritjeve"):
-            st.dataframe(stability_frame, hide_index=True, use_container_width=True)
+            st.dataframe(
+                fmt_columns(
+                    stability_frame,
+                    {
+                        "Ngjashmëria e grupeve (Jaccard)": 3,
+                        "Pjesa e përbashkët në krye": 3,
+                        "Përsëritje": 0,
+                        "Pjesa e mostrës": 2,
+                        "Pragu i percentilit": 2,
+                    },
+                ),
+                hide_index=True,
+                use_container_width=True,
+            )
 
     vote_sensitivity = report.get("rank_agreement_quantile_sensitivity") or {}
     quantiles = vote_sensitivity.get("quantiles") or {}
@@ -214,13 +252,12 @@ with tab_stability:
             for scenario in sorted(quantiles.values(), key=lambda value: value.get("quantile", 0))
         ]
         st.dataframe(
-            pd.DataFrame(sensitivity_rows),
+            fmt_columns(
+                pd.DataFrame(sensitivity_rows),
+                {"Tenderë": 0, "Pjesa e tenderëve": 4, "Ngjashmëria me përzgjedhjen bazë": 3},
+            ),
             hide_index=True,
             use_container_width=True,
-            column_config={
-                "Pjesa e tenderëve": st.column_config.NumberColumn(format="%.4f"),
-                "Ngjashmëria me përzgjedhjen bazë": st.column_config.NumberColumn(format="%.3f"),
-            },
         )
         st.caption(
             "Pjesa e tenderëve shprehet nga 0 në 1; 0,05 do të thotë 5%. "
@@ -239,7 +276,9 @@ with tab_details:
             "tregojnë se klasifikuesi riprodhon rregullat; nuk matin zbulimin e mashtrimit. "
             "Ky klasifikues përdoret për shpjegimin SHAP të rregullave."
         )
-        st.caption(f"Pragu i etiketës së rregullave: {report.get('rule_label_threshold', '—')}")
+        st.caption(
+            f"Pragu i etiketës së rregullave: {_metric_text(report.get('rule_label_threshold'), 1)}"
+        )
         if cv.get("rocauc_mean") is None:
             st.info("Validimi i kryqëzuar nuk është i disponueshëm.")
         else:
@@ -331,7 +370,18 @@ with tab_details:
                 for family, values in (subset.get("families") or {}).items()
             ]
             if family_rows:
-                st.dataframe(pd.DataFrame(family_rows), hide_index=True, use_container_width=True)
+                st.dataframe(
+                    fmt_columns(
+                        pd.DataFrame(family_rows),
+                        {
+                            "Korrelacioni i renditjeve": 3,
+                            "Jaccard për 5% në krye": 3,
+                            "Tenderë të përbashkët në krye": 0,
+                        },
+                    ),
+                    hide_index=True,
+                    use_container_width=True,
+                )
             ensemble_comparison = subset.get("ensemble_comparison") or {}
             if ensemble_comparison:
                 st.caption(

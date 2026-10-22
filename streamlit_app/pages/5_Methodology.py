@@ -11,7 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import pandas as pd
 import streamlit as st
 from _bootstrap import page_header
-from _charts import fmt_number
+from _charts import RULE_TABLE_CAPTION, fmt_columns, fmt_datetime, fmt_number, rule_table_sq
 from _narrative import FLAG_NARRATIVE
 from pyarrow.parquet import ParquetFile
 
@@ -21,18 +21,23 @@ from thesis.anomaly.rules import RULE_SCORE_NORMALISER, RULES
 from thesis.domain.features import CONTEXT_FEATURES, ML_FEATURES
 from thesis.jsonutil import loads_json
 
-st.set_page_config(page_title="Metodologjia · OCDS Kosova", page_icon="📖", layout="wide")
+st.set_page_config(
+    page_title="Si funksionon analiza · Prokurimi në Kosovë", page_icon="📖", layout="wide"
+)
 page_header(
-    "📖 Si bëhet analiza",
+    "📖 Si funksionon analiza",
     "Nga njoftimet e prokurimit te sinjalet për shqyrtim: burimi, hapat dhe kufizimet.",
 )
 
 DOCS = paths.DOCS
+ENGLISH_DOCUMENT_NOTE = "Ky dokument teknik është në anglisht."
 
 
-def _render_document(filename: str) -> None:
+def _render_document(filename: str, *, english: bool = False) -> None:
     document = DOCS / filename
     if document.exists():
+        if english:
+            st.caption(ENGLISH_DOCUMENT_NOTE)
         st.markdown(document.read_text())
     else:
         st.info("Dokumenti shpjegues nuk është i disponueshëm në këtë instalim.")
@@ -78,10 +83,11 @@ def _render_dq_artifact(report_path: Path, parquet_path: Path) -> None:
 
     with st.expander("Raporti i plotë dhe koha e kontrollit"):
         st.caption(
-            f"Kontrolluar: {run_at or '—'} · Të dhënat përditësuar: "
-            f"{artifact_updated.isoformat() if artifact_updated else '—'}"
+            f"Kontrolluar: {fmt_datetime(run_at)} · Të dhënat përditësuar: "
+            f"{fmt_datetime(artifact_updated)}"
         )
         st.caption(f"Skedari: {report_path.relative_to(paths.ROOT)}")
+        st.caption(ENGLISH_DOCUMENT_NOTE)
         st.markdown(report_path.read_text())
 
 
@@ -164,11 +170,10 @@ with tab_rules:
             }
         )
     st.dataframe(
-        pd.DataFrame(rows),
+        fmt_columns(pd.DataFrame(rows), {"Pikët që shton": 3}),
         hide_index=True,
         use_container_width=True,
         column_config={
-            "Pikët që shton": st.column_config.NumberColumn(format="%.3f"),
             "Shpjegimi": st.column_config.TextColumn(width="large"),
         },
     )
@@ -179,12 +184,13 @@ with tab_rules:
     )
     with st.expander("Peshat, pragjet dhe referencat e plota"):
         st.code("rule_score = clip(sum(weight × triggered) / 2, 0, 1)", language="text")
-        st.dataframe(rule_descriptions(), hide_index=True, use_container_width=True)
+        st.caption(RULE_TABLE_CAPTION)
+        st.dataframe(rule_table_sq(rule_descriptions()), hide_index=True, use_container_width=True)
 
 with tab_quality:
     st.subheader("A i kanë kaluar të dhënat kontrollet?")
     st.caption(
-        "Zgjidh grupin që dëshiron të kontrollosh. Paralajmërimet tregojnë fusha "
+        "Zgjidhni grupin që dëshironi të kontrolloni. Paralajmërimet tregojnë fusha "
         "që kërkojnë kujdes edhe kur kontrollet kryesore kanë kaluar."
     )
     quality_groups = {
@@ -207,12 +213,12 @@ with tab_technical:
         ("Metodologjia e plotë", "methodology.md"),
     ):
         with st.expander(label):
-            _render_document(filename)
-    with st.expander("Treguesit që përdorin modelet"):
+            _render_document(filename, english=True)
+    with st.expander("Veçoritë hyrëse të modeleve"):
         c1, c2 = st.columns(2)
-        c1.markdown(f"**Tregues numerikë ({len(ML_FEATURES)})**")
+        c1.markdown(f"**Veçori numerike ({len(ML_FEATURES)})**")
         c1.code("\n".join(ML_FEATURES), language="text")
-        c2.markdown(f"**Tregues për krahasim me tenderë të ngjashëm ({len(CONTEXT_FEATURES)})**")
+        c2.markdown(f"**Veçori për krahasim me tenderë të ngjashëm ({len(CONTEXT_FEATURES)})**")
         c2.code("\n".join(CONTEXT_FEATURES), language="text")
         st.caption(
             "Emrat teknikë lidhen me kolonat e ruajtura. Percentilet dhe pikët "
@@ -224,6 +230,8 @@ with tab_technical:
         adrs = sorted((DOCS / "adr").glob("*.md"))
         if not adrs:
             st.info("Nuk ka dokumente të vendimeve teknike në këtë instalim.")
+        else:
+            st.caption(ENGLISH_DOCUMENT_NOTE)
         for document in adrs:
             st.markdown(document.read_text())
             st.divider()

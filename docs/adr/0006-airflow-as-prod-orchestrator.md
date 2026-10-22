@@ -1,7 +1,7 @@
 # ADR-0006: Airflow for production orchestration; lightweight DAG runner locally
 
 * **Status:** Accepted
-* **Date:** 2026-04
+* **Date:** 2026-04; amended 2026-07
 
 ## Context
 
@@ -18,7 +18,8 @@ Provide **two execution paths** that share the *same* CLI:
 1. **Local: `thesis.pipeline.dag.run_dag()`** — a small custom DAG
    runner that:
    * declares each task's inputs and outputs,
-   * skips tasks whose outputs are newer than every input,
+   * skips stages whose release manifests still validate against the current
+     inputs, code, configuration and runtime,
    * supports `--only`, `--from`, `--force`,
    * has zero external dependencies.
 

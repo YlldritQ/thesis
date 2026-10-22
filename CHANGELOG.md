@@ -6,6 +6,30 @@ follows [SemVer](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+Documentation, dashboard and regression tests only; the package, data and model
+releases remain 1.3.0 and still validate.
+
+### Final review — 22 October 2026
+
+- Dashboard: dates are shown and grouped in the source's published `+01:00`
+  offset instead of UTC (most publication dates previously appeared one day
+  early); the review page now ranks by the rule score by default, since the
+  ensemble's 0.5 cut is only its 67th percentile; Albanian number formatting,
+  page names, labels and remaining English UI text made consistent.
+- Methodology: added purpose and contributions, related work and a full
+  reference list; described the rule/ensemble relationship as nested rather
+  than disagreeing; documented what the unsupervised detectors pick up, the
+  sensitivity of the model election, and known issues that need a new
+  publication (rule overlap in `WINNER_TAKES_ALL_LARGE`, UTC date bucketing,
+  same-title award de-duplication).
+- Corrected citation details, stale CSV and lineage references in the ADRs,
+  page and document names across the Albanian docs, and the copyright holder.
+- EDA notebook: reads the bundled `.jsonl.gz` when the expanded file is
+  missing, and its takeaways section is filled in with verified figures.
+- Date regressions cover local month/year boundaries, the fixed summer offset,
+  missing dates, filtering and aggregation without changing scores or instants.
+  Corrected the methodology's date-shift counts and annual-rate comparison.
+
 ### Changed
 
 - Reorganized documentation around setup, dashboard use, development,

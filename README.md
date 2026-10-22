@@ -16,15 +16,16 @@ njerëzorë ende nuk është përcaktuar.
 
 ## Çfarë përmban
 
-- **Panel me nëntë faqe në shqip:** përmbledhje, kërkim tenderësh, sinjale për
-  shqyrtim, autoritete dhe furnizues, metodologji, kontrolle të modeleve dhe fjalor.
+- **Panel me nëntë faqe në shqip:** ballinë, përmbledhje, kërkim tenderësh,
+  sinjale për shqyrtim, autoritete dhe furnizues, si funksionon analiza,
+  kontrolle të modeleve, krahasim i modeleve dhe fjalor i termave.
 - **Përpunim nga burimi te analiza:** ruajtje e burimit, pastrim, tabela analitike
   dhe kontrolle të cilësisë së të dhënave.
-- **Analizë e shpjegueshme:** 15 tregues të dukshëm, prej të cilëve katër kanë
+- **Analizë e shpjegueshme:** 15 rregulla të dukshme, prej të cilave katër kanë
   peshë në pikët e rregullave; krahasim i 35 konfigurimeve të modeleve dhe
   shpjegim i përbërësve të pikëve për secilin tender.
 - **Gjurmueshmëri:** skedarët e publikimit lidhin rezultatet me të dhënat,
-  kodin, konfigurimin dhe mjedisin që i ka prodhuar.
+  kodin, konfigurimin dhe mjedisin që i kanë prodhuar.
 
 ## Të dhënat e përfshira
 
@@ -74,7 +75,7 @@ Nëse projekti është tashmë i instaluar në `.venv`, mund ta nisni drejtpërd
 
 Hapja e parë mund të zgjasë, sepse aplikacioni kontrollon integritetin e skedarëve.
 Për Docker, instalim për zhvillim dhe zgjidhje problemesh, shihni
-[udhëzuesin e ekzekutimit](docs/operations.md).
+[udhëzuesin e ekzekutimit dhe mirëmbajtjes](docs/operations.md).
 
 ## Si të filloni analizën
 
@@ -84,10 +85,10 @@ Për Docker, instalim për zhvillim dhe zgjidhje problemesh, shihni
 3. Te **Sinjalet për shqyrtim**, lexoni arsyet e sinjalizimit dhe të dhënat që
    mungojnë para se të interpretoni pikët.
 4. Përdorni **Autoritetet dhe furnizuesit** për krahasime të përmbledhura dhe
-   **Fjalori i termave** për termat. Kontrolloni gjithmonë periudhën dhe bazën e krahasimit
-   të shënuar në faqe.
+   **Fjalori i termave** për kuptimin e termave. Kontrolloni gjithmonë periudhën
+   dhe bazën e krahasimit të shënuara në faqe.
 
-[Udhëzuesi i përdoruesit](docs/user_guide.md) shpjegon faqet, filtrat dhe mënyrën
+[Udhëzuesi i përdorimit](docs/user_guide.md) shpjegon faqet, filtrat dhe mënyrën
 e leximit të grafikëve, me shembuj dhe kufizimet përkatëse.
 
 ## Si është ndërtuar
@@ -121,8 +122,8 @@ mund të rigjenerohet. `make clean` heq vetëm skedarët e përkohshëm të zhvi
 ## Zhvillimi dhe rindërtimi
 
 [CONTRIBUTING.md](CONTRIBUTING.md) përmban instalimin për zhvillim dhe komandat e
-testimit. [Udhëzuesi i ekzekutimit](docs/operations.md) shpjegon veçmas hapjen e
-rezultateve ekzistuese dhe krijimin e një publikimi të ri.
+testimit. [Udhëzuesi i ekzekutimit dhe mirëmbajtjes](docs/operations.md) shpjegon
+veçmas hapjen e rezultateve ekzistuese dhe krijimin e një publikimi të ri.
 
 **Mos e nisni `pipeline run` vetëm për të hapur panelin.** Kjo komandë kontrollon
 burimin në internet dhe mund të shkarkojë të dhëna të reja e të rindërtojë
@@ -135,11 +136,11 @@ mjedis tjetër të përputhshëm.
 
 Nisni nga [indeksi i dokumentacionit](docs/README.md). Dokumentet kryesore janë:
 
-- [Udhëzuesi i përdoruesit](docs/user_guide.md) — përdorimi dhe interpretimi i panelit.
+- [Udhëzuesi i përdorimit](docs/user_guide.md) — përdorimi dhe interpretimi i panelit.
 - [Metodologjia](docs/methodology.md) — burimi, treguesit, modelet dhe kufizimet.
 - [Arkitektura](docs/architecture.md) — rrjedha dhe kontratat e publikimit.
 - [Shpjegimi i pikëve](docs/explainability.md) — formulat dhe një shembull i verifikuar.
-- [Ekzekutimi dhe mirëmbajtja](docs/operations.md) — instalimi, rindërtimi dhe problemet e zakonshme.
+- [Udhëzuesi i ekzekutimit dhe mirëmbajtjes](docs/operations.md) — instalimi, rindërtimi dhe problemet e zakonshme.
 - [Gjetjet e gjeneruara](docs/findings.md) — shifrat e lidhura me publikimin e përfshirë.
 - [Rishikimi i projektit](docs/project_review_2026_09.md) — kontrollet e kryera dhe çështjet e mbetura.
 - [Protokolli i shqyrtimit manual](docs/manual_audit_protocol.md) — hapat për vlerësimin e pavarur.

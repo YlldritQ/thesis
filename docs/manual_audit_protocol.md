@@ -38,12 +38,12 @@ The unit is one tender (`ocid`). Review the original notice, award decision,
 lot information, dates, and amendments where available. The primary question
 is:
 
+> Does the source documentation contain a concrete, review-relevant concern
+> that is supported by recorded evidence, rather than merely being unusual?
+
 Treat an OCDS `award` as a recorded award decision only. Do not mark a contract
 as signed, executed or paid unless a separate source document explicitly
 supports that status; absence of such evidence is not a negative finding.
-
-> Does the source documentation contain a concrete, review-relevant concern
-> that is supported by recorded evidence, rather than merely being unusual?
 
 Record one of `yes`, `no`, or `uncertain` in
 `review_relevant_concern`. An empty field means **not reviewed**, never “no”.

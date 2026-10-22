@@ -6,34 +6,34 @@ PIP := .venv/bin/pip
 PYTHONPATH := src
 
 help:
-	@echo "Objektivat e pipeline-it (Inxhinieri e të Dhënave):"
+	@echo "Komandat e përpunimit (inxhinieri e të dhënave):"
 	@echo ""
-	@echo "  install          krijo venv nëse mungon dhe instalo varësitë"
-	@echo "  dev              instalo edhe veglat e zhvillimit (ruff, mypy, pytest, pre-commit)"
+	@echo "  install           krijo venv nëse mungon dhe instalo varësitë"
+	@echo "  dev               instalo edhe veglat e zhvillimit (ruff, mypy, pytest, pre-commit)"
 	@echo ""
-	@echo "  fetch            shkarko bronze OCDS"
-	@echo "  check_updates    kontrollo për rekorde të reja të tenderëve në burim"
-	@echo "  silver           bronze -> silver"
-	@echo "  gold             silver -> tender_features + 3 përmbledhje gold"
-	@echo "  benchmark        23 konfigurime të pambikëqyrura + 12 të mbikëqyrura"
-	@echo "  benchmark_quick  provë e shpejtë e motorit të benchmark-ut (sekonda)"
-	@echo "  models           tender_features + champions -> tender_summary + modele/SHAP"
-	@echo "  all              ekzekuto DAG-un e plotë (anashkalon fazat e freskëta)"
-	@echo "  app              nis panelin Streamlit"
+	@echo "  fetch             shkarko bronze OCDS"
+	@echo "  check_updates     kontrollo për rekorde të reja të tenderëve në burim"
+	@echo "  silver            bronze -> silver"
+	@echo "  gold              silver -> tender_features + 3 përmbledhje gold"
+	@echo "  benchmark         23 konfigurime të pambikëqyrura + 12 të mbikëqyrura"
+	@echo "  benchmark_quick   provë e shpejtë e motorit të benchmark-ut (sekonda)"
+	@echo "  models            tender_features + champions -> tender_summary + modele/SHAP"
+	@echo "  all               ekzekuto DAG-un e plotë (anashkalon fazat e freskëta)"
+	@echo "  app               nis panelin Streamlit"
 	@echo ""
-	@echo "  validate_releases verify publication hashes and lineage chain"
-	@echo "  dq               ekzekuto të gjitha suitat e pritshmërive DQ"
-	@echo "  test             pytest (njësi + kontrata + integrim + faqet UI)"
-	@echo "  test_unit        vetëm njësi + kontrata (i shpejtë)"
-	@echo "  test_integration testet e integrimit"
-	@echo "  lint             ruff check + kontroll formati"
-	@echo "  format           ruff format (në vend)"
-	@echo "  type             mypy mbi src/thesis"
+	@echo "  validate_releases verifiko hash-et e publikimeve dhe zinxhirin e prejardhjes"
+	@echo "  dq                ekzekuto të gjitha suitat e pritshmërive DQ"
+	@echo "  test              pytest (njësi + kontrata + integrim + faqet UI)"
+	@echo "  test_unit         vetëm njësi + kontrata (i shpejtë)"
+	@echo "  test_integration  testet e integrimit"
+	@echo "  lint              ruff check + kontroll formati"
+	@echo "  format            ruff format (në vend)"
+	@echo "  type              mypy mbi src/thesis"
 	@echo ""
-	@echo "  docker_build     ndërto imazhin Docker të prodhimit"
-	@echo "  docker_up        docker compose up për panelin"
+	@echo "  docker_build      ndërto imazhin Docker të prodhimit"
+	@echo "  docker_up         docker compose up për panelin"
 	@echo ""
-	@echo "  clean            hiq skedarët e përkohshëm; ruaj të dhënat dhe modelet"
+	@echo "  clean             hiq skedarët e përkohshëm; ruaj të dhënat dhe modelet"
 
 install:
 	@test -d .venv || python3 -m venv .venv
@@ -68,7 +68,7 @@ models:
 all:
 	$(PY) -m thesis pipeline run
 	@echo ""
-	@echo "Pipeline u krye. Ekzekuto 'make app' për panelin."
+	@echo "Përpunimi përfundoi. Ekzekuto 'make app' për panelin."
 
 dq:
 	$(PY) -m thesis dq run

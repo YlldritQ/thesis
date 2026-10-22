@@ -33,7 +33,7 @@ METRIC_HELP = {
     "days_to_first_award": "Ditët nga afati për dorëzimin e ofertave deri te vendimi i parë "
     "i dhënies. Vlerat negative kërkojnë verifikim të datave në dokumentet burimore.",
     "ensemble_score": "Pikë nga 0 në 1 që kombinon rregullat dhe modelet statistikore. "
-    "Sa më e lartë, aq më herët del tenderi për shqyrtim në këtë grup të dhënash. "
+    "Sa më e lartë, aq më lart renditet tenderi për shqyrtim në këtë grup të dhënash. "
     "Nuk është probabilitet shkeljeje dhe nuk ndryshon kur përdorni filtrat e faqes.",
     "rule_score": "Pikë nga 0 në 1, sipas sinjaleve për shqyrtim dhe peshave të zgjedhura "
     "nga autori. Kontrollet e cilësisë së të dhënave nuk shtojnë pikë. Nuk mat probabilitet shkeljeje.",

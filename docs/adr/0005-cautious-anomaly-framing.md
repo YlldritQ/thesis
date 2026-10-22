@@ -31,19 +31,23 @@ We need a framing rule that:
    top 5%**. It is not a raw-score threshold of 0.7, calibrated confidence,
    or evidence of fewer false positives. External presentations must name
    it "rank agreement" and keep the rule/output-label caveat visible.
-5. **No name-and-shame outputs.** No CSV export of "top 50 suppliers"
-   ranked by score. The CSVs published by the pipeline are aggregated
-   (DQ scorecards, supplier-summary, procuring-entity-summary) and
-   never combine names with anomaly scores.
-6. **CONTRIBUTING.md PR-blocks** any change that weakens the above.
+5. **No name-and-shame outputs.** No export of "top 50 suppliers"
+   ranked by score. Pipeline outputs are Parquet, JSON and Markdown; the
+   only CSV is the internal manual-audit worksheet
+   (`data/review/manual_audit_sample.csv`), which pairs authority names with
+   scores for document review and must not be published.
+6. **Tests enforce the caveat:** `tests/test_streamlit_pages.py` checks that
+   every dashboard page shows it, and changes that weaken the points above
+   should not be merged.
 
 ## Consequences
 
 **Positive:**
 
 * Reduces the chance of harm from a misread of the dashboard.
-* Aligns with the OECD-Procurement-Integrity guidance on
-  responsible use of statistical risk indicators.
+* Keeps the dashboard consistent with the project's own evidence: no
+  independent outcome labels exist, so no score can be presented as a
+  finding (see `docs/responsible_use.md`).
 
 **Negative:**
 
@@ -56,4 +60,4 @@ We need a framing rule that:
 
 * `docs/responsible_use.md`
 * `streamlit_app/_bootstrap.py:show_caveat`
-* `CONTRIBUTING.md` § "Sensitive subject"
+* `tests/test_streamlit_pages.py` (caveat on every page)

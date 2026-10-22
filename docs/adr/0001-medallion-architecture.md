@@ -1,7 +1,7 @@
 # ADR-0001: Medallion architecture (bronze / silver / gold)
 
 * **Status:** Accepted
-* **Date:** 2026-04
+* **Date:** 2026-04; amended 2026-07
 * **Deciders:** thesis author + supervisor
 
 ## Context
@@ -28,8 +28,9 @@ Adopt the **medallion architecture** popularised by Databricks:
   `monthly_metrics`. Benchmark reads `tender_features`; ML then writes the
   scored `tender_summary` as its sole canonical producer.
 
-DQ artifacts and lineage sidecars are siblings of the layers, under
-`data/dq/` and `data/_lineage/`.
+DQ artifacts live under `data/dq/`; each Parquet file has its lineage
+sidecar next to it (`*.parquet.lineage.json`), and historical run copies under
+`data/_lineage/` stay local.
 
 ## Consequences
 

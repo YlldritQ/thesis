@@ -1,134 +1,156 @@
-# Përdorimi i Përgjegjshëm
+# Përdorimi i përgjegjshëm
 
-Zbulimi i anomalive në **prokurime publike është temë e ndjeshme**.
-Një shenjë (flag) në këtë sistem *nuk* është akuzë. Ky dokument sqaron
-çfarë bën projekti, çfarë nuk bën, dhe si duhen lexuar rezultatet e tij.
-Analiza mbulon vetëm snapshot-in e Publikimit 115: 75,710 rekorde dhe
-118 muaj me të dhëna nga 121 muaj në intervalin e publikuar. Nuk është
-monitorim live ose cens i plotë i prokurimit kombëtar.
+Zbulimi i anomalive në **prokurimin publik është temë e ndjeshme**.
+Një tender i sinjalizuar në këtë sistem *nuk* është akuzë. Ky dokument sqaron
+çfarë bën projekti, çfarë nuk bën dhe si duhen lexuar rezultatet e tij.
+Analiza mbulon vetëm grupin e ruajtur të të dhënave nga Publikimi 115:
+75 710 regjistrime dhe 118 muaj me të dhëna nga 121 muaj në intervalin e
+publikuar. Nuk është monitorim në kohë reale ose regjistrim i plotë i
+prokurimit kombëtar.
 
 ## Parimi themelor
 
-> Një pikë e lartë anomalie do të thotë *"ky rekord tenderi renditet si i
-> pazakontë brenda snapshot-it dhe/ose aktivizon tregues të përcaktuar nga
-> autori; një auditor me dokumente në dorë duhet ta vendosë në kontekst"*.
+> Një pikë e lartë anomalie do të thotë: «ky tender renditet si i pazakontë
+> brenda grupit të ruajtur të të dhënave dhe/ose aktivizon rregulla të
+> përcaktuara nga autori; një auditor me dokumentet në dorë duhet ta vendosë
+> në kontekst».
 >
 > **Nuk** do të thotë që tenderi është mashtrues, që dikush ka vepruar
-> në mënyrë të parregullt, apo që ka ndodhur ndonjë shkelje.
+> në mënyrë të parregullt apo që ka ndodhur ndonjë shkelje.
 
-Përdorim me qëllim fjalët **shenjë**, **sinjal**, **rishikim** —
-**kurrë** "mashtrim" ose "korrupsion" — kur përshkruajmë daljet e modelit.
+Me qëllim përdorim fjalët **sinjal**, **shenjë** dhe **shqyrtim** — **kurrë**
+«mashtrim» ose «korrupsion» — kur përshkruajmë rezultatet e modeleve.
 
-Objekti OCDS `award` është vetëm një **vendim dhënieje i regjistruar**.
-`awarded_value_eur` nuk është provë e vlerës së një kontrate të nënshkruar,
-të ekzekutuar ose të paguar dhe nuk është shpenzim real. Për këtë arsye
-paneli përdor shprehjen “vlera e dhënieve të regjistruara”.
+Objekti OCDS `award` është vetëm një **vendim i regjistruar për dhënien e
+kontratës**. Fusha `awarded_value_eur` nuk dëshmon vlerën e një kontrate të
+nënshkruar, të zbatuar ose të paguar dhe nuk është shpenzim real. Për këtë
+arsye paneli përdor shprehjen «vlera e vendimeve të dhënies».
 
 ## Çfarë bëjmë për t'u mbrojtur nga akuzat e rreme
 
-1. **Pajtim renditjesh, jo provë e pavarur.** Ansambli kombinon renditjet e
-   katër detektorëve kampionë me shtresën e rregullave dhe pikën
-   kontekstuale. Kolona historikisht e quajtur `high_confidence` do të
-   thotë vetëm se të paktën **3 nga 4** detektorët e vendosin rekordin në
-   **5% më të lartë të batch-it aktual**. Nuk është besueshmëri e
-   kalibruar dhe nuk provon më pak falsë pozitive.
+1. **Pajtim renditjesh, jo provë e pavarur.** Pikët e kombinuara bashkojnë
+   renditjet e katër modeleve të përzgjedhura me pikët e rregullave dhe
+   pikët e kontekstit. Kolona teknike `high_confidence` (emër i trashëguar),
+   së cilës i përgjigjet filtri «Vetëm tenderët ku modelet pajtohen…»,
+   do të thotë vetëm se të paktën **3 nga 4** modelet e vendosin tenderin
+   mes **5% më të pazakontëve të grupit të analizuar**. Nuk është
+   besueshmëri e kalibruar dhe nuk provon se ka më pak pozitive të rreme.
 
 2. **Rregulla transparente.** Çdo rregull ka kod, përshkrim në gjuhë të
-   thjeshtë, arsyetim/prag të deklaruar, kufizime dhe peshë fikse.
-   Riprodhohen me makinë llogaritëse. Shih `src/thesis/anomaly/rules.py`.
+   thjeshtë, arsyetim ose prag të deklaruar, kufizime dhe peshë fikse. Nga
+   15 rregullat e dukshme, vetëm katër kanë peshë në pikët e rregullave.
+   Llogaritjet mund të riprodhohen me makinë llogaritëse. Shihni
+   `src/thesis/anomaly/rules.py`.
 
-3. **Vlerësim kontekstual.** Anomalia është kontekstuale: një tender
-   5 mln € është normal për Ministrinë e Infrastrukturës dhe i pazakontë
-   për një komunë të vogël. `context_score` e pasqyron këtë shprehimisht.
+3. **Vlerësim sipas kontekstit.** Anomalia varet nga konteksti: një tender
+   prej 5 mln € mund të jetë i zakonshëm për Ministrinë e Infrastrukturës
+   dhe i pazakontë për një komunë të vogël. Pikët e kontekstit («Dallimet nga
+   tenderët e ngjashëm», `context_score`) e pasqyrojnë këtë drejtpërdrejt.
 
-4. **Zgjedhje modeli me protokoll të dokumentuar.** Modelet në ansambël
-   renditen me rrjeta hiperparametrash, stabilitet bootstrap, konsistencë
-   seed-esh dhe besnikëri ndaj etiketave proxy të rregullave. Ndarja
-   ≤2023/≥2024 nuk simulon përdorim real: objektivi i rregullave dhe
-   inputet e modelit mbivendosen fort. E gjithë renditja publikohet në
-   faqen "Krahasimi i Modeleve" dhe në
-   `data/models/benchmark/leaderboard.md`.
+4. **Përzgjedhje e modeleve me protokoll të dokumentuar.** Modelet që hyjnë
+   në pikët e kombinuara renditen sipas kërkimit në rrjetë të
+   hiperparametrave, qëndrueshmërisë bootstrap, qëndrueshmërisë ndaj vlerave
+   fillestare të rastësisë (seed) dhe përputhjes me etiketat ndihmëse të
+   nxjerra nga rregullat. Ndarja kohore ≤ 2023 / ≥ 2024 nuk simulon përdorim
+   real, sepse objektivi i rregullave dhe veçoritë hyrëse të modeleve
+   mbivendosen fort. Renditja e plotë publikohet në faqen «Krahasimi i
+   modeleve» dhe në `data/models/benchmark/leaderboard.md`.
 
-5. **Kontrolle të brendshme çdo herë.** Ekzekutimi prodhon
-   `data/models/validation_report.json` me CV kundër proxy-t,
-   stabilitet bootstrap, pajtim ndër-modelesh dhe kalibrim ndaj etiketave
-   të rregullave. Këto matin sjelljen e brendshme, jo aftësi zbulimi.
+5. **Kontrolle të brendshme në çdo ekzekutim.** Çdo ekzekutim prodhon
+   `data/models/validation_report.json`, me vlerësim të kryqëzuar kundrejt
+   etiketave ndihmëse, qëndrueshmëri bootstrap, pajtim ndërmjet modeleve
+   dhe një kontroll të kalibrimit kundrejt etiketave të rregullave. Pikët
+   nuk janë probabilitete të kalibruara. Këto kontrolle matin sjelljen e
+   brendshme të modeleve, jo aftësinë për të zbuluar shkelje.
 
-6. **Banner i përhershëm.** Çdo faqe e panelit mban paralajmërimin
-   "Anomalia ≠ mashtrim". Është kërkesë e fortë (bllokohet në PR) që ky
-   banner të mbetet.
+6. **Paralajmërim i përhershëm.** Çdo faqe e panelit shfaq paralajmërimin
+   «Anomalia ≠ mashtrim». Testet e projektit kontrollojnë që ky
+   paralajmërim të mbetet; një ndryshim që e heq nuk i kalon kontrollet.
 
-7. **Gjurmim linje.** Artefaktet Parquet mbajnë sidecar `*.lineage.json`
-   me hash-e inputesh/daljesh, version kodi dhe run-id; manifestet e fazave
-   lidhin grupin e plotë të daljes. Kjo mbështet auditimin e snapshot-it, por
-   nuk e kthen hash-in në provë të vlefshmërisë semantike.
+7. **Gjurmimi i prejardhjes.** Skedarët Parquet kanë skedarë shoqërues
+   `*.lineage.json` me hash-et e skedarëve hyrës dhe dalës, versionin e
+   kodit dhe identifikuesin e ekzekutimit; manifestet e fazave lidhin të
+   gjithë skedarët e prodhuar. Kjo mbështet auditimin e grupit të ruajtur të
+   të dhënave, por hash-i nuk dëshmon që përmbajtja është e saktë në kuptim.
 
-## Çfarë nuk dimë për falsë pozitivët
+## Çfarë nuk dimë për pozitivët e rremë
 
-Nuk ka etiketa të pavarura në paketën e dorëzuar, prandaj projekti nuk
-mund të llogarisë normën e falsë-pozitivëve. Numri i rekordeve në radhën
-e rishikimit varet nga pragjet, përzierja e procedurave dhe snapshot-i.
-Normat e ofertuesit të vetëm duhen lexuar sipas nënllojit të procedurës,
-statusit të dhënies, vitit dhe brezit të vlerës — jo si një përqindje e
-përbashkët kombëtare ose si ekuivalent i një benchmark-u të BE-së.
+Paketa e dorëzuar nuk përmban etiketa të pavarura, prandaj projekti nuk mund
+të llogarisë normën e pozitivëve të rremë. Numri i tenderëve në radhën e
+shqyrtimit varet nga pragjet, përbërja e procedurave dhe grupi i ruajtur i të
+dhënave. Përqindjet e tenderëve me një ofertues duhen lexuar sipas nënllojit të
+procedurës, statusit të dhënies, vitit dhe brezit të vlerës — jo si një
+përqindje e vetme kombëtare dhe as si e barasvlershme me një tregues
+referues të BE-së.
 
-`ensemble_score`, percentilet e detektorëve dhe `high_confidence` janë
-relative ndaj snapshot-it aktual. Ndryshimi i popullatës krahasuese mund
-të ndryshojë renditjen e të njëjtit rekord. Nuk ka statistikë reference të
-ngrirë/versionuar për pikëzim online; çdo ekzekutim i plotë krijon renditje të
-reja ndaj batch-it të vet.
+Pikët e kombinuara, percentilet e modeleve dhe filtri i pajtimit të modeleve
+janë relative ndaj grupit të ruajtur të të dhënave. Nëse ndryshon grupi me të
+cilin krahasohet, mund të ndryshojë edhe renditja e të njëjtit tender. Nuk ka
+statistika referuese të ngrira dhe me version për pikëzimin e vazhdueshëm të
+tenderëve të rinj; çdo ekzekutim i plotë krijon renditje të reja brenda grupit
+të vet të analizuar.
 
-Identiteti i furnizuesit raportohet me pamje ndjeshmërie: ID biznesi/emër,
-ID biznesi/ID pale burimore/emër dhe vetëm ID biznesi. ID-të sentinel
-normalizohen si të munguara, por ruhen në fushën e papërpunuar. ID-ja e palës
-është çelës i publikimit, jo identifikues juridik i verifikuar; emri mund të
-bashkojë subjekte të ndryshme dhe ID-ja burimore mund ta ndajë të njëjtin
-subjekt. Këto pamje nuk janë zgjidhje e plotë identiteti dhe nuk e bëjnë HHI-në
-një përkufizim tregu relevant.
+Identiteti i furnizuesve paraqitet në tri mënyra, për të kontrolluar
+ndjeshmërinë e rezultateve: ID-ja e biznesit me emrin; ID-ja e biznesit me
+ID-në e palës në burim dhe emrin; dhe vetëm ID-ja e biznesit. Vlerat
+zëvendësuese që nuk janë ID reale trajtohen si të munguara, por ruhen në
+fushën e papërpunuar. ID-ja e palës është çelës brenda publikimit, jo
+identifikues juridik i verifikuar; i njëjti emër mund të bashkojë subjekte
+të ndryshme, ndërsa ID-ja burimore mund ta ndajë të njëjtin subjekt. Këto
+pamje nuk e zgjidhin plotësisht identifikimin e furnizuesve dhe nuk e bëjnë
+HHI-në matës të përqendrimit në një treg përkatës.
 
-Kur burimi nuk publikon ofertuesit, numri mbetet i papërcaktuar dhe përjashtohet
-nga emëruesi i normës së ofertuesit të vetëm/zero. Mungesa e publikimit nuk
-interpretohet si zero konkurrencë.
+Kur burimi nuk publikon numrin e ofertuesve, ky numër mbetet i papërcaktuar
+dhe përjashtohet nga emëruesi i përqindjeve të tenderëve me një ose zero
+ofertues. Mungesa e publikimit nuk interpretohet si mungesë konkurrence.
 
-## Si të përdoret paneli me përgjegjësi
+## Si ta përdorni panelin me përgjegjësi
 
-1. **Fillo nga faqja "Validimi"** dhe "Krahasimi i Modeleve" — lexo
-   kufizimet dhe kontrollet e brendshme para se të përdorësh renditjen.
-2. **Filtro në fushën tënde.** Një auditor komunal ka gjasa të dojë
-   vetëm autoritetin e vet — përdor shiritin anësor.
-3. **Rendit sipas `ensemble_score`** për një renditje eksploruese, ose
-   sipas `rule_score` për shtresën transparente. Filtri
-   `high_confidence` ngushton te pajtimi i renditjeve top-5%; nuk rrit
-   automatikisht vlefshmërinë e gjetjeve.
-4. **Hap pamjen për-tender.** Për `ensemble_score`, përdor zbërthimin ekzakt
-   të rank-percentileve të detektorëve, `rule_score` dhe `context_score`;
-   baza plus efektet e komponentëve duhet ta rindërtojnë pikën e publikuar.
-   Për radhën heuristike, lista dhe aritmetika e rregullave janë shpjegimi
-   parësor. Ujëvara SHAP është vetëm shpjegim dytësor i daljes log-odds të
-   proxy-t të rregullave dhe nuk shpjegon ansamblin.
-5. **Tërhiq dokumentet burimore** para çdo përfundimi. Njoftimi i
-   tenderit, kontrata e nënshkruar (nëse ekziston) dhe vendimi i dhënies
-   qëndrojnë tek autoriteti kontraktues dhe KRPP — ato janë e vërteta bazë.
+1. **Filloni nga faqet «Kontrollet e modeleve» dhe «Krahasimi i
+   modeleve».** Lexoni kufizimet dhe kontrollet e brendshme para se të
+   përdorni renditjen.
+2. **Kufizoni analizën në fushën tuaj.** Një auditor komunal ka gjasa të
+   dojë vetëm autoritetin e vet; përdorni filtrat në shiritin anësor.
+3. **Zgjidhni renditjen te «Rendit sipas».** «Pikët e rregullave»
+   (`rule_score`) japin renditjen më transparente, ndërsa «Pikët e
+   kombinuara» (`ensemble_score`) japin një renditje eksploruese. Kutia
+   «Vetëm tenderët ku modelet pajtohen…» e ngushton listën te tenderët që
+   të paktën 3 nga 4 modelet i rendisin mes 5% më të pazakontëve; ajo nuk e
+   rrit automatikisht vlefshmërinë e gjetjeve.
+4. **Hapni hollësitë e tenderit.** Për «Pikët e kombinuara», përdorni
+   zbërthimin e saktë në percentilet e renditjes së modeleve, pikët e
+   rregullave dhe pikët e kontekstit; vlera bazë plus ndikimet e përbërësve
+   duhet ta rindërtojnë pikën e publikuar. Për «Pikët e rregullave»,
+   shpjegimi parësor është lista e rregullave të aktivizuara dhe llogaritja
+   e tyre. Grafiku SHAP (ujëvara) është vetëm shpjegim dytësor i modelit
+   ndihmës që imiton rregullat (dalje në log-shanse) dhe nuk shpjegon pikët e
+   kombinuara.
+5. **Merrni dokumentet burimore** para çdo përfundimi. Njoftimi i tenderit,
+   kontrata e nënshkruar (nëse ekziston) dhe vendimi i dhënies gjenden te
+   autoriteti kontraktues dhe te KRPP-ja; ato janë burimi përfundimtar për
+   verifikim.
 
-## Si të MOS përdoret paneli
+## Si të mos e përdorni panelin
 
-- **Mos** publiko një listë "kontraktorësh të dyshimtë" bazuar në
-  bashkësinë e shenjuar.
-- **Mos** kombino pikën me emrin e një personi në asnjë dalje publike.
-- **Mos** e trajto rregullën `awarded > estimated` si provë manipulimi
-  çmimi; mund të thotë thjesht që vlerësimi ishte jorealist.
-- **Mos** i trajto tenderët me pak ofertues si automatikisht të dyshimtë —
-  në punë teknike bazeni i ofertuesve të kualifikuar është i vogël nga
-  natyra.
+- **Mos** publikoni lista «kontraktorësh të dyshimtë» bazuar në tenderët e
+  sinjalizuar.
+- **Mos** e lidhni pikën me emrin e një personi në asnjë publikim.
+- **Mos** e trajtoni sinjalin «Vlera e vendimeve tejkalon parashikimin» si
+  provë manipulimi të çmimit; ai mund të tregojë thjesht se vlera e
+  parashikuar ishte jorealiste ose se lotet nuk janë të krahasueshme.
+- **Mos** i trajtoni tenderët me pak ofertues si automatikisht të dyshimtë;
+  për punë teknike të specializuara, numri i ofertuesve të kualifikuar është
+  natyrshëm i vogël.
 
 ## Privatësia
 
-Feed-i OCDS është plotësisht publik. Ruajmë vetëm çfarë publikohet. Nuk
-pasurojmë me të dhëna private. Nuk lidhim individë me rekorde prokurimi.
+Burimi OCDS është plotësisht publik. Ruajmë vetëm atë që publikohet, nuk e
+pasurojmë me të dhëna private dhe nuk lidhim individë me regjistrimet e
+prokurimit.
 
 ## Raportimi i problemeve
 
-Nëse vëren një rekord tenderi që beson se është klasifikuar gabim, ose një
-veçori të modelit që anon sistematikisht kundër një kategorie blerësi
-apo furnizuesi, hap një issue. Raporte të tilla i trajtojmë si gabime
-(bugs), jo si opinione.
+Nëse vëreni një tender që besoni se është klasifikuar gabim, ose një veçori
+të modelit që anon sistematikisht kundër një kategorie autoritetesh
+kontraktuese apo furnizuesish, raportojeni problemin te autori i projektit.
+Raporte të tilla trajtohen si gabime që duhen korrigjuar, jo si mendime.

@@ -24,7 +24,8 @@ We considered:
 Use **Streamlit** with **Plotly** for charts.
 
 * `streamlit_app/Home.py` is the landing page.
-* `streamlit_app/pages/*.py` are auto-discovered as tabs.
+* `streamlit_app/pages/*.py` are separate pages, reached through a grouped
+  Albanian sidebar (`_bootstrap.page_header`) instead of Streamlit's default list.
 * `streamlit_app/_bootstrap.py` provides cached loaders, the filter
   sidebar, KPI rows, and the caveat banner.
 

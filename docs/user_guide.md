@@ -1,4 +1,4 @@
-# Udhëzuesi i përdorimit të panelit
+# Udhëzuesi i përdorimit
 
 Paneli ndihmon në shqyrtimin e të dhënave të publikuara të prokurimit në Kosovë:
 çfarë parashihet të blihet, kush merr pjesë dhe cilët tenderë kërkojnë verifikim.
@@ -39,9 +39,9 @@ Emrat më poshtë janë emrat në menynë anësore.
    dhe pjesën **Çfarë kërkon verifikim?** Tabela dhe përzgjedhësi paraqesin
    deri në 500 rezultate; ngushtoni kërkimin nëse lista është më e gjatë.
 4. **Kuptoni sinjalin.** Te **Sinjalet për shqyrtim**, zgjidhni një nga
-   tenderët e renditur ose vendosni OCID-në e rastit. Lexoni shpjegimin
+   tenderët e renditur ose vendosni OCID-in e rastit. Lexoni shpjegimin
    përpara pikëve. Llogaritjet teknike janë në pjesët që hapen me klikim.
-5. **Kontrolloni dokumentet burimore.** Mbani shënim OCID-në, filtrat dhe
+5. **Kontrolloni dokumentet burimore.** Mbani shënim OCID-in, filtrat dhe
    arsyen e shqyrtimit. Verifikoni njoftimet, lotet dhe vendimet në burimin
    përkatës. Nëse dëshironi vlerësim të strukturuar për punimin, ndiqni
    [protokollin e shqyrtimit manual](manual_audit_protocol.md).
@@ -75,11 +75,11 @@ që duken në ekran. Emrat teknikë të kolonave ruhen për ripërdorim në anal
 |---|---|
 | **Vlera e parashikuar** | Vlera që autoriteti kontraktues ka parashikuar për tenderin. Nuk është shpenzim i kryer. |
 | **Vlera e vendimeve të dhënies** | Shuma e regjistruar në vendimet për dhënie të kontratës. Nuk dëshmon nënshkrim, zbatim ose pagesë të kontratës. |
-| **Me vetëm një ofertues (%)** | Te përmbledhja e tenderëve, llogaritet vetëm ndër rastet me numër të publikuar ofertuesish. Mungesat përjashtohen nga baza e përqindjes. |
+| **Me vetëm një ofertues** | Te **Përmbledhja**, përqindja llogaritet vetëm ndër tenderët me numër të publikuar ofertuesish. Mungesat përjashtohen nga baza e përqindjes. |
 | **Mediana** | Vlera në mes të listës së renditur; ndikohet më pak nga disa tenderë me vlera shumë të mëdha. |
 | **Pikët e rregullave** | Përmbledhje nga 0 në 1 e sinjaleve që shtojnë pikë, me pesha të zgjedhura nga autori. Kontrollet e cilësisë nuk shtojnë pikë. |
 | **Pikët e kombinuara** | Përmbledhin renditjet e modeleve, rregullat dhe krahasimin me tenderë të ngjashëm. Shërbejnë për renditje brenda grupit të analizuar. |
-| **Pajtimi mes modeleve** | Sa modele e vendosin të njëjtin tender pranë kreut të renditjes. Nuk është masë sigurie se ka shkelje. |
+| **Vetëm tenderët ku modelet pajtohen…** | Kuti zgjedhjeje te **Sinjalet për shqyrtim**. Mban vetëm tenderët që të paktën 3 nga 4 modelet i rendisin mes 5% më të pazakontëve. Modelet përdorin veçori të mbivendosura, prandaj pajtimi i tyre nuk është masë sigurie se ka shkelje. |
 | **HHI** | Përqendrimi i vlerës së vendimeve te furnizuesit. Vlera më të larta tregojnë përqendrim te më pak furnizues, sipas mënyrës së identifikimit të përdorur. Nuk mat vetvetiu konkurrencën e një tregu. |
 
 Shenja **—** tregon vlerë të munguar ose të papërcaktueshme; nuk është zero.

@@ -18,8 +18,8 @@ Every layer needs a persistent storage format. Options:
 Use **Parquet** for tabular silver/gold artifacts and tabular model outputs
 such as SHAP values and the benchmark leaderboard.
 
-DQ run evidence uses JSON plus human-readable Markdown; the field catalogue
-and other flat extracts use CSV where appropriate.
+DQ run evidence uses JSON plus human-readable Markdown. The only CSV is the
+manual-audit worksheet, which reviewers edit by hand.
 
 Lineage sidecars use JSON (one per Parquet file, plus chronological
 copy under `data/_lineage/`).
@@ -43,8 +43,8 @@ reports use JSON.
 
 **Negative:**
 
-* Less human-friendly to peek at — but the DQ CSVs and the lineage
-  sidecars cover that need.
+* Less human-friendly to peek at — but the DQ Markdown reports and the
+  lineage sidecars cover that need.
 * Slightly higher memory footprint at write time (Arrow buffers).
 
 ## Alternatives considered

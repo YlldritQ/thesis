@@ -12,7 +12,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 from _bootstrap import page_header
-from _charts import fmt_number
+from _charts import fmt_columns, fmt_datetime, fmt_number
 
 from thesis import paths
 from thesis.anomaly.detectors import FAMILY_LABELS_SQ
@@ -20,7 +20,9 @@ from thesis.io import readers
 from thesis.release import validate_canonical_release
 from thesis.viz import PALETTE
 
-st.set_page_config(page_title="Krahasimi i modeleve · OCDS Kosova", page_icon="🏁", layout="wide")
+st.set_page_config(
+    page_title="Krahasimi i modeleve · Prokurimi në Kosovë", page_icon="🏁", layout="wide"
+)
 page_header(
     "🏁 Krahasimi i modeleve",
     "Cilat modele u përzgjodhën, sa përsëriten rezultatet e tyre dhe çfarë mat ky krahasim.",
@@ -51,6 +53,10 @@ if lb.empty:
         )
     st.stop()
 
+# Display-only spelling fix for a released label (Albanian sentence case).
+lb["family_label_sq"] = lb["family_label_sq"].replace(
+    {"Regresion Logjistik": "Regresion logjistik"}
+)
 unsup = lb[lb["kind"] == "unsupervised"].copy()
 sup = lb[lb["kind"] == "supervised"].copy()
 selected_families = champions.get("ensemble_families") or []
@@ -140,21 +146,18 @@ with tab_selection:
             ]
         ]
         st.dataframe(
-            compact,
+            fmt_columns(
+                compact,
+                {"composite": 3, "proxy_auc_07": 3, "stability_jaccard": 3, "seed_consistency": 3},
+            ),
             hide_index=True,
             use_container_width=True,
             column_config={
                 "family_label_sq": st.column_config.TextColumn("Modeli"),
-                "composite": st.column_config.NumberColumn("Pikët e krahasimit", format="%.3f"),
-                "proxy_auc_07": st.column_config.NumberColumn(
-                    "Përputhja me rregullat (AUC)", format="%.3f"
-                ),
-                "stability_jaccard": st.column_config.NumberColumn(
-                    "Qëndrueshmëria (Jaccard)", format="%.3f"
-                ),
-                "seed_consistency": st.column_config.NumberColumn(
-                    "Nisje të ndryshme", format="%.3f"
-                ),
+                "composite": "Pikët e krahasimit",
+                "proxy_auc_07": "Përputhja me rregullat (AUC)",
+                "stability_jaccard": "Qëndrueshmëria (Jaccard)",
+                "seed_consistency": "Nisje të ndryshme",
             },
         )
         st.caption(
@@ -177,30 +180,33 @@ with tab_selection:
                 "n_fits",
             ]
             st.dataframe(
-                unsup.sort_values("composite", ascending=False).reindex(columns=columns),
+                fmt_columns(
+                    unsup.sort_values("composite", ascending=False).reindex(columns=columns),
+                    {
+                        "composite": 3,
+                        "proxy_auc_07": 3,
+                        "proxy_auc_04": 3,
+                        "precision_at_k": 3,
+                        "stability_jaccard": 3,
+                        "seed_consistency": 3,
+                        "spearman_rule": 3,
+                        "fit_seconds": 1,
+                        "n_fits": 0,
+                    },
+                ),
                 hide_index=True,
                 use_container_width=True,
                 column_config={
                     "family_label_sq": "Modeli",
                     "params": "Parametrat",
-                    "composite": st.column_config.NumberColumn("Pikët e krahasimit", format="%.3f"),
-                    "proxy_auc_07": st.column_config.NumberColumn(
-                        "AUC ndaj rregullave ≥0,7", format="%.3f"
-                    ),
-                    "proxy_auc_04": st.column_config.NumberColumn(
-                        "AUC ndaj rregullave ≥0,4", format="%.3f"
-                    ),
-                    "precision_at_k": st.column_config.NumberColumn(
-                        f"Përputhja në {precision_k} të parët", format="%.3f"
-                    ),
-                    "stability_jaccard": st.column_config.NumberColumn("Jaccard", format="%.3f"),
-                    "seed_consistency": st.column_config.NumberColumn(
-                        "Nisje të ndryshme", format="%.3f"
-                    ),
-                    "spearman_rule": st.column_config.NumberColumn(
-                        "Spearman ndaj rregullave", format="%.3f"
-                    ),
-                    "fit_seconds": st.column_config.NumberColumn("Koha (sekonda)", format="%.1f"),
+                    "composite": "Pikët e krahasimit",
+                    "proxy_auc_07": "AUC ndaj rregullave ≥0,7",
+                    "proxy_auc_04": "AUC ndaj rregullave ≥0,4",
+                    "precision_at_k": f"Përputhja në {precision_k} të parët",
+                    "stability_jaccard": "Jaccard",
+                    "seed_consistency": "Nisje të ndryshme",
+                    "spearman_rule": "Spearman ndaj rregullave",
+                    "fit_seconds": "Koha (sekonda)",
                     "n_fits": "Trajnime",
                 },
             )
@@ -211,7 +217,9 @@ with tab_selection:
                 mime="text/csv",
             )
         with st.expander("Përputhja me rregullat kundrejt qëndrueshmërisë"):
-            st.caption("Çdo pikë është një konfigurim. Vendos kursorin mbi të për parametrat.")
+            st.caption(
+                "Çdo pikë është një konfigurim. Vendosni kursorin mbi të për të parë parametrat."
+            )
             plot_frame = unsup.dropna(subset=["stability_jaccard", "proxy_auc_07"])
             if plot_frame.empty:
                 st.info("Nuk ka matje të plota për këtë grafik.")
@@ -255,24 +263,40 @@ with tab_supervised:
         st.info("Nuk ka rezultate për klasifikuesit.")
     else:
         supervised_columns = ["family_label_sq", "oot_rocauc", "oot_prauc", "cv_rocauc_mean"]
+        supervised_labels = {
+            "family_label_sq": "Modeli",
+            "params": "Parametrat",
+            "oot_rocauc": f"ROC-AUC nga {test_start}",
+            "oot_prauc": f"PR-AUC nga {test_start}",
+            "oot_ece": f"Gabimi i kalibrimit (ECE) nga {test_start}",
+            "cv_rocauc_mean": "ROC-AUC në validimin e kryqëzuar",
+            "cv_rocauc_std": "Devijimi standard i ROC-AUC (validim i kryqëzuar)",
+            "cv_prauc_mean": "PR-AUC në validimin e kryqëzuar",
+            "cv_brier_mean": "Treguesi Brier në validimin e kryqëzuar",
+            "fit_seconds": "Koha (sekonda)",
+            "n_fits": "Trajnime",
+        }
+        supervised_decimals = {
+            "oot_rocauc": 4,
+            "oot_prauc": 4,
+            "oot_ece": 4,
+            "cv_rocauc_mean": 4,
+            "cv_rocauc_std": 4,
+            "cv_prauc_mean": 4,
+            "cv_brier_mean": 4,
+            "fit_seconds": 1,
+            "n_fits": 0,
+        }
         st.dataframe(
-            sup.sort_values("oot_rocauc", ascending=False, na_position="last").reindex(
-                columns=supervised_columns
+            fmt_columns(
+                sup.sort_values("oot_rocauc", ascending=False, na_position="last").reindex(
+                    columns=supervised_columns
+                ),
+                supervised_decimals,
             ),
             hide_index=True,
             use_container_width=True,
-            column_config={
-                "family_label_sq": "Modeli",
-                "oot_rocauc": st.column_config.NumberColumn(
-                    f"ROC-AUC nga {test_start}", format="%.4f"
-                ),
-                "oot_prauc": st.column_config.NumberColumn(
-                    f"PR-AUC nga {test_start}", format="%.4f"
-                ),
-                "cv_rocauc_mean": st.column_config.NumberColumn(
-                    "ROC-AUC në validimin e kryqëzuar", format="%.4f"
-                ),
-            },
+            column_config={column: supervised_labels[column] for column in supervised_columns},
         )
         st.caption(
             "Çdo rresht është një konfigurim. Vlera që mungon do të thotë se matja nuk është kryer."
@@ -314,23 +338,10 @@ with tab_supervised:
                 st.plotly_chart(fig, use_container_width=True)
         with st.expander("Parametrat dhe matjet e plota të klasifikuesve"):
             st.dataframe(
-                sup.reindex(
-                    columns=[
-                        "family_label_sq",
-                        "params",
-                        "oot_rocauc",
-                        "oot_prauc",
-                        "oot_ece",
-                        "cv_rocauc_mean",
-                        "cv_rocauc_std",
-                        "cv_prauc_mean",
-                        "cv_brier_mean",
-                        "fit_seconds",
-                        "n_fits",
-                    ]
-                ),
+                fmt_columns(sup.reindex(columns=list(supervised_labels)), supervised_decimals),
                 hide_index=True,
                 use_container_width=True,
+                column_config=supervised_labels,
             )
 
 with tab_details:
@@ -361,7 +372,10 @@ with tab_details:
         ]
         if rows:
             st.dataframe(
-                pd.DataFrame(rows).sort_values("Pikët e krahasimit", ascending=False),
+                fmt_columns(
+                    pd.DataFrame(rows).sort_values("Pikët e krahasimit", ascending=False),
+                    {"Pikët e krahasimit": 3, "AUC ndaj rregullave": 3, "Qëndrueshmëria": 3},
+                ),
                 hide_index=True,
                 use_container_width=True,
             )
@@ -369,12 +383,15 @@ with tab_details:
             st.info("Konfigurimet e përzgjedhura nuk janë të disponueshme.")
         if champions.get("supervised_champion"):
             selected = champions["supervised_champion"]
-            st.markdown(f"**Klasifikuesi i përzgjedhur:** {selected.get('family', '—')}")
+            family = selected.get("family")
+            family_labels = sup.drop_duplicates("family").set_index("family")["family_label_sq"]
+            readable_family = family_labels.get(family, family) if family else "—"
+            st.markdown(f"**Klasifikuesi i përzgjedhur:** {readable_family}")
             st.json(selected)
         if champions.get("explainer"):
             st.markdown(
                 "**Modeli shpjegues SHAP** riprodhon etiketat e rregullave. "
-                "Ai nuk shpjegon ensemble_score dhe nuk është detektor i pavarur."
+                "Ai nuk shpjegon pikët e kombinuara dhe nuk është detektor i pavarur."
             )
             st.json(champions["explainer"])
 
@@ -412,7 +429,14 @@ with tab_details:
                 }
             )
         if sensitivity_rows:
-            st.dataframe(pd.DataFrame(sensitivity_rows), hide_index=True, use_container_width=True)
+            st.dataframe(
+                fmt_columns(
+                    pd.DataFrame(sensitivity_rows),
+                    {"Jaccard ndaj përzgjedhjes bazë": 3, "Konfigurime të ndryshuara": 0},
+                ),
+                hide_index=True,
+                use_container_width=True,
+            )
             st.caption(
                 "Jaccard 1 do të thotë se u zgjodhën të njëjtat familje. "
                 "Ky është kontroll i ndikimit të peshave; nuk mat saktësinë e modeleve."
@@ -421,7 +445,7 @@ with tab_details:
             st.info("Skenarët alternativë nuk janë të disponueshëm.")
 
     with st.expander("Gjurmueshmëria dhe riprodhimi i analizës"):
-        st.caption(f"Rezultatet u gjeneruan më: {champions.get('created_at', '—')}")
+        st.caption(f"Rezultatet u gjeneruan më: {fmt_datetime(champions.get('created_at'))}")
         st.markdown(
             "Tabelat, konfigurimet e përzgjedhura dhe skedarët e modeleve lidhen "
             "me të njëjtin version të të dhënave dhe të kodit. Kontrolli i integritetit "

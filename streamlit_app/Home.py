@@ -7,7 +7,7 @@ from _bootstrap import app_link, cached_dashboard_bundle, fmt_eur, fmt_number, p
 from _charts import category_bar, monthly_summary, time_series_volume
 
 st.set_page_config(
-    page_title="Prokurimi në Kosovë · Ballina",
+    page_title="Ballina · Prokurimi në Kosovë",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -15,7 +15,7 @@ st.set_page_config(
 
 page_header(
     "Çfarë tregojnë të dhënat e prokurimit?",
-    "Shih vlerat e parashikuara, pjesëmarrjen e ofertuesve dhe tenderët me sinjale për shqyrtim.",
+    "Shihni vlerat e parashikuara, pjesëmarrjen e ofertuesve dhe tenderët me sinjale për shqyrtim.",
 )
 
 dashboard = cached_dashboard_bundle(include_model_metadata=True)
@@ -65,17 +65,17 @@ with right:
         use_container_width=True,
     )
 st.caption(
-    "Grafikët përfshijnë të gjithë tenderët në këtë grup të dhënash. Për periudha ose institucione të veçanta, hap Përmbledhjen."
+    "Grafikët përfshijnë të gjithë tenderët në këtë grup të dhënash. Për periudha ose institucione të veçanta, hapni Përmbledhjen."
 )
 
-st.markdown("### Zgjidh çfarë dëshiron të kuptosh")
+st.markdown("### Zgjidhni çfarë dëshironi të kuptoni")
 for col, heading, detail, route, button in zip(
     st.columns(3),
     ["Si ndryshon prokurimi?", "Çfarë përmban një tender?", "Cilat raste kërkojnë shqyrtim?"],
     [
-        "Krahaso numrin, vlerën dhe konkurrencën sipas periudhës, kategorisë dhe autoritetit.",
-        "Kërko sipas titullit ose identifikuesit. Shih vlerat, afatet dhe vendimet e dhënies.",
-        "Shih arsyet e sinjalizimit dhe si është llogaritur rezultati i çdo tenderi.",
+        "Krahasoni numrin, vlerën dhe konkurrencën sipas periudhës, kategorisë dhe autoritetit.",
+        "Kërkoni sipas titullit ose identifikuesit. Shihni vlerat, afatet dhe vendimet e dhënies.",
+        "Shihni arsyet e sinjalizimit dhe si janë llogaritur pikët e çdo tenderi.",
     ],
     ["pages/1_Overview.py", "pages/2_Explore.py", "pages/3_Anomalies.py"],
     ["Hap përmbledhjen →", "Kërko tenderë →", "Shih sinjalet →"],
@@ -110,12 +110,12 @@ with st.expander("Si krijohen sinjalet për shqyrtim?"):
     st.write(
         "Rregullat kontrollojnë të dhënat e konkurrencës, vlerat dhe afatet. "
         f"Renditjet e {ensemble_family_count} detektorëve kombinohen me rregullat dhe krahasimin "
-        "me tenderë të ngjashëm. Rezultati është relativ ndaj të dhënave të analizuara."
+        "me tenderë të ngjashëm. Pikët janë relative ndaj të dhënave të analizuara."
     )
     st.write(
         "Pikët nuk janë probabilitet mashtrimi. Modelet janë krahasuar me etiketa të nxjerra "
         "nga rregullat; rezultatet ende nuk janë verifikuar me vlerësime të pavarura të rasteve. "
-        "Te Sinjalet për shqyrtim mund të shohësh kontributin e secilës pjesë në rezultatin përfundimtar."
+        "Te Sinjalet për shqyrtim mund të shihni kontributin e secilës pjesë në pikët përfundimtare."
     )
 
 st.caption("Projekt diplome bachelor · Panel kërkimor; nuk është shërbim zyrtar i institucioneve.")

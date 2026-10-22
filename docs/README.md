@@ -4,7 +4,7 @@ Ky projekt analizon të dhëna të publikuara të prokurimit në Kosovë dhe
 paraqet sinjale për shqyrtim. Paneli përdor një version të ruajtur të të
 dhënave; rezultatet statistikore nuk janë prova shkeljesh.
 
-## Nga të filloni
+## Ku të filloni
 
 | Nëse dëshironi të… | Lexoni |
 |---|---|
@@ -12,9 +12,9 @@ dhënave; rezultatet statistikore nuk janë prova shkeljesh.
 | Përdorni panelin dhe kuptoni grafikët | [Udhëzuesi i përdorimit](user_guide.md) |
 | Kuptoni si duhen përdorur rezultatet | [Përdorimi i përgjegjshëm](responsible_use.md) |
 | Shqyrtoni metodën dhe pretendimet e punimit | [Metodologjia](methodology.md) |
-| Kuptoni llogaritjen dhe shpjegimin e pikëve | [Si shpjegohen pikët](explainability.md) |
+| Kuptoni llogaritjen dhe shpjegimin e pikëve | [Shpjegimi i pikëve](explainability.md) |
 | Kuptoni organizimin e të dhënave dhe përbërësve | [Arkitektura](architecture.md) |
-| Rindërtoni analizën ose zgjidhni probleme gjatë ekzekutimit | [Udhëzuesi i operimit](operations.md) |
+| Rindërtoni analizën ose zgjidhni probleme gjatë ekzekutimit | [Udhëzuesi i ekzekutimit dhe mirëmbajtjes](operations.md) |
 | Verifikoni tenderë duke lexuar dokumentet burimore | [Protokolli i shqyrtimit manual](manual_audit_protocol.md) |
 | Shihni përmbledhjen numerike të versionit të të dhënave | [Gjetjet e gjeneruara](findings.md) |
 | Shihni vlerësimin e projektit dhe kontrollet e kryera | [Rishikimi i projektit — shtator 2026](project_review_2026_09.md) |
@@ -25,8 +25,8 @@ origjinalë të fushave dhe komandat për riprodhimin e analizës.
 
 ## Çfarë përmban secili grup dokumentesh?
 
-**Përdorimi dhe interpretimi.** [Udhëzuesi](user_guide.md) përshkruan nëntë
-faqet reale të panelit, filtrat, shkarkimin dhe kuptimin e treguesve.
+**Përdorimi dhe interpretimi.** [Udhëzuesi i përdorimit](user_guide.md)
+përshkruan nëntë faqet e panelit, filtrat, shkarkimin dhe kuptimin e treguesve.
 [Përdorimi i përgjegjshëm](responsible_use.md) shpjegon kufijtë e interpretimit
 kur rezultatet lidhen me institucione ose furnizues konkretë.
 
@@ -35,11 +35,13 @@ transformimet, rregullat, modelet, shpjegimin e pikëve dhe kufizimet.
 [Shpjegimi i pikëve](explainability.md) jep formulën e kombinimit, një shembull
 të verifikuar dhe dallimin mes shpjegimit të pikëve të kombinuara dhe SHAP-it.
 [Arkitektura](architecture.md) shpjegon shtresat e të dhënave dhe lidhjen mes
-tyre. [Udhëzuesi i operimit](operations.md) mbulon rindërtimin, kontrollet e
-publikimeve, problemet e zakonshme dhe rikthimin e të dhënave.
+tyre. [Udhëzuesi i ekzekutimit dhe mirëmbajtjes](operations.md) mbulon
+rindërtimin, kontrollet e publikimeve, problemet e zakonshme dhe rikthimin e të
+dhënave.
 
-**Rezultatet dhe vlerësimi.** [Gjetjet](findings.md) gjenerohen nga skedarët
-e analizës; koha dhe gjurmët e hyrjeve shënohen në krye të dokumentit.
+**Rezultatet dhe vlerësimi.** [Gjetjet e gjeneruara](findings.md) krijohen nga
+skedarët e analizës; koha e gjenerimit dhe gjurmët e skedarëve hyrës shënohen në
+krye të dokumentit.
 Mos i ndryshoni shifrat me dorë. Komanda për rigjenerim, pas përgatitjes dhe
 verifikimit të rezultateve, është:
 

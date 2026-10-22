@@ -33,10 +33,10 @@ def _flag_kind(code: str) -> str:
     return "ndikon në pikët e rregullave" if rule.score_enabled else "kontroll pa pikë shtesë"
 
 
-st.set_page_config(page_title="Kërko tenderë · OCDS Kosova", page_icon="🔍", layout="wide")
+st.set_page_config(page_title="Kërko tenderë · Prokurimi në Kosovë", page_icon="🔍", layout="wide")
 page_header(
     "🔍 Kërko tenderë",
-    "Gjej një tender, shiko vlerat dhe ofertuesit e regjistruar, pastaj shqyrto sinjalet që kërkojnë verifikim.",
+    "Gjeni një tender, shihni vlerat dhe ofertuesit e regjistruar, pastaj shqyrtoni sinjalet që kërkojnë verifikim.",
 )
 
 dashboard = cached_dashboard_bundle()
@@ -279,7 +279,7 @@ if ocid:
             ratio = r["awarded_value_ratio"]
             st.metric(
                 "Vendimet kundrejt parashikimit",
-                f"{ratio:.1%}" if pd.notna(ratio) else "—",
+                f"{fmt_number(ratio * 100, 1)}%" if pd.notna(ratio) else "—",
                 help=METRIC_HELP["awarded_value_ratio"],
             )
             st.caption(METRIC_HELP["awarded_value_ratio"])
@@ -289,7 +289,7 @@ if ocid:
                 (c2, "iso_score", "Isolation Forest"),
                 (c3, "ensemble_score", "Pikët e kombinuara"),
             ):
-                column.metric(label, f"{r[key]:.2f}")
+                column.metric(label, fmt_number(r[key], 2))
             st.caption(METRIC_HELP["ensemble_score"])
             st.write(f"Numri i tenderit në burim: {r['tender_id']}")
             app_link("pages/3_Anomalies.py", label="Hap shpjegimet e renditjes")

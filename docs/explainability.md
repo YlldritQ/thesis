@@ -116,6 +116,10 @@ This record triggers three scored rules:
 | `WINNER_TAKES_ALL_LARGE` | 0.50 |
 
 Thus `(0.75 + 0.75 + 0.50) / 2 = 1.0`; clipping does not alter the result.
+All three rules depend on the same underlying fact, a single recorded bidder:
+with one bidder, one supplier necessarily receives the whole awarded value, so
+`WINNER_TAKES_ALL_LARGE` adds no independent evidence here. The methodology
+documents this overlap as a known issue of the published release.
 Data-quality and operational diagnostics remain visible but contribute zero.
 The weights and normalization are screening choices, not learned probabilities
 or legal severity grades. Definitions and limitations are maintained in

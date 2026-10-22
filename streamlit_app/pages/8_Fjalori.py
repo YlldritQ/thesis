@@ -9,13 +9,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import pandas as pd
 import streamlit as st
-from _bootstrap import app_link, cached_dashboard_bundle, page_header
+from _bootstrap import SOURCE_TZ, app_link, cached_dashboard_bundle, page_header
 from _charts import fmt_number
 from _narrative import DATA_LIMITATION_BIDS, FLAG_NARRATIVE, METRIC_HELP, contract_severity
 
-st.set_page_config(page_title="Fjalori · OCDS Kosova", page_icon="📚", layout="wide")
+st.set_page_config(
+    page_title="Fjalori i termave · Prokurimi në Kosovë", page_icon="📚", layout="wide"
+)
 page_header(
-    "📚 Fjalori dhe udhëzuesi",
+    "📚 Fjalori i termave",
     "Shpjegime të shkurtra për fjalët, shifrat dhe sinjalet që shfaqen në panel.",
 )
 
@@ -23,9 +25,14 @@ dashboard = cached_dashboard_bundle(include_model_metadata=True)
 gold = dashboard["gold"]
 feature_metadata = dashboard.get("feature_metadata") or {}
 ensemble_definition = feature_metadata.get("ensemble_explanation") or {}
-release_dates = pd.to_datetime(
-    gold.get("release_date", pd.Series(dtype="datetime64[ns]")), errors="coerce", utc=True
-).dropna()
+# Show the covered period in the source's published +01:00 offset, as on the other pages.
+release_dates = (
+    pd.to_datetime(
+        gold.get("release_date", pd.Series(dtype="datetime64[ns]")), errors="coerce", utc=True
+    )
+    .dt.tz_convert(SOURCE_TZ)
+    .dropna()
+)
 
 st.markdown(
     "**Filloni nga Përmbledhja** për pamjen e përgjithshme. Përdorni **Kërko tenderë** "
@@ -84,7 +91,7 @@ with tab_terms:
         "shqyrtim brenda grupit të analizuar; nuk mat probabilitetin e mashtrimit.",
         "Etiketa e rregullave": "Përgjigje po/jo e llogaritur nga pikët e rregullave. "
         "Përdoret për krahasimin e modeleve. Nuk është etiketë e një shkeljeje të konfirmuar.",
-        "Modeli statistikor": "Metodë që mëson modele të përsëritura nga të dhënat "
+        "Modeli statistikor": "Metodë që mëson rregullsi nga të dhënat "
         "dhe veçon raste që dallojnë. Modele të ndryshme mund të veçojnë raste të ndryshme.",
     }
     query = (
@@ -240,6 +247,6 @@ c1, c2, c3 = st.columns(3)
 with c1:
     app_link("pages/1_Overview.py", "📊 Përmbledhja")
 with c2:
-    app_link("pages/2_Explore.py", "🔎 Kërko tenderë")
+    app_link("pages/2_Explore.py", "🔍 Kërko tenderë")
 with c3:
-    app_link("pages/5_Methodology.py", "📖 Si bëhet analiza")
+    app_link("pages/5_Methodology.py", "📖 Si funksionon analiza")

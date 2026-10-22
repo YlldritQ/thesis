@@ -15,7 +15,14 @@ from _bootstrap import (
     fmt_eur,
     page_header,
 )
-from _charts import PALETTE, category_label, fmt_number, lorenz_curve, method_label
+from _charts import (
+    PALETTE,
+    category_label,
+    fmt_columns,
+    fmt_number,
+    lorenz_curve,
+    method_label,
+)
 from _narrative import METRIC_HELP
 
 from thesis.domain.features import (
@@ -26,12 +33,12 @@ from thesis.domain.features import (
 )
 
 st.set_page_config(
-    page_title="Autoritetet dhe furnizuesit · OCDS Kosova", page_icon="🏢", layout="wide"
+    page_title="Autoritetet dhe furnizuesit · Prokurimi në Kosovë", page_icon="🏢", layout="wide"
 )
 
 page_header(
     "🏢 Autoritetet dhe furnizuesit",
-    "Krahaso aktivitetin e institucioneve dhe shiko si ndahet vlera e vendimeve të dhënies mes furnizuesve.",
+    "Krahasoni aktivitetin e institucioneve dhe shihni si ndahet vlera e vendimeve të dhënies mes furnizuesve.",
 )
 
 dashboard = cached_dashboard_bundle()
@@ -177,12 +184,18 @@ def _value_bar(frame: pd.DataFrame, label: str, value: str, title: str, axis: st
     view["short_name"] = view[label].str.slice(0, 58)
     # Use a unique positional axis so names that share a prefix never merge.
     view["row"] = range(len(view))
+    is_eur = value.endswith("_eur")
+    x_column = value
+    if is_eur:
+        x_column = "value_million_eur"
+        view[x_column] = view[value] / 1e6
+        axis = axis.replace("(€)", "(milionë €)")
     fig = px.bar(
         view,
-        x=value,
+        x=x_column,
         y="row",
         orientation="h",
-        custom_data=[label],
+        custom_data=[label, value],
         color_discrete_sequence=[PALETTE["primary"]],
     )
     fig.update_yaxes(tickvals=view["row"], ticktext=view["short_name"], title=None)
@@ -193,8 +206,9 @@ def _value_bar(frame: pd.DataFrame, label: str, value: str, title: str, axis: st
     elif value.endswith("_pct"):
         value_hover = "%{x:.1f}%"
         fig.update_xaxes(ticksuffix="%")
-    elif value.endswith("_eur"):
-        value_hover = "%{x:,.0f} €"
+    elif is_eur:
+        value_hover = "%{customdata[1]:,.0f} €"
+        fig.update_xaxes(tickformat=",~f")
     else:
         value_hover = "%{x:,.0f}"
     fig.update_traces(hovertemplate="%{customdata[0]}<br>" + value_hover + "<extra></extra>")
@@ -310,7 +324,7 @@ with tab_entity:
         )
         c4.metric("Me vendim dhënieje", fmt_number(e["awarded_tenders"]))
         st.caption(
-            f"Numri i ofertuesve është i publikuar për {_percent(e['bidder_data_coverage_pct'])} të tenderëve të këtij autoriteti. — tregon se vlera mungon."
+            f"Numri i ofertuesve është i publikuar për {_percent(e['bidder_data_coverage_pct'])} të tenderëve të këtij autoriteti. Shenja «—» te treguesit tregon se vlera mungon."
         )
 
         yearly = (
@@ -343,6 +357,7 @@ with tab_entity:
                     xaxis_title="Viti i publikimit",
                     yaxis_title=axis,
                     height=320,
+                    separators=", ",
                     margin={"l": 20, "r": 20, "t": 60, "b": 20},
                     showlegend=False,
                 )
@@ -386,7 +401,7 @@ with tab_entity:
                 identified_total / total_value * 100 if total_value > 0 else float("nan")
             )
             st.caption(
-                f"Deri në 10 furnizuesit e paraqitur mbulojnë {_percent(share)} të vlerës së vendimeve të këtij autoriteti. Gjithsej, {_percent(identity_coverage)} e vlerës mund të lidhet me një furnizues."
+                f"10 furnizuesit kryesorë (ose më pak, kur ka më pak) mbulojnë {_percent(share)} të vlerës së vendimeve të këtij autoriteti. Gjithsej, {_percent(identity_coverage)} e vlerës mund të lidhet me një furnizues."
             )
 
         with st.expander("Si matet përqendrimi te furnizuesit? (HHI)"):
@@ -416,13 +431,9 @@ with tab_entity:
                 ]
             )
             st.dataframe(
-                scenarios,
+                fmt_columns(scenarios, {"HHI (0–10 000)": 0, "Vlera e mbuluar (%)": 1}),
                 hide_index=True,
                 use_container_width=True,
-                column_config={
-                    "HHI (0–10 000)": st.column_config.NumberColumn(format="%.0f"),
-                    "Vlera e mbuluar (%)": st.column_config.NumberColumn(format="%.1f"),
-                },
             )
             st.caption(
                 "ID-ja e palës identifikon një palë në publikim; nuk është identifikues juridik i verifikuar. Edhe emrat e njëjtë mund t'u përkasin subjekteve të ndryshme."
@@ -606,7 +617,7 @@ with tab_supplier:
                 use_container_width=True,
             )
             st.caption(
-                "Furnizuesit renditen nga vlera më e ulët te më e larta. Sa më larg vijës së barazisë të jetë kurba, aq më shumë vlerë përqendrohet te pak furnizues. Kjo përshkruan vetëm të dhënat e analizuara; nuk mat pjesë tregu."
+                "Furnizuesit renditen nga vlera më e ulët te vlera më e lartë. Sa më larg vijës së barazisë të jetë kurba, aq më shumë vlerë përqendrohet te pak furnizues. Kjo përshkruan vetëm të dhënat e analizuara; nuk mat pjesë tregu."
             )
 
     with st.expander("Tabela krahasuese e të gjithë furnizuesve"):

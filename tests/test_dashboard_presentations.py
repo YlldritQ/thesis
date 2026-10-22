@@ -53,6 +53,87 @@ def dashboard_rows() -> pd.DataFrame:
     )
 
 
+@pytest.fixture
+def source_boundary_rows(dashboard_rows) -> pd.DataFrame:
+    rows = dashboard_rows.copy(deep=True)
+    rows["release_date"] = pd.to_datetime(
+        [
+            "2023-12-31 23:30:00",
+            "2024-01-31 23:30:00",
+            "2024-06-30 22:30:00",
+            "2024-06-30 23:30:00",
+            "2024-12-31 22:30:00",
+            None,
+        ],
+        utc=True,
+    )
+    rows["award_date"] = rows["release_date"] + pd.Timedelta(days=1)
+    rows["year"] = rows["release_date"].dt.year.astype("Int64")
+    rows["month"] = rows["release_date"].dt.strftime("%Y-%m")
+    rows["ensemble_score"] = [0.1, 0.5, 0.8, 0.3, 0.6, np.nan]
+    return rows
+
+
+def test_source_local_dates_drive_year_filter_and_monthly_buckets(source_boundary_rows):
+    import _bootstrap
+
+    original = source_boundary_rows.copy(deep=True)
+    local = _bootstrap._to_source_local_time(source_boundary_rows)
+
+    assert local["release_date"].dt.strftime("%Y-%m-%d %H:%M").iloc[:5].tolist() == [
+        "2024-01-01 00:30",
+        "2024-02-01 00:30",
+        "2024-06-30 23:30",  # Summer dates retain the source's fixed +01 offset.
+        "2024-07-01 00:30",
+        "2024-12-31 23:30",
+    ]
+    pd.testing.assert_series_equal(
+        local["year"], pd.Series([2024] * 5 + [pd.NA], name="year", dtype="Int64")
+    )
+    assert local["month"].iloc[:5].tolist() == [
+        "2024-01",
+        "2024-02",
+        "2024-06",
+        "2024-07",
+        "2024-12",
+    ]
+    assert pd.isna(local.loc[5, "month"])
+    for column in ("release_date", "award_date"):
+        pd.testing.assert_series_equal(local[column].dt.tz_convert("UTC"), original[column])
+    pd.testing.assert_series_equal(local["ensemble_score"], original["ensemble_score"])
+
+    selected = local[_bootstrap._selected_filter_mask(local["year"], [2024])]
+    assert selected["ocid"].tolist() == [f"fixture-{i}" for i in range(5)]
+    monthly = _charts.monthly_summary(selected).dropna(subset=["tenders"])
+    assert monthly["release_date"].dt.strftime("%Y-%m").tolist() == [
+        "2024-01",
+        "2024-02",
+        "2024-06",
+        "2024-07",
+        "2024-12",
+    ]
+    assert monthly["tenders"].tolist() == [1] * 5
+    assert monthly["value_mn"].tolist() == pytest.approx([0.1, 0.2, 0.9, 0.3, 0.8])
+    undated = local[
+        _bootstrap._selected_filter_mask(local["year"], [_bootstrap.UNKNOWN_FILTER_OPTION])
+    ]
+    assert undated["ocid"].tolist() == ["fixture-5"]
+    assert _charts.monthly_summary(undated).empty
+    pd.testing.assert_frame_equal(source_boundary_rows, original)
+
+
+def test_source_local_time_leaves_naive_dates_and_their_buckets_unchanged(source_boundary_rows):
+    import _bootstrap
+
+    rows = source_boundary_rows.copy(deep=True)
+    for column in ("release_date", "award_date"):
+        rows[column] = rows[column].dt.tz_localize(None)
+    original = rows.copy(deep=True)
+
+    pd.testing.assert_frame_equal(_bootstrap._to_source_local_time(rows), original)
+    pd.testing.assert_frame_equal(rows, original)
+
+
 def test_monthly_summary_recomputes_values_and_denominators_from_selected_rows(dashboard_rows):
     original = dashboard_rows.copy(deep=True)
     selected = dashboard_rows[dashboard_rows["category"].eq("goods")]

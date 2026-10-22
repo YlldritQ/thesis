@@ -19,11 +19,14 @@ from _bootstrap import (
 )
 from _charts import (
     PALETTE,
+    RULE_TABLE_CAPTION,
     anomaly_score_hist,
     category_label,
     ensemble_contribution_bar,
+    fmt_columns,
     fmt_number,
     method_label,
+    rule_table_sq,
     shap_waterfall,
 )
 from _narrative import (
@@ -47,11 +50,13 @@ from thesis.anomaly.detectors import FAMILY_LABELS_SQ
 from thesis.anomaly.ensemble import validate_ensemble_definition
 from thesis.domain.features import ML_FEATURES
 
-st.set_page_config(page_title="Sinjalet për shqyrtim · OCDS Kosova", page_icon="🚨", layout="wide")
+st.set_page_config(
+    page_title="Sinjalet për shqyrtim · Prokurimi në Kosovë", page_icon="🚨", layout="wide"
+)
 
 page_header(
     "🔎 Sinjalet për shqyrtim",
-    "Shiko cilët tenderë kërkojnë verifikim dhe kupto arsyen. "
+    "Shihni cilët tenderë kërkojnë verifikim dhe kuptoni arsyen. "
     "Sinjalet ndihmojnë në përzgjedhjen e rasteve; nuk provojnë shkelje.",
     caveat=False,
 )
@@ -87,6 +92,44 @@ filtered = sidebar_filters(gold)
 
 RULE_BY_CODE = {rule.code: rule for rule in RULES}
 
+# Defined before the tender detail section, which also uses these labels.
+SCORE_LABELS = {
+    "ensemble_score": "Pikët e kombinuara",
+    "rule_score": "Pikët e rregullave",
+    "context_score": "Dallimet nga tenderët e ngjashëm",
+    "iso_score": "Isolation Forest",
+    "lof_score": "Local Outlier Factor (LOF)",
+    "ee_score": "Elliptic Envelope",
+    "ocsvm_score": "One-Class SVM",
+    "pca_score": "Gabimi i rindërtimit PCA",
+    "gmm_score": "Gaussian Mixture (GMM)",
+    "knn_score": "Distanca KNN",
+    "hbos_score": "HBOS (histogram)",
+    "hgb_score": "HistGradientBoosting (vetëm shpjegim)",
+}
+DIRECTION_LABELS = {
+    "high": "e lartë",
+    "low": "e ulët",
+    "middle": "në mes",
+    "missing": "mungon",
+    "no_reference": "pa bazë krahasimi",
+}
+BASIS_LABELS = {
+    "empirical_midrank_percentile": "Percentili empirik",
+    "missingness_frequency": "Shpeshtësia e mungesës",
+}
+
+
+def _fmt_signed(value: float, decimals: int = 3) -> str:
+    return ("+" if value >= 0 else "") + fmt_number(value, decimals)
+
+
+def _fmt_feature_value(value: object) -> str:
+    if value is None or pd.isna(value):
+        return "—"
+    number = float(value)
+    return fmt_number(number, 0 if abs(number) >= 1000 or number.is_integer() else 3)
+
 
 def _has_recorded_award(row: pd.Series | dict) -> bool:
     """Return whether the snapshot contains at least one recorded award decision."""
@@ -113,7 +156,13 @@ with_signal = filtered[score_rules].fillna(False).any(axis=1)
 with_diagnostic = filtered[diagnostic_rules].fillna(False).any(axis=1)
 c1, c2, c3 = st.columns(3)
 c1.metric("Tenderë në përzgjedhje", fmt_number(len(filtered)))
-c2.metric("Me sinjal për shqyrtim", fmt_number(int(with_signal.sum())))
+c2.metric(
+    "Me së paku një sinjal që shton pikë",
+    fmt_number(int(with_signal.sum())),
+    help="Tenderë me të paktën një sinjal që ndikon në pikët e rregullave, edhe kur ky sinjal "
+    "shton pak pikë. Lista për shqyrtim në Ballinë numëron vetëm tenderët me pikë të "
+    "rregullave të paktën 0,5.",
+)
 c3.metric("Me të dhëna për verifikim", fmt_number(int(with_diagnostic.sum())))
 st.caption(
     "Një tender mund të jetë në të dy grupet. Filtrat kufizojnë pamjen; pikët mbeten të llogaritura kundrejt të gjithë grupit të të dhënave."
@@ -144,11 +193,16 @@ else:
         fig.update_layout(
             title="Cilat sinjale shfaqen më shpesh?",
             height=280,
+            separators=", ",
             yaxis_title=None,
             xaxis_title="Numri i tenderëve",
             margin={"l": 20, "r": 20, "t": 50, "b": 20},
         )
-        fig.update_traces(hovertemplate="%{y}<br>%{x:,.0f} tenderë<extra></extra>")
+        fig.update_xaxes(tickformat=",.0f")
+        fig.update_traces(
+            texttemplate="%{x:,.0f}",
+            hovertemplate="%{y}<br>%{x:,.0f} tenderë<extra></extra>",
+        )
         st.plotly_chart(fig, use_container_width=True)
         st.caption(
             "Shfaqen sinjalet që ndikojnë në pikët e rregullave. I njëjti tender mund të aktivizojë disa sinjale, ndaj kolonat nuk mblidhen në një total."
@@ -159,12 +213,13 @@ else:
 # =====================================================================
 st.subheader("Shqyrto një tender")
 st.caption(
-    "Zgjidh nga 300 tenderët e parë sipas pikëve të kombinuara ose vendos një OCID. "
+    "Zgjidhni një nga 300 tenderët e parë, të renditur sipas pikëve të rregullave, pastaj "
+    "pikëve të kombinuara, ose vendosni një OCID. "
     "Pikët janë mjet për renditje, jo probabilitet shkeljeje."
 )
 
-# renditja për përzgjedhësin: më të shenjuarit në krye
-ranked = filtered.sort_values("ensemble_score", ascending=False)
+# renditja për përzgjedhësin: shtresa e rregullave (baza e auditueshme) në krye
+ranked = filtered.sort_values(["rule_score", "ensemble_score"], ascending=False)
 top_choices = ranked.head(300)
 
 
@@ -261,7 +316,7 @@ if ocid and (gold["ocid"] == ocid).any():
         supplier_display = supplier_display.where(supplier_display.ne(""), legal)
         supplier_display = supplier_display.where(
             supplier_display.ne(""), "Palë burimore " + party
-        ).replace("Palë burimore ", "E paidentifikuar")
+        ).replace("Palë burimore ", "Furnizues i paidentifikuar")
         winners = (
             a.assign(supplier_display=supplier_display)
             .groupby("supplier_display")["awarded_value_eur"]
@@ -294,7 +349,7 @@ if ocid and (gold["ocid"] == ocid).any():
             published_score=float(r["ensemble_score"]),
         )
         component_labels = {
-            "rule_score": "Indikatorët e rregullave",
+            "rule_score": "Pikët e rregullave",
             "context_score": "Dallimet nga tenderët e ngjashëm",
             **{
                 f"ensemble_rank_{family}": FAMILY_LABELS_SQ.get(family, family)
@@ -316,41 +371,51 @@ if ocid and (gold["ocid"] == ocid).any():
             component_explanation["effect_vs_baseline"].sum()
         )
         st.caption(
-            f"Σ e kontributeve = {direct_total:.6f}; baza e grupit të të dhënave "
-            f"{ensemble_composition.baseline_score:.6f} + efektet ndaj bazës = "
-            f"{centered_total:.6f}; ensemble_score i publikuar = {r['ensemble_score']:.6f}. "
-            "Ky është zbërthim matematikor ekzakt i pikës së publikuar. Tregon cilat "
+            f"Σ e kontributeve = {fmt_number(direct_total, 6)}; baza e grupit të të dhënave "
+            f"{fmt_number(ensemble_composition.baseline_score, 6)} + efektet ndaj bazës = "
+            f"{fmt_number(centered_total, 6)}; pikët e kombinuara të publikuara = "
+            f"{fmt_number(r['ensemble_score'], 6)}. "
+            "Ky është zbërthim matematikor ekzakt i pikëve të publikuara. Tregon cilat "
             "shtresa e ngritën ose e ulën renditjen, jo shkak, probabilitet apo provë shkeljeje."
         )
-        explanation_table = component_explanation[
-            [
-                "component_label",
-                "value_in_formula",
-                "weight",
-                "direct_contribution",
-                "baseline",
-                "effect_vs_baseline",
-            ]
-        ].rename(
+        explanation_table = fmt_columns(
+            component_explanation[
+                [
+                    "component_label",
+                    "value_in_formula",
+                    "weight",
+                    "direct_contribution",
+                    "baseline",
+                    "effect_vs_baseline",
+                ]
+            ],
+            {
+                "value_in_formula": 4,
+                "weight": 4,
+                "direct_contribution": 6,
+                "baseline": 6,
+                "effect_vs_baseline": 6,
+            },
+        ).rename(
             columns={
-                "component_label": "përbërësi",
-                "value_in_formula": "vlera në formulë",
-                "weight": "pesha",
-                "direct_contribution": "kontributi ekzakt",
-                "baseline": "baza e komponentit",
-                "effect_vs_baseline": "efekti ndaj bazës",
+                "component_label": "Përbërësi",
+                "value_in_formula": "Vlera në formulë",
+                "weight": "Pesha",
+                "direct_contribution": "Kontributi ekzakt",
+                "baseline": "Baza e komponentit",
+                "effect_vs_baseline": "Efekti ndaj bazës",
             }
         )
         st.dataframe(explanation_table, hide_index=True, use_container_width=True)
 
     with st.expander("Si llogariten pikët e rregullave dhe kontekstit?"):
         st.caption(
-            f"Aritmetika e rule_score: Σ peshave të aktivizuara "
-            f"{rule_arithmetic['raw_weight_sum']:.3f} / "
-            f"{rule_arithmetic['normaliser']:.1f} = "
-            f"{rule_arithmetic['unclipped_score']:.3f}; pas kufizimit [0,1] = "
-            f"{rule_arithmetic['reconstructed_score']:.3f}. Diagnostikët me peshë zero "
-            "mbeten të dukshëm, por nuk ndikojnë në pikë."
+            f"Llogaritja e pikëve të rregullave: Σ e peshave të aktivizuara "
+            f"{fmt_number(rule_arithmetic['raw_weight_sum'], 3)} / "
+            f"{fmt_number(rule_arithmetic['normaliser'], 1)} = "
+            f"{fmt_number(rule_arithmetic['unclipped_score'], 3)}; pas kufizimit në intervalin "
+            f"0–1 = {fmt_number(rule_arithmetic['reconstructed_score'], 3)}. Diagnostikët me "
+            "peshë zero mbeten të dukshëm, por nuk ndikojnë në pikë."
         )
 
         context_explanation = explain_context_score(
@@ -359,39 +424,53 @@ if ocid and (gold["ocid"] == ocid).any():
         )
         if context_explanation.drivers:
             drivers = ", ".join(
-                f"{feature}={value:+.3f}z"
+                f"{feature} = {_fmt_signed(value)}"
                 for feature, value in context_explanation.signed_z_by_driver.items()
             )
             st.caption(
-                f"Konteksti: max |z| = {context_explanation.max_absolute_z:.3f} nga {drivers}; "
-                f"tanh(max|z|/2) = {context_explanation.reconstructed_score:.3f}."
+                f"Konteksti: vlera z më e madhe absolute, max |z| = "
+                f"{fmt_number(context_explanation.max_absolute_z, 3)}, vjen nga {drivers}; "
+                f"tanh(max|z|/2) = {fmt_number(context_explanation.reconstructed_score, 3)}."
             )
         else:
-            st.caption("Konteksti: asnjë z-score i vëzhguar; context_score rindërtohet si 0.")
+            st.caption("Konteksti: asnjë vlerë z e vëzhguar; pikët e kontekstit rindërtohen si 0.")
 
     with st.expander("📐 Konteksti përshkrues i veçorive hyrëse"):
         feature_profile = feature_deviation_profile(gold, r, ML_FEATURES, top_k=8)
+        profile_view = fmt_columns(
+            feature_profile,
+            {"missing_rate": 3, "percentile": 3, "unusualness": 3},
+        )
+        for column in ("observed_value", "snapshot_median"):
+            profile_view[column] = feature_profile[column].map(_fmt_feature_value)
+        profile_view["missing"] = feature_profile["missing"].map({True: "Po", False: "Jo"})
+        profile_view["direction"] = feature_profile["direction"].map(
+            lambda value: DIRECTION_LABELS.get(value, value)
+        )
+        profile_view["basis"] = feature_profile["basis"].map(
+            lambda value: BASIS_LABELS.get(value, value)
+        )
         st.dataframe(
-            feature_profile.rename(
+            profile_view.rename(
                 columns={
-                    "feature": "veçoria",
-                    "observed_value": "vlera",
-                    "missing": "mungon",
-                    "missing_rate": "pjesa që mungon",
-                    "snapshot_median": "mediana e grupit të të dhënave",
-                    "percentile": "percentili",
-                    "direction": "drejtimi",
-                    "unusualness": "largësia nga mesi",
-                    "basis": "baza e krahasimit",
+                    "feature": "Veçoria",
+                    "observed_value": "Vlera",
+                    "missing": "Mungon",
+                    "missing_rate": "Pjesa që mungon",
+                    "snapshot_median": "Mediana e grupit të të dhënave",
+                    "percentile": "Percentili",
+                    "direction": "Drejtimi",
+                    "unusualness": "Largësia nga mesi",
+                    "basis": "Baza e krahasimit",
                 }
             ),
             hide_index=True,
             use_container_width=True,
         )
         st.caption(
-            "Këto percentile dhe frekuenca mungese përshkruajnë hyrjet kundrejt "
+            "Këto percentile dhe shpeshtësi të mungesës përshkruajnë hyrjet kundrejt "
             "grupit të plotë të të dhënave. Nuk janë kontribute të matura të detektorëve, "
-            "nuk hyjnë sërish në ensemble_score dhe nuk janë shpjegim shkakësor."
+            "nuk hyjnë sërish në pikët e kombinuara dhe nuk janë shpjegim shkakësor."
         )
 
     # ================================================================
@@ -399,13 +478,17 @@ if ocid and (gold["ocid"] == ocid).any():
     # ================================================================
     with st.expander("Modelet statistikore dhe shpjegimi SHAP"):
         st.write(f"Dallimi ndërmjet datave në burim: {fmt_number(days)} ditë.")
-        st.metric("Vendimet kundrejt parashikimit", f"{ratio:.1%}" if pd.notna(ratio) else "—")
+        st.metric(
+            "Vendimet kundrejt parashikimit",
+            f"{fmt_number(ratio * 100, 1)}%" if pd.notna(ratio) else "—",
+        )
         st.caption(METRIC_HELP["awarded_value_ratio"])
         st.markdown(
             "**Pikët bruto të modeleve (diagnostikë)** — këto shkallë 0–1 janë "
-            "normalizime brenda secilit detektor, jo rank-percentilet që hyjnë "
+            "normalizime brenda secilit detektor, jo percentilet e renditjes që hyjnë "
             "drejtpërdrejt në formulën sipër. Vetëm familjet e zgjedhura hyjnë në "
-            "ensemble_score pas rank-transformimit; detektorët e tjerë dhe HGB nuk hyjnë."
+            "pikët e kombinuara pas shndërrimit në renditje; detektorët e tjerë dhe "
+            "HistGradientBoosting nuk hyjnë."
         )
         sc_cols = [
             c
@@ -426,19 +509,20 @@ if ocid and (gold["ocid"] == ocid).any():
         ]
         cols = st.columns(min(len(sc_cols), 6))
         for i, c in enumerate(sc_cols):
-            cols[i % 6].metric(c.replace("_score", ""), f"{r[c]:.3f}")
+            cols[i % 6].metric(SCORE_LABELS.get(c, c), fmt_number(r[c], 3))
 
-        st.markdown("**Indikatorët e aktivizuar (me statusin e pikëzimit):**")
+        st.markdown("**Sinjalet e aktivizuara (me statusin e pikëzimit):**")
         triggered = [rl for rl in RULES if r.get(rl.code, False)]
         if triggered:
             for rl in triggered:
                 contribution = (
-                    f"hyn në pikë me peshë {rl.weight}"
+                    f"hyn në pikë me peshë {fmt_number(rl.weight, 2)}"
                     if rl.score_enabled
                     else "diagnostik; peshë 0 dhe nuk hyn në pikë"
                 )
                 st.markdown(
-                    f"- `{rl.code}` — {rl.description} _({_flag_kind(rl.code)}; {contribution})_"
+                    f"- `{rl.code}` — {FLAG_NARRATIVE[rl.code][0]} "
+                    f"_({_flag_kind(rl.code)}; {contribution})_"
                 )
         else:
             st.markdown("_Asnjë rregull nuk u aktivizua._")
@@ -453,16 +537,17 @@ if ocid and (gold["ocid"] == ocid).any():
                 values,
                 base_value,
                 x_value,
-                title=f"SHAP i modelit proxy të rregullave · {ocid}",
+                title=f"SHAP i modelit që përafron rregullat · {ocid}",
             )
             st.plotly_chart(fig, use_container_width=True)
             st.caption(
-                "Ky SHAP shpjegon daljen log-odds të klasifikuesit që përafron "
-                "rregullat. Nuk shpjegon ensemble_score, nuk është kontribut i "
-                "detektorëve unsupervised dhe nuk është sinjal i pavarur."
+                "Ky SHAP shpjegon log-shanset që jep klasifikuesi që përafron "
+                "rregullat. Nuk shpjegon ensemble_score, pra pikët e kombinuara; nuk "
+                "është kontribut i detektorëve të pambikëqyrur dhe nuk është sinjal i pavarur."
             )
         st.caption(
-            f"OCID: `{ocid}`  ·  Tender ID: `{r.get('tender_id')}`  ·  Metoda: {r.get('method')}"
+            f"OCID: `{ocid}`  ·  Numri i tenderit: `{r.get('tender_id')}`  ·  "
+            f"Metoda në burim: {method_label(r.get('method'))}"
         )
 
 st.markdown("---")
@@ -472,23 +557,9 @@ st.markdown("---")
 # =====================================================================
 st.subheader("Krahaso tenderët sipas pikëve")
 st.caption(
-    "Zgjidh mënyrën e renditjes dhe kufirin minimal. Këto zgjedhje ndryshojnë listën më poshtë, jo tenderin e hapur më sipër."
+    "Zgjidhni mënyrën e renditjes dhe kufirin minimal. Këto zgjedhje ndryshojnë listën më poshtë, jo tenderin e hapur më sipër."
 )
 
-SCORE_LABELS = {
-    "ensemble_score": "Pikët e kombinuara",
-    "rule_score": "Pikët e rregullave",
-    "context_score": "Dallimet nga tenderët e ngjashëm",
-    "iso_score": "Isolation Forest",
-    "lof_score": "Local Outlier Factor (LOF)",
-    "ee_score": "Elliptic Envelope",
-    "ocsvm_score": "One-Class SVM",
-    "pca_score": "Gabimi i rindërtimit PCA",
-    "gmm_score": "Gaussian Mixture (GMM)",
-    "knn_score": "Distanca KNN",
-    "hbos_score": "HBOS (histogram)",
-    "hgb_score": "HistGradientBoosting (vetëm shpjegim)",
-}
 advanced_models = st.checkbox("Përfshi edhe modelet individuale në renditje", value=False)
 score_options = [
     c
@@ -498,7 +569,22 @@ score_options = [
 ]
 
 c1, c2, c3 = st.columns([1, 1, 2])
-score_type = c1.selectbox("Rendit sipas", score_options, format_func=lambda c: SCORE_LABELS[c])
+# The rule layer is the auditable baseline; the combined score stays an exploratory option.
+score_type = c1.selectbox(
+    "Rendit sipas",
+    score_options,
+    index=score_options.index("rule_score") if "rule_score" in score_options else 0,
+    format_func=lambda c: SCORE_LABELS[c],
+)
+ensemble_half_percentile = (
+    float(gold["ensemble_score"].lt(0.5).mean() * 100) if "ensemble_score" in gold else None
+)
+ensemble_half_note = (
+    f" Për «Pikët e kombinuara», vlera 0,5 është afërsisht percentili i "
+    f"{fmt_number(ensemble_half_percentile)}-të i këtyre pikëve, prandaj nuk është kufi për shqyrtim."
+    if ensemble_half_percentile is not None
+    else ""
+)
 threshold = c2.slider(
     "Pikët minimale",
     0.0,
@@ -506,13 +592,14 @@ threshold = c2.slider(
     0.5,
     0.05,
     help="Filtër në shkallën e renditjes së zgjedhur; nuk është prag "
-    "probabiliteti ose vendim i validuar.",
+    "probabiliteti ose vendim i validuar." + ensemble_half_note,
 )
 rule_codes = sorted([r.code for r in RULES])
 sel_rules = c3.multiselect(
     "Kërko një sinjal të caktuar (opsionale)",
     rule_codes,
     format_func=lambda code: FLAG_NARRATIVE[code][0],
+    placeholder="Të gjitha sinjalet",
 )
 
 flagged = filtered[filtered[score_type] >= threshold].copy()
@@ -526,7 +613,7 @@ require_agreement = st.checkbox(
     f"i rendisin mes {(1 - agreement_quantile):.0%} më të pazakontëve",
     value=False,
     help="Ky është filtër për përputhje modelesh me veçori të mbivendosura; nuk është "
-    "masë besueshmërie dhe nuk është provuar se redukton falsë pozitivët.",
+    "masë besueshmërie dhe nuk është provuar se zvogëlon pozitivët e rremë.",
 )
 if require_agreement and "model_agreement_count" in flagged.columns:
     flagged = flagged[flagged["model_agreement_count"] >= minimum_model_agreement]
@@ -534,12 +621,12 @@ if require_agreement and "model_agreement_count" in flagged.columns:
 c1, c2, c3, c4 = st.columns(4)
 c1.metric(
     "Tenderë mbi kufirin",
-    f"{len(flagged):,}",
-    help=f"{len(flagged) / max(len(filtered), 1):.1%} e tenderëve në përzgjedhje.",
+    fmt_number(len(flagged)),
+    help=f"{fmt_number(100 * len(flagged) / max(len(filtered), 1), 1)}% e tenderëve në përzgjedhje.",
 )
 c2.metric("Vlera totale e parashikuar", fmt_eur(flagged["estimated_value_eur"].sum(min_count=1)))
-c3.metric("Mediana e pikëve", f"{flagged[score_type].median():.3f}" if len(flagged) else "—")
-c4.metric("Autoritete kontraktuese", f"{flagged['procuring_entity_id'].nunique():,}")
+c3.metric("Mediana e pikëve", fmt_number(flagged[score_type].median(), 3) if len(flagged) else "—")
+c4.metric("Autoritete kontraktuese", fmt_number(flagged["procuring_entity_id"].nunique()))
 
 st.plotly_chart(
     anomaly_score_hist(filtered[score_type], threshold=threshold), use_container_width=True
@@ -560,7 +647,13 @@ with st.expander("Të gjitha sinjalet në listën e përzgjedhur"):
             color_discrete_sequence=[PALETTE["bad"]],
             labels={"value": "Numri i tenderëve", "index": "Sinjali"},
         )
-        fig.update_layout(height=540, showlegend=False, margin={"l": 20, "r": 20, "t": 30, "b": 20})
+        fig.update_layout(
+            height=540,
+            showlegend=False,
+            separators=", ",
+            margin={"l": 20, "r": 20, "t": 30, "b": 20},
+        )
+        fig.update_xaxes(tickformat=",.0f")
         st.plotly_chart(fig, use_container_width=True)
 
 display_cols = [
@@ -597,7 +690,7 @@ if len(table):
     if "total_awarded_eur" in table:
         table.loc[~has_award, "total_awarded_eur"] = float("nan")
     table["award_status"] = has_award.map(
-        {True: "dhënie e regjistruar", False: "— pa dhënie të regjistruar"}
+        {True: "Me vendim të regjistruar", False: "Pa vendim të regjistruar"}
     )
     table = table.drop(columns=["was_awarded"], errors="ignore")
 
@@ -609,18 +702,20 @@ score_col_config = {
 score_col_config.update(
     {
         "ocid": st.column_config.TextColumn("OCID"),
-        "release_date": st.column_config.DateColumn("data"),
-        "procuring_entity_name": st.column_config.TextColumn("autoriteti kontraktues"),
-        "category": st.column_config.TextColumn("kategoria"),
+        "release_date": st.column_config.DateColumn("Data e publikimit", format="DD.MM.YYYY"),
+        "procuring_entity_name": st.column_config.TextColumn("Autoriteti kontraktues"),
+        "category": st.column_config.TextColumn("Kategoria"),
         "method": st.column_config.TextColumn("Metoda në burim"),
         "estimated_value_eur": st.column_config.NumberColumn(
-            "vlera e parashikuar €", format="%.0f"
+            "Vlera e parashikuar (€)", format="localized"
         ),
-        "total_awarded_eur": st.column_config.NumberColumn("Vendimet e dhënies (€)", format="%.0f"),
-        "award_status": st.column_config.TextColumn("statusi i dhënies"),
-        "title": st.column_config.TextColumn("titulli", width="large"),
+        "total_awarded_eur": st.column_config.NumberColumn(
+            "Vendimet e dhënies (€)", format="localized"
+        ),
+        "award_status": st.column_config.TextColumn("Statusi i dhënies"),
+        "title": st.column_config.TextColumn("Titulli i tenderit", width="large"),
         "model_agreement_count": st.column_config.NumberColumn(
-            f"Modele në {(1 - agreement_quantile):.0%} më të lartët",
+            f"Modele që e vendosin në {(1 - agreement_quantile):.0%} më të lartë",
             help="Numri i modeleve që e rendisin tenderin ndër më të pazakontët; nuk është masë sigurie.",
         ),
     }
@@ -639,4 +734,5 @@ with st.expander("Çfarë tregojnë pikët?"):
 
 with st.expander("Përkufizimet teknike të rregullave"):
     st.caption("Përkufizimet origjinale, peshat dhe kufizimet për verifikim metodologjik.")
-    st.dataframe(rule_descriptions(), hide_index=True, use_container_width=True)
+    st.caption(RULE_TABLE_CAPTION)
+    st.dataframe(rule_table_sq(rule_descriptions()), hide_index=True, use_container_width=True)

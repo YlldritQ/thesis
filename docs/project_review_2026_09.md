@@ -1,5 +1,18 @@
 # Project review — 18 September 2026
 
+> **Update, 22 October 2026.** The final pre-submission review verified the
+> full 378-test suite and two subsequently added date regressions: **380 passing
+> tests in total** (303 unit/contract, 12 integration, 65 dashboard). Ruff and
+> mypy are clean, and all five releases validate. The date regressions cover
+> local month/year boundaries, the fixed summer offset, missing dates, filtering
+> and aggregation, and preservation of scores, instants and input data. The
+> continuation review also corrected the date-shift counts and annual-rate
+> comparison in the methodology. It found issues that need a new
+> publication to fix (a rule overlap that inflates the review queue, UTC date
+> bucketing, and a narrow award de-duplication case). They are documented in
+> [the methodology's known issues](methodology.md#known-issues-in-the-published-release).
+> The counts below are as of 18 September.
+
 ## Assessment
 
 This is a strong bachelor-level **data-engineering and explainability project**.
@@ -66,8 +79,9 @@ Together the completed suites cover **375 passing tests**. After the UI changes,
 all five publication stages were validated again successfully.
 
 The integration suite exercises a synthetic bronze→silver→gold run, checks that
-the committed findings report exactly matches a fresh deterministic rendering,
-and reconstructs ensemble scores for every published record to a tolerance of
+the committed findings report matches a fresh deterministic rendering (apart
+from its input-timestamp line), and reconstructs ensemble scores for every
+published record to a tolerance of
 `1e-12`. The separate SHAP check verifies the rule-proxy model's raw log-odds;
 SHAP is not presented as an explanation of the ensemble score.
 

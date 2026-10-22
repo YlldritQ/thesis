@@ -65,6 +65,60 @@ def fmt_eur(value: float | None) -> str:
     return f"{fmt_number(value)} €"
 
 
+def fmt_datetime(value: object) -> str:
+    """Show an ISO timestamp as «19.07.2026 12:28 UTC»; keep unparseable text as given."""
+    if value is None or (isinstance(value, str) and not value.strip()):
+        return "—"
+    try:
+        stamp = pd.Timestamp(value)
+    except (TypeError, ValueError):
+        return str(value)
+    if pd.isna(stamp):
+        return "—"
+    if stamp.tzinfo is None:
+        return stamp.strftime("%d.%m.%Y %H:%M")
+    return stamp.tz_convert("UTC").strftime("%d.%m.%Y %H:%M UTC")
+
+
+def fmt_columns(frame: pd.DataFrame, decimals: dict[str, int]) -> pd.DataFrame:
+    """Display copy with Albanian number text (e.g. «0,375») in the named columns."""
+    view = frame.copy()
+    for column, digits in decimals.items():
+        if column in view:
+            view[column] = view[column].map(lambda value, d=digits: fmt_number(value, d))
+    return view
+
+
+SIGNAL_TYPE_LABELS = {
+    "review": "Shqyrtim i tenderit",
+    "data_quality": "Cilësia e të dhënave",
+    "operational": "Ndjekja e procedurës",
+}
+RULE_TABLE_COLUMNS = {
+    "code": "Kodi",
+    "description": "Përshkrimi",
+    "weight": "Pesha",
+    "reference": "Referenca",
+    "score_enabled": "Ndikon në pikë",
+    "signal_type": "Lloji",
+    "threshold_rationale": "Arsyetimi i pragut",
+    "limitations": "Kufizimet",
+}
+RULE_TABLE_CAPTION = "Përshkrimet e rregullave janë në anglisht, si në kodin burimor."
+
+
+def rule_table_sq(rules: pd.DataFrame) -> pd.DataFrame:
+    """Albanian headers and labels for the published rule registry; values stay as published."""
+    view = fmt_columns(rules, {"weight": 2})
+    if "score_enabled" in view:
+        view["score_enabled"] = view["score_enabled"].map({True: "Po", False: "Jo"})
+    if "signal_type" in view:
+        view["signal_type"] = view["signal_type"].map(
+            lambda value: SIGNAL_TYPE_LABELS.get(value, value)
+        )
+    return view.rename(columns=RULE_TABLE_COLUMNS)
+
+
 def style_chart(fig: go.Figure, *, height: int = 350) -> go.Figure:
     fig.update_layout(
         height=height,
@@ -133,6 +187,7 @@ def time_series_volume(monthly: pd.DataFrame) -> go.Figure:
         yaxis_title="Numri i tenderëve",
         xaxis_title=None,
     )
+    fig.update_yaxes(tickformat=",~f")
     return style_chart(fig)
 
 
@@ -217,6 +272,7 @@ def value_histogram(values: pd.Series, log: bool = True) -> go.Figure:
         )
     )
     fig.update_layout(xaxis_title="Vlera e parashikuar", yaxis_title="Numri i tenderëve")
+    fig.update_yaxes(tickformat=",~f")
     return style_chart(fig)
 
 
@@ -270,4 +326,5 @@ def anomaly_score_hist(scores: pd.Series, threshold: float | None = None) -> go.
         yaxis_title="Numri i tenderëve",
         showlegend=False,
     )
+    fig.update_yaxes(tickformat=",~f")
     return style_chart(fig)
