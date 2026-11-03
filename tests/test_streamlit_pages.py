@@ -68,6 +68,25 @@ def test_explore_tender_selector_changes_visible_details() -> None:
     assert any(heading.value in displayed_choice for heading in at.subheader)
 
 
+def test_explore_opens_explanations_for_the_selected_tender() -> None:
+    """Opening explanations must preserve the searched tender, not show the top-ranked one."""
+    from streamlit.testing.v1 import AppTest
+
+    at = AppTest.from_file(str(ROOT / "streamlit_app/Home.py"), default_timeout=120)
+    at.switch_page("pages/2_Explore.py").run()
+    assert not at.exception
+    chooser = next(box for box in at.selectbox if box.label == "Zgjidh nga rezultatet")
+    displayed_choice = chooser.options[1]
+    selected_ocid = displayed_choice.rsplit(" · ", 1)[-1]
+    chooser.set_value(selected_ocid).run()
+    next(
+        button for button in at.button if button.label == "Shpjego pikët e këtij tenderi →"
+    ).click().run()
+    assert not at.exception
+    assert at.text_input(key="anomaly_manual_ocid").value == selected_ocid
+    assert any(heading.value in displayed_choice for heading in at.subheader)
+
+
 @pytest.mark.parametrize("page", PAGES)
 def test_every_page_shows_caveat(page: str) -> None:
     """Governance promise (review M-24/AM-01): the 'anomaly ≠ fraud' caveat

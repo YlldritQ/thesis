@@ -9,6 +9,15 @@ follows [SemVer](https://semver.org/spec/v2.0.0.html).
 Documentation, dashboard and regression tests only; the package, data and model
 releases remain 1.3.0 and still validate.
 
+### Përgatitja për shqyrtim — 4 nëntor 2026
+
+- Kërkimi i tenderëve hap shpjegimin e pikëve për tenderin e përzgjedhur;
+  një test mbulon kalimin ndërmjet faqeve.
+- U shtuan katër pamje të panelit në shqip, përshkrimet për prezantim dhe
+  dy pamje në README.
+- U përshtatën udhëzimet për depon publike dhe nisjen e panelit pa pyetjen
+  fillestare të Streamlit për emailin.
+
 ### Final review — 22 October 2026
 
 - Dashboard: dates are shown and grouped in the source's published `+01:00`

@@ -27,6 +27,18 @@ njerëzorë ende nuk është përcaktuar.
 - **Gjurmueshmëri:** skedarët e publikimit lidhin rezultatet me të dhënat,
   kodin, konfigurimin dhe mjedisin që i kanë prodhuar.
 
+## Pamje nga paneli
+
+Ecuria mujore dhe vlerat e parashikuara sipas kategorisë:
+
+![Grafikët e prokurimit në panelin në shqip](docs/screenshots/02-grafiket.jpg)
+
+Sinjalet që ndihmojnë në përzgjedhjen e rasteve për shqyrtim:
+
+![Përmbledhja e sinjaleve për shqyrtim](docs/screenshots/03-sinjalet.jpg)
+
+[Të gjitha pamjet dhe përshkrimet e tyre](docs/screenshots/README.md).
+
 ## Të dhënat e përfshira
 
 Burimi është [Publikimi 115 i Open Contracting Partnership](https://data.open-contracting.org/en/publication/115),
@@ -48,16 +60,16 @@ dhe [metodologjia](docs/methodology.md).
 
 ## Hapja e panelit
 
-Nevojiten Git, [uv](https://docs.astral.sh/uv/getting-started/installation/)
-dhe qasje në këtë depo private. Komandat më poshtë përdorin Python 3.11;
-`uv` e siguron nëse mungon. Paketa mbështet Python 3.9–3.12.
+Nevojiten Git dhe [uv](https://docs.astral.sh/uv/getting-started/installation/).
+Depoja është publike dhe mund të klonohet pa llogari në GitHub. Komandat më
+poshtë përdorin Python 3.11; `uv` e siguron nëse mungon. Paketa mbështet Python 3.9–3.12.
 
 ```bash
 git clone https://github.com/YlldritQ/thesis.git
 cd thesis
 uv sync --frozen --python 3.11
 gzip -dk data/raw/kosovo_ocds.jsonl.gz
-uv run --no-sync python -m thesis ui
+uv run --no-sync python -m thesis ui --headless
 ```
 
 Hapni **[http://localhost:8501](http://localhost:8501)**. Ndaleni panelin me
@@ -70,7 +82,7 @@ Skedari i zgjeruar përjashtohet nga Git për shkak të madhësisë.
 Nëse projekti është tashmë i instaluar në `.venv`, mund ta nisni drejtpërdrejt:
 
 ```bash
-.venv/bin/python -m thesis ui
+.venv/bin/python -m thesis ui --headless
 ```
 
 Hapja e parë mund të zgjasë, sepse aplikacioni kontrollon integritetin e skedarëve.

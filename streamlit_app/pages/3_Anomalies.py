@@ -241,7 +241,11 @@ with c_sel:
         placeholder="Nuk ka tenderë në përzgjedhje" if top_choices.empty else "Zgjidh një tender",
     )
 with c_search:
-    manual = st.text_input("Ose kërko me identifikuesin OCID", value="").strip()
+    # A tender opened from search takes precedence over an earlier manual lookup.
+    incoming_ocid = st.session_state.pop("review_ocid", None)
+    if incoming_ocid is not None:
+        st.session_state["anomaly_manual_ocid"] = incoming_ocid
+    manual = st.text_input("Ose kërko me identifikuesin OCID", key="anomaly_manual_ocid").strip()
 
 ocid = manual or chosen
 if manual and not gold["ocid"].eq(manual).any():

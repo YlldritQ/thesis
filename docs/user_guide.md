@@ -38,6 +38,8 @@ Emrat më poshtë janë emrat në menynë anësore.
    tenderi; pastaj përdorni **Zgjidh nga rezultatet**. Lexoni vlerat, afatin
    dhe pjesën **Çfarë kërkon verifikim?** Tabela dhe përzgjedhësi paraqesin
    deri në 500 rezultate; ngushtoni kërkimin nëse lista është më e gjatë.
+   Te hollësitë e pikëve, **Shpjego pikët e këtij tenderi →** hap shpjegimet
+   për të njëjtin tender te **Sinjalet për shqyrtim**.
 4. **Kuptoni sinjalin.** Te **Sinjalet për shqyrtim**, zgjidhni një nga
    tenderët e renditur ose vendosni OCID-in e rastit. Lexoni shpjegimin
    përpara pikëve. Llogaritjet teknike janë në pjesët që hapen me klikim.

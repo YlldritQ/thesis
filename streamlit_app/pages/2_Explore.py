@@ -9,7 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import pandas as pd
 import streamlit as st
-from _bootstrap import app_link, cached_dashboard_bundle, fmt_eur, page_header, sidebar_filters
+from _bootstrap import cached_dashboard_bundle, fmt_eur, page_header, sidebar_filters
 from _charts import category_label, fmt_number, method_label, procedure_label
 from _narrative import METRIC_HELP, contract_severity, explain_flags, plain_summary
 
@@ -292,4 +292,6 @@ if ocid:
                 column.metric(label, fmt_number(r[key], 2))
             st.caption(METRIC_HELP["ensemble_score"])
             st.write(f"Numri i tenderit në burim: {r['tender_id']}")
-            app_link("pages/3_Anomalies.py", label="Hap shpjegimet e renditjes")
+            if st.button("Shpjego pikët e këtij tenderi →", use_container_width=True):
+                st.session_state["review_ocid"] = str(ocid)
+                st.switch_page(Path(__file__).with_name("3_Anomalies.py"))
