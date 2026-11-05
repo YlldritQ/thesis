@@ -15,7 +15,7 @@ st.set_page_config(
 
 page_header(
     "Çfarë tregojnë të dhënat e prokurimit?",
-    "Shihni vlerat e parashikuara, pjesëmarrjen e ofertuesve dhe tenderët me sinjale për shqyrtim.",
+    "Shqyrtoni vlerat e parashikuara, pjesëmarrjen e ofertuesve dhe rastet e sinjalizuara nga analiza.",
 )
 
 dashboard = cached_dashboard_bundle(include_model_metadata=True)
@@ -35,7 +35,7 @@ period = (
 st.caption(f"BURIMI: KRPP / Open Contracting Partnership · {period} · Publikimi 115")
 
 cols = st.columns(4)
-cols[0].metric("Tenderë në të dhëna", fmt_number(len(gold)))
+cols[0].metric("Tenderë të përfshirë", fmt_number(len(gold)))
 cols[1].metric(
     "Autoritete kontraktuese",
     fmt_number(gold["procuring_entity_id"].nunique()),
@@ -52,7 +52,8 @@ cols[3].metric(
     fmt_number(flagged),
     delta=f"{fmt_number(flagged / len(gold) * 100, 1)}% e tenderëve",
     delta_color="off",
-    help="Tenderë me pikë të rregullave të paktën 0,5. Ky është prag orientues për shqyrtim, jo konstatim shkeljeje.",
+    help="Tenderë me të paktën 0,5 pikë sipas rregullave. "
+    "Ky prag ndihmon në përzgjedhjen e rasteve për shqyrtim; nuk dëshmon shkelje.",
 )
 
 st.markdown("### Një vështrim i parë")
@@ -61,20 +62,23 @@ with left:
     st.plotly_chart(time_series_volume(monthly_summary(gold)), use_container_width=True)
 with right:
     st.plotly_chart(
-        category_bar(gold, "estimated_value_eur", "Për çfarë parashihen fondet?"),
+        category_bar(
+            gold, "estimated_value_eur", "Si ndahet vlera e parashikuar sipas kategorive?"
+        ),
         use_container_width=True,
     )
 st.caption(
-    "Grafikët përfshijnë të gjithë tenderët në këtë grup të dhënash. Për periudha ose institucione të veçanta, hapni Përmbledhjen."
+    "Grafikët përfshijnë të gjithë tenderët e analizuar. "
+    "Për të filtruar të dhënat sipas periudhës ose institucionit, hapni Përmbledhjen."
 )
 
-st.markdown("### Zgjidhni çfarë dëshironi të kuptoni")
+st.markdown("### Eksploroni analizën")
 for col, heading, detail, route, button in zip(
     st.columns(3),
     ["Si ndryshon prokurimi?", "Çfarë përmban një tender?", "Cilat raste kërkojnë shqyrtim?"],
     [
-        "Krahasoni numrin, vlerën dhe konkurrencën sipas periudhës, kategorisë dhe autoritetit.",
-        "Kërkoni sipas titullit ose identifikuesit. Shihni vlerat, afatet dhe vendimet e dhënies.",
+        "Krahasoni numrin e tenderëve, vlerat dhe pjesëmarrjen e ofertuesve sipas periudhës, kategorisë dhe autoritetit.",
+        "Kërkoni sipas titullit ose identifikuesit. Shihni vlerat, afatet dhe vendimet për dhënien e kontratës.",
         "Shihni arsyet e sinjalizimit dhe si janë llogaritur pikët e çdo tenderi.",
     ],
     ["pages/1_Overview.py", "pages/2_Explore.py", "pages/3_Anomalies.py"],
@@ -100,22 +104,24 @@ with st.expander("Çfarë përfshijnë këto të dhëna?"):
             f"Ka të dhëna në {populated} nga {calendar} muaj të periudhës. {fmt_number(gold['release_date'].isna().sum())} tenderë nuk kanë datë publikimi dhe nuk paraqiten në grafikun kohor."
         )
     st.write(
-        "Objekti `award` regjistron një vendim dhënieje, pra vendimin për dhënie të kontratës. "
-        "Ai nuk dëshmon që kontrata është nënshkruar, ekzekutuar ose paguar. "
-        "Vlera e parashikuar dhe vlera e vendimeve të dhënies nuk duhen interpretuar si kursim buxhetor."
+        "Objekti `award` në të dhënat burimore përfaqëson një vendim për dhënien e kontratës. "
+        "Ai nuk dëshmon se kontrata është nënshkruar apo zbatuar, ose se janë kryer pagesa. "
+        "Diferenca ndërmjet vlerës së parashikuar dhe vlerës sipas vendimeve "
+        "nuk duhet interpretuar si kursim buxhetor."
     )
     st.markdown("[Burimi i të dhënave](https://data.open-contracting.org/en/publication/115)")
 
 with st.expander("Si krijohen sinjalet për shqyrtim?"):
     st.write(
-        "Rregullat kontrollojnë të dhënat e konkurrencës, vlerat dhe afatet. "
-        f"Renditjet e {ensemble_family_count} detektorëve kombinohen me rregullat dhe krahasimin "
-        "me tenderë të ngjashëm. Pikët janë relative ndaj të dhënave të analizuara."
+        "Rregullat shqyrtojnë pjesëmarrjen e ofertuesve, vlerat dhe afatet. "
+        f"Renditjet e prodhuara nga {ensemble_family_count} modele për zbulimin e anomalive "
+        "kombinohen me pikët sipas rregullave dhe me krahasimin me tenderë të ngjashëm. "
+        "Pikët shprehin pozicionin relativ brenda bashkësisë së analizuar."
     )
     st.write(
-        "Pikët nuk janë probabilitet mashtrimi. Modelet janë krahasuar me etiketa të nxjerra "
+        "Pikët nuk tregojnë probabilitetin e mashtrimit. Modelet janë krahasuar me etiketa të nxjerra "
         "nga rregullat; rezultatet ende nuk janë verifikuar me vlerësime të pavarura të rasteve. "
-        "Te Sinjalet për shqyrtim mund të shihni kontributin e secilës pjesë në pikët përfundimtare."
+        "Në faqen Sinjalet për shqyrtim mund të shihni kontributin e secilit përbërës në pikët përfundimtare."
     )
 
 st.caption("Projekt diplome bachelor · Panel kërkimor; nuk është shërbim zyrtar i institucioneve.")

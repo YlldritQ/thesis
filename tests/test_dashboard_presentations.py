@@ -308,7 +308,7 @@ def test_plain_summary_distinguishes_missing_bidders_and_absent_award_from_zero(
     )
 
     assert "Numri i ofertuesve nuk është publikuar" in missing
-    assert "Nuk ka vendim dhënieje të regjistruar" in missing
+    assert "Nuk ka vendim për dhënien e kontratës" in missing
     assert "**0 €**" not in missing
     assert "zero ofertues" in recorded_zero
     assert "**0 €**" in recorded_zero

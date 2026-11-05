@@ -10,19 +10,19 @@ përfshira në këtë depo. Mund ta hapni pa shkarkuar të dhëna të reja dhe p
 i ritrajnuar modelet.
 
 **Pikët e anomalive ndihmojnë në përzgjedhjen e rasteve për shqyrtim; ato nuk
-janë prova të mashtrimit ose të shkeljeve.** Vlerësimi i modeleve mat pajtimin me
+janë prova të mashtrimit ose të shkeljeve.** Vlerësimi i modeleve mat përputhjen me
 rregullat e projektit. Saktësia kundrejt rezultateve të verifikuara nga shqyrtues
-njerëzorë ende nuk është përcaktuar.
+të pavarur ende nuk është përcaktuar.
 
 ## Çfarë përmban
 
 - **Panel me nëntë faqe në shqip:** ballinë, përmbledhje, kërkim tenderësh,
   sinjale për shqyrtim, autoritete dhe furnizues, si funksionon analiza,
-  kontrolle të modeleve, krahasim i modeleve dhe fjalor i termave.
+  vlerësim i modeleve, krahasim i modeleve dhe fjalor i termave.
 - **Përpunim nga burimi te analiza:** ruajtje e burimit, pastrim, tabela analitike
   dhe kontrolle të cilësisë së të dhënave.
 - **Analizë e shpjegueshme:** 15 rregulla të dukshme, prej të cilave katër kanë
-  peshë në pikët e rregullave; krahasim i 35 konfigurimeve të modeleve dhe
+  peshë në pikët sipas rregullave; krahasim i 35 konfigurimeve të modeleve dhe
   shpjegim i përbërësve të pikëve për secilin tender.
 - **Gjurmueshmëri:** skedarët e publikimit lidhin rezultatet me të dhënat,
   kodin, konfigurimin dhe mjedisin që i kanë prodhuar.
@@ -53,8 +53,9 @@ me të dhëna të KRPP-së në formatin OCDS.
 | Mostra për shqyrtim manual | 150 tenderë, ende pa etiketa të plotësuara |
 
 Ky mbulim nuk dëshmon se janë përfshirë të gjitha prokurimet në Kosovë.
-Objektet `award` përfaqësojnë **vendime të regjistruara për dhënie të kontratës**;
-vlerat e tyre nuk vërtetojnë nënshkrimin, zbatimin ose pagesën e kontratave.
+Objektet `award` përfaqësojnë **vendime të regjistruara për dhënien e kontratës**.
+Vlerat e shënuara në to nuk dëshmojnë se kontratat janë nënshkruar apo zbatuar,
+ose se janë kryer pagesa.
 Shifrat e hollësishme dhe kufizimet gjenden te [gjetjet](docs/findings.md)
 dhe [metodologjia](docs/methodology.md).
 
@@ -91,8 +92,9 @@ Për Docker, instalim për zhvillim dhe zgjidhje problemesh, shihni
 
 ## Si të filloni analizën
 
-1. Hapni faqen **Përmbledhja** dhe zgjidhni periudhën, kategorinë ose autoritetin që
-   ju intereson. Grafikët dhe treguesit në këtë faqe ndjekin filtrat.
+1. Hapni faqen **Përmbledhja** dhe përdorni **Filtro të dhënat** për të zgjedhur
+   periudhën, kategorinë ose autoritetin që ju intereson. Grafikët dhe treguesit
+   përditësohen sipas filtrave. **Hiq filtrat** rikthen të gjithë bashkësinë e të dhënave.
 2. Te **Kërko tenderë**, gjeni një tender dhe hapni hollësitë e tij.
 3. Te **Sinjalet për shqyrtim**, lexoni arsyet e sinjalizimit dhe të dhënat që
    mungojnë para se të interpretoni pikët.
@@ -102,6 +104,8 @@ Për Docker, instalim për zhvillim dhe zgjidhje problemesh, shihni
 
 [Udhëzuesi i përdorimit](docs/user_guide.md) shpjegon faqet, filtrat dhe mënyrën
 e leximit të grafikëve, me shembuj dhe kufizimet përkatëse.
+Faqja **Fjalori i termave** shpjegon edhe terminologjinë e mësimit makinerik,
+me referenca nga literatura universitare në shqip.
 
 ## Si është ndërtuar
 

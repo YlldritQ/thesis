@@ -175,21 +175,21 @@ def test_ui_does_not_overstate_proxy_or_supplier_identity_evidence() -> None:
     entities = (ROOT / "streamlit_app" / "pages" / "4_Entities.py").read_text().lower()
     assert "me ndërtim" not in benchmark
     assert "identitet robust" not in entities
-    assert "zgjidhje e verifikuar" in entities
+    assert "nuk vërteton identitetin juridik" in entities
 
 
 def test_anomaly_page_separates_exact_ensemble_xai_from_rule_proxy_shap() -> None:
     source = (ROOT / "streamlit_app" / "pages" / "3_Anomalies.py").read_text().lower()
     home = (ROOT / "streamlit_app" / "Home.py").read_text().lower()
-    assert "pse mori këtë pikë ansambli" in source
-    assert "zbërthim matematikor ekzakt" in source
-    assert "nuk shpjegon ensemble_score" in source
-    assert "konteksti përshkrues i veçorive" in source
+    assert "si u llogaritën pikët e kombinuara" in source
+    assert "riprodhon saktësisht pikët e publikuara" in source
+    assert "nuk shpjegon pikët e kombinuara" in source
+    assert "krahasimi i veçorive të tenderit" in source
     assert "3/4 detektorë" not in source
     assert 'model_agreement_count"] >= 3' not in source
     assert 'model_agreement_count"] >= minimum_model_agreement' in source
     assert "katër detektorëve" not in home
-    assert "{ensemble_family_count} detektorëve" in home
+    assert "{ensemble_family_count} modele për zbulimin e anomalive" in home
 
 
 def test_benchmark_page_cache_is_keyed_by_release_digest() -> None:
@@ -232,5 +232,5 @@ def test_award_objects_are_not_presented_as_contracts(page: str, forbidden: str)
     assert forbidden not in source
 
     home = (ROOT / "streamlit_app" / "Home.py").read_text().lower()
-    assert "vendim dhënieje" in home
-    assert all(status in home for status in ("nënshkruar", "ekzekutuar", "paguar"))
+    assert "vendim për dhënien e kontratës" in home
+    assert all(status in home for status in ("nënshkruar", "zbatuar", "kryer pagesa"))

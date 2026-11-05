@@ -8,7 +8,9 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 from thesis.domain.procedures import classify_procedure_series
-from thesis.viz import PALETTE, ensemble_contribution_bar, shap_waterfall  # noqa: F401
+from thesis.viz import PALETTE
+from thesis.viz import ensemble_contribution_bar as _ensemble_contribution_bar
+from thesis.viz import shap_waterfall as _shap_waterfall
 
 CATEGORY_LABELS = {"goods": "Furnizime", "services": "Shërbime", "works": "Punë"}
 METHOD_LABELS = {
@@ -24,8 +26,8 @@ PROCEDURE_LABELS = {
     "price_quotation": "Kuotim i çmimeve",
     "minimum_value": "Vlerë minimale",
     "design_contest": "Konkurs projektimi",
-    "negotiated_without_notice": "E negociuar pa publikim",
-    "negotiated_with_notice": "E negociuar me publikim",
+    "negotiated_without_notice": "Procedurë e negociuar pa publikim",
+    "negotiated_with_notice": "Procedurë e negociuar me publikim",
     "framework_mini_tender": "Mini-tender në marrëveshje kornizë",
     "selective": "Procedurë përzgjedhëse",
     "unknown": "E papërcaktuar",
@@ -61,6 +63,8 @@ def fmt_eur(value: float | None) -> str:
         return "—"
     for threshold, suffix in ((1e9, "miliardë €"), (1e6, "milionë €"), (1e3, "mijë €")):
         if abs(value) >= threshold:
+            if abs(value) == threshold and threshold >= 1e6:
+                suffix = "miliard €" if threshold == 1e9 else "milion €"
             return f"{fmt_number(value / threshold, 2 if threshold >= 1e6 else 1)} {suffix}"
     return f"{fmt_number(value)} €"
 
@@ -89,27 +93,78 @@ def fmt_columns(frame: pd.DataFrame, decimals: dict[str, int]) -> pd.DataFrame:
     return view
 
 
+def ensemble_contribution_bar(explanation: pd.DataFrame, title: str = "") -> go.Figure:
+    """Localize presentation text without changing the published score components."""
+    fig = _ensemble_contribution_bar(explanation, title=title)
+    fig.update_layout(
+        title=title or "Kontributi i përbërësve në pikët e kombinuara",
+        xaxis_title="Kontributi në pikët e kombinuara",
+        separators=", ",
+        margin={"r": 60},
+    )
+    fig.update_traces(
+        text=[fmt_number(value, 4) for value in explanation["direct_contribution"]],
+        cliponaxis=False,
+        hovertemplate=(
+            "%{y}<br>Vlera në formulë: %{customdata[0]:.4f}"
+            "<br>Pesha: %{customdata[1]:.4f}"
+            "<br>Kontributi: %{x:.4f}<extra></extra>"
+        ),
+    )
+    return fig
+
+
+def shap_waterfall(
+    feature_names: list[str], values: np.ndarray, base_value: float, x_value: float, title: str = ""
+) -> go.Figure:
+    """Keep SHAP values and ordering; translate only chart labels and number text."""
+    fig = _shap_waterfall(feature_names, values, base_value, x_value, title=title)
+    fig.update_layout(
+        title=title
+        or (
+            "SHAP: modeli i trajnuar sipas rregullave "
+            f"(dalja log-odds: {fmt_number(x_value, 3)}; baza: {fmt_number(base_value, 3)})"
+        ),
+        xaxis_title="Kontributi në daljen log-odds të modelit të trajnuar sipas rregullave",
+        separators=", ",
+    )
+    for trace in fig.data:
+        trace.text = [f"{'+' if value >= 0 else ''}{fmt_number(value, 3)}" for value in trace.x]
+    return fig
+
+
 SIGNAL_TYPE_LABELS = {
     "review": "Shqyrtim i tenderit",
     "data_quality": "Cilësia e të dhënave",
-    "operational": "Ndjekja e procedurës",
+    "operational": "Ecuria e procedurës",
 }
 RULE_TABLE_COLUMNS = {
     "code": "Kodi",
     "description": "Përshkrimi",
     "weight": "Pesha",
     "reference": "Referenca",
-    "score_enabled": "Ndikon në pikë",
+    "score_enabled": "Ndikon në pikëzim",
     "signal_type": "Lloji",
     "threshold_rationale": "Arsyetimi i pragut",
     "limitations": "Kufizimet",
 }
-RULE_TABLE_CAPTION = "Përshkrimet e rregullave janë në anglisht, si në kodin burimor."
+RULE_TABLE_CAPTION = (
+    "Përshkrimet dhe shpjegimet janë në shqip. Kodet, peshat dhe referencat "
+    "ruhen si në përkufizimin teknik të rregullave."
+)
 
 
 def rule_table_sq(rules: pd.DataFrame) -> pd.DataFrame:
     """Albanian headers and labels for the published rule registry; values stay as published."""
+    from _rule_text import RULE_TEXT_SQ
+
     view = fmt_columns(rules, {"weight": 2})
+    for column in ("description", "threshold_rationale", "limitations"):
+        if column in view:
+            view[column] = [
+                RULE_TEXT_SQ.get(code, {}).get(column, value)
+                for code, value in zip(view["code"], view[column])
+            ]
     if "score_enabled" in view:
         view["score_enabled"] = view["score_enabled"].map({True: "Po", False: "Jo"})
     if "signal_type" in view:
@@ -303,8 +358,8 @@ def lorenz_curve(values: pd.Series, label: str) -> go.Figure:
         fig.add_annotation(text="Nuk ka vlera pozitive për këtë krahasim.", showarrow=False)
     fig.update_layout(
         title=f"Si shpërndahet vlera? · {label}",
-        xaxis_title="Pjesa e subjekteve, nga vlera më e vogël",
-        yaxis_title="Pjesa e vlerës së përgjithshme",
+        xaxis_title="Përqindja kumulative e subjekteve",
+        yaxis_title="Përqindja kumulative e vlerës",
     )
     fig.update_xaxes(tickformat=".0%", range=[0, 1])
     fig.update_yaxes(tickformat=".0%", range=[0, 1])

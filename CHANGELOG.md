@@ -9,6 +9,16 @@ follows [SemVer](https://semver.org/spec/v2.0.0.html).
 Documentation, dashboard and regression tests only; the package, data and model
 releases remain 1.3.0 and still validate.
 
+### Rishikimi gjuhësor i panelit — 5 nëntor 2026
+
+- U rishikuan formulimet në të gjitha faqet për shqipe standarde dhe përdorim
+  të natyrshëm të termave, duke u mbështetur edhe në literaturën universitare
+  në shqip për informatikën dhe mësimin makinerik.
+- U shqipëruan përshkrimet e të 15 rregullave dhe emërtimet në grafikët e
+  shpjegimit të pikëve; u përditësuan fjalori i termave dhe udhëzuesi i përdorimit.
+- U rifreskuan pamjet e panelit dhe materialet e përgatitura për emailin.
+  Ndryshimet gjuhësore nuk ndryshojnë të dhënat, modelet apo pikët e publikuara.
+
 ### Përgatitja për shqyrtim — 4 nëntor 2026
 
 - Kërkimi i tenderëve hap shpjegimin e pikëve për tenderin e përzgjedhur;

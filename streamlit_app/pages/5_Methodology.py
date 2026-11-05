@@ -26,7 +26,7 @@ st.set_page_config(
 )
 page_header(
     "📖 Si funksionon analiza",
-    "Nga njoftimet e prokurimit te sinjalet për shqyrtim: burimi, hapat dhe kufizimet.",
+    "Burimi i të dhënave, hapat e përpunimit dhe kufizimet e analizës.",
 )
 
 DOCS = paths.DOCS
@@ -40,14 +40,14 @@ def _render_document(filename: str, *, english: bool = False) -> None:
             st.caption(ENGLISH_DOCUMENT_NOTE)
         st.markdown(document.read_text())
     else:
-        st.info("Dokumenti shpjegues nuk është i disponueshëm në këtë instalim.")
+        st.info("Dokumenti shpjegues nuk gjendet në këtë instalim të aplikacionit.")
 
 
 def _render_dq_artifact(report_path: Path, parquet_path: Path) -> None:
     """Show freshness alongside the canonical DQ report, including unknown states."""
     if not report_path.exists():
         st.info("Raporti i kontrollit nuk është gjeneruar ende.")
-        with st.expander("Udhëzim për mirëmbajtësin"):
+        with st.expander("Udhëzime për mirëmbajtjen"):
             st.code("thesis dq run", language="bash")
         return
 
@@ -66,7 +66,10 @@ def _render_dq_artifact(report_path: Path, parquet_path: Path) -> None:
     c1.metric("Rreshta të të dhënave", fmt_number(row_count))
     c2.metric("Kontrolli i cilësisë", result)
     c3.metric("Paralajmërime", str(metadata.get("warning_count", "—")))
-    st.caption("Kalimi i kontrollit vërteton rregullat e kontrolluara, jo plotësinë e burimit.")
+    st.caption(
+        "Rezultati pozitiv tregon se janë përmbushur kushtet e kontrolluara; "
+        "ai nuk vërteton plotësinë e burimit."
+    )
 
     if run_at and artifact_updated is not None:
         try:
@@ -83,7 +86,7 @@ def _render_dq_artifact(report_path: Path, parquet_path: Path) -> None:
 
     with st.expander("Raporti i plotë dhe koha e kontrollit"):
         st.caption(
-            f"Kontrolluar: {fmt_datetime(run_at)} · Të dhënat përditësuar: "
+            f"Data e kontrollit: {fmt_datetime(run_at)} · Përditësimi i të dhënave: "
             f"{fmt_datetime(artifact_updated)}"
         )
         st.caption(f"Skedari: {report_path.relative_to(paths.ROOT)}")
@@ -92,53 +95,53 @@ def _render_dq_artifact(report_path: Path, parquet_path: Path) -> None:
 
 
 tab_steps, tab_rules, tab_quality, tab_technical = st.tabs(
-    ["Si funksionon", "Rregullat e shqyrtimit", "Cilësia e të dhënave", "Dokumentacioni teknik"]
+    ["Hapat e analizës", "Rregullat për shqyrtim", "Cilësia e të dhënave", "Dokumentacioni teknik"]
 )
 
 with tab_steps:
     st.subheader("Çfarë bën ky projekt?")
     st.markdown(
         "Projekti i ndihmon përdoruesit të kuptojnë të dhënat e publikuara të prokurimit "
-        "dhe të zgjedhin tenderë për shqyrtim të mëtejshëm. Analiza përdor një grup të "
-        "ruajtur të të dhënave; nuk përditësohet drejtpërdrejt nga portali i prokurimit."
+        "dhe të përzgjedhin tenderë për shqyrtim të mëtejshëm. Analiza mbështetet në një kopje të "
+        "ruajtur të të dhënave, pa përditësim të drejtpërdrejtë nga portali i prokurimit."
     )
     c1, c2, c3 = st.columns(3)
     c1.markdown(
         "**1 · Përgatiten të dhënat**\n\n"
         "Njoftimet e publikuara në formatin OCDS organizohen sipas tenderit, "
-        "autoritetit kontraktues dhe vendimit për dhënie të kontratës. "
+        "autoritetit kontraktues dhe vendimit për dhënien e kontratës. "
         "Kontrollohen identifikuesit, datat dhe vlerat që mungojnë."
     )
     c2.markdown(
         "**2 · Kërkohen sinjale**\n\n"
-        "Rregullat e shpjegueshme gjejnë kushte të caktuara, si një ofertues i vetëm. "
-        "Modelet statistikore gjejnë tenderë që dallojnë nga të tjerët në të dhëna."
+        "Rregullat identifikojnë situata të caktuara, si pjesëmarrja e një ofertuesi të vetëm. "
+        "Modelet statistikore identifikojnë tenderë që dallojnë nga të tjerët në bashkësinë e analizuar."
     )
     c3.markdown(
         "**3 · Shqyrtohet konteksti**\n\n"
-        "Paneli paraqet arsyen, shifrat dhe kufizimet. Për të arritur në një përfundim "
-        "duhen lexuar dokumentet burimore dhe rrethanat e procedurës."
+        "Paneli paraqet arsyet e sinjalizimit, shifrat dhe kufizimet e analizës. Për të arritur "
+        "në një përfundim duhen shqyrtuar dokumentet burimore dhe rrethanat e procedurës."
     )
     st.subheader("Si duhen kuptuar pikët?")
     st.markdown(
-        "**Pikët e rregullave** përmbledhin sinjalet me peshat e zgjedhura nga autori. "
+        "**Pikët sipas rregullave** përmbledhin sinjalet me peshat e zgjedhura nga autori. "
         "**Pikët e kombinuara** bashkojnë renditjet e modeleve, rregullat dhe krahasimin "
         "me tenderë të ngjashëm. Vlerat janë nga 0 në 1: një vlerë më e lartë rrit "
         "përparësinë për shqyrtim, por nuk tregon probabilitetin e një shkeljeje."
     )
     st.info(
-        "Pikët krahasojnë tenderët brenda grupit të analizuar. Ato mund të ndryshojnë "
-        "kur ndryshon ky grup. Rezultatet nuk janë verifikuar kundrejt një liste "
+        "Pikët krahasojnë tenderët brenda bashkësisë së analizuar. Ato mund të ndryshojnë "
+        "kur ndryshon kjo bashkësi. Rezultatet nuk janë verifikuar kundrejt një liste "
         "të pavarur të shkeljeve të konfirmuara."
     )
     st.subheader("Çfarë nuk mund të tregojnë këto të dhëna?")
     st.markdown(
-        "- Një vendim për dhënie të kontratës nuk provon se kontrata është "
-        "nënshkruar, zbatuar ose paguar.\n"
+        "- Një vendim për dhënien e kontratës nuk provon se kontrata është "
+        "nënshkruar apo zbatuar, ose se janë kryer pagesa.\n"
         "- Pa çmimet e secilës ofertë, nuk mund të përcaktohet nëse u zgjodh "
         "oferta më e lirë.\n"
-        "- Një diferencë mes vlerës së parashikuar dhe vlerës së vendimeve të "
-        "dhënies mund të vijë nga lote ose publikime të paplota; ajo nuk mat "
+        "- Dallimi ndërmjet vlerës së parashikuar dhe vlerave të shënuara në vendimet "
+        "për dhënien e kontratës mund të vijë nga lote ose publikime të paplota; ai nuk mat "
         "vetvetiu kursimin apo tejkalimin e shpenzimeve.\n"
         "- Mungesa e një sinjali nuk vërteton se një procedurë është pa probleme."
     )
@@ -150,8 +153,8 @@ with tab_rules:
     enabled_count = sum(rule.score_enabled for rule in RULES)
     st.caption(
         f"Kontrollohen {len(RULES)} kushte. Vetëm {enabled_count} prej tyre ndikojnë "
-        "në pikët e rregullave; të tjerat shërbejnë për kontroll të të dhënave "
-        "ose ndjekje të procedurës. Asnjëri nuk përbën konstatim ligjor."
+        "në pikët sipas rregullave; të tjerat shërbejnë për kontroll të të dhënave "
+        "ose ndjekje të ecurisë së procedurës. Asnjë prej tyre nuk përbën konstatim ligjor."
     )
     signal_types = {
         "review": "Shqyrtim i tenderit",
@@ -178,7 +181,7 @@ with tab_rules:
         },
     )
     st.caption(
-        "Pikët e aktivizuara mblidhen dhe kufizohen në 1. Kushti me një ofertues "
+        "Mblidhen pikët e kushteve të përmbushura, deri në një vlerë maksimale prej 1. Kushti për një ofertues "
         "në procedurë të hapur zëvendëson kushtin e përgjithshëm për një ofertues, "
         "që i njëjti fakt të mos numërohet dy herë."
     )
@@ -188,25 +191,28 @@ with tab_rules:
         st.dataframe(rule_table_sq(rule_descriptions()), hide_index=True, use_container_width=True)
 
 with tab_quality:
-    st.subheader("A i kanë kaluar të dhënat kontrollet?")
+    st.subheader("Çfarë rezultatesh kanë dhënë kontrollet e të dhënave?")
     st.caption(
-        "Zgjidhni grupin që dëshironi të kontrolloni. Paralajmërimet tregojnë fusha "
-        "që kërkojnë kujdes edhe kur kontrollet kryesore kanë kaluar."
+        "Zgjidhni bashkësinë e të dhënave për të parë raportin e kontrollit. Paralajmërimet "
+        "tregojnë çështje që kërkojnë vëmendje edhe kur kontrollet kryesore kanë përfunduar me sukses."
     )
     quality_groups = {
-        "Tenderët e përgatitur": (paths.DQ / "silver_tenders.dq.md", paths.SILVER_TENDERS),
-        "Vendimet për dhënie të kontratës": (paths.DQ / "silver_awards.dq.md", paths.SILVER_AWARDS),
+        "Të dhënat e përpunuara të tenderëve": (
+            paths.DQ / "silver_tenders.dq.md",
+            paths.SILVER_TENDERS,
+        ),
+        "Vendimet për dhënien e kontratës": (paths.DQ / "silver_awards.dq.md", paths.SILVER_AWARDS),
         "Treguesit e llogaritur": (paths.DQ / "gold_tender_features.dq.md", paths.GOLD_FEATURES),
-        "Tenderët me rezultate të analizës": (
+        "Tenderët me rezultatet e analizës": (
             paths.DQ / "gold_tender_summary.dq.md",
             paths.GOLD_TENDERS,
         ),
     }
-    chosen_quality_group = st.selectbox("Grupi i të dhënave", list(quality_groups))
+    chosen_quality_group = st.selectbox("Bashkësia e të dhënave", list(quality_groups))
     _render_dq_artifact(*quality_groups[chosen_quality_group])
 
 with tab_technical:
-    st.caption("Material për riprodhimin e analizës dhe shqyrtimin akademik të projektit.")
+    st.caption("Dokumente për riprodhimin e analizës dhe vlerësimin akademik të projektit.")
     for label, filename in (
         ("Arkitektura e sistemit", "architecture.md"),
         ("Udhëzuesi i ekzekutimit dhe mirëmbajtjes", "operations.md"),
@@ -222,11 +228,11 @@ with tab_technical:
         c2.code("\n".join(CONTEXT_FEATURES), language="text")
         st.caption(
             "Emrat teknikë lidhen me kolonat e ruajtura. Percentilet dhe pikët "
-            "llogariten kundrejt të gjithë grupit të analizuar."
+            "llogariten kundrejt gjithë bashkësisë së analizuar."
         )
         if paths.FEATURE_LIST.exists():
             st.json(loads_json(paths.FEATURE_LIST.read_text()))
-    with st.expander("Vendimet për ndërtimin e sistemit"):
+    with st.expander("Vendimet për projektimin e sistemit"):
         adrs = sorted((DOCS / "adr").glob("*.md"))
         if not adrs:
             st.info("Nuk ka dokumente të vendimeve teknike në këtë instalim.")

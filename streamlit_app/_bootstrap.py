@@ -87,7 +87,7 @@ def cached_tenders() -> pd.DataFrame:
     return _cached_tenders(_release_token(paths.SILVER_RELEASE))
 
 
-@st.cache_data(show_spinner="Po ngarkohen vendimet e dhënies…")
+@st.cache_data(show_spinner="Po ngarkohen vendimet për dhënien e kontratës…")
 def _cached_awards(release_token: str) -> pd.DataFrame:
     del release_token
     return _to_source_local_time(readers.load_silver_awards())
@@ -232,9 +232,12 @@ def sidebar_filters(df: pd.DataFrame) -> pd.DataFrame:
     """
     with st.sidebar:
         st.divider()
-        st.markdown("### Kufizo të dhënat")
-        st.caption("Pa përzgjedhje = të gjitha. Grafikët ndjekin filtrat e kësaj faqeje.")
-        if st.button("Pastro filtrat", use_container_width=True):
+        st.markdown("### Filtro të dhënat")
+        st.caption(
+            "Fushat pa përzgjedhje përfshijnë të gjitha vlerat. "
+            "Grafikët përditësohen sipas filtrave të kësaj faqeje."
+        )
+        if st.button("Hiq filtrat", use_container_width=True):
             for key in (
                 "filter_years",
                 "filter_cats",
@@ -263,12 +266,13 @@ def sidebar_filters(df: pd.DataFrame) -> pd.DataFrame:
         )
         methods = _dimension_options(df["method"])
         sel_methods = st.multiselect(
-            "Metoda sipas burimit",
+            "Metoda e prokurimit",
             methods,
             key="filter_methods",
             format_func=method_label,
             placeholder="Të gjitha metodat",
-            help="Klasifikimi i përgjithshëm në burim. Grafikët e procedurave përdorin edhe llojin e hollësishëm të procedurës.",
+            help="Klasifikimi i përgjithshëm i metodës në burimin e të dhënave. "
+            "Grafikët sipas procedurës përdorin klasifikimin më të hollësishëm, kur ai është i disponueshëm.",
         )
 
         ent_names = sorted([str(x) for x in df["procuring_entity_name"].dropna().unique()])
@@ -277,12 +281,12 @@ def sidebar_filters(df: pd.DataFrame) -> pd.DataFrame:
             ent_names,
             key="filter_ent",
             placeholder="Të gjitha autoritetet",
-            help="Lëreni bosh për të gjitha.",
+            help="Nëse nuk zgjidhni asnjë autoritet, përfshihen të gjithë.",
         )
 
         with st.expander("Vlera e parashikuar (€)"):
             min_value = st.number_input(
-                "Nga (€)",
+                "Vlera minimale (€)",
                 min_value=0.0,
                 value=None,
                 step=1000.0,
@@ -290,16 +294,19 @@ def sidebar_filters(df: pd.DataFrame) -> pd.DataFrame:
                 placeholder="Pa kufi të poshtëm",
             )
             max_value = st.number_input(
-                "Deri në (€)",
+                "Vlera maksimale (€)",
                 min_value=0.0,
                 value=None,
                 step=1000.0,
                 key="filter_value_max",
                 placeholder="Pa kufi të sipërm",
             )
-            st.caption("Kur vendosni kufij, tenderët pa vlerë të publikuar përjashtohen.")
+            st.caption(
+                "Nëse vendosni një kufi vlere, përjashtohen tenderët për të cilët "
+                "nuk është publikuar vlera e parashikuar."
+            )
         if min_value is not None and max_value is not None and min_value > max_value:
-            st.warning("Kufiri i poshtëm duhet të jetë më i vogël se kufiri i sipërm.")
+            st.warning("Vlera minimale nuk mund të jetë më e madhe se vlera maksimale.")
             return df.iloc[:0].copy()
 
     out = df.copy()
@@ -322,12 +329,12 @@ def sidebar_filters(df: pd.DataFrame) -> pd.DataFrame:
 # -------------------------------------------------------------------- helpers
 
 CAVEAT_TEXT = (
-    "**Anomalia ≠ mashtrim.** Sinjalet tregojnë raste për shqyrtim. "
+    "**Anomalia ≠ mashtrim.** Sinjalet identifikojnë raste që duhen shqyrtuar. "
     "Përfundimet kërkojnë verifikimin e dokumenteve të prokurimit."
 )
 
 STUDENT_DISCLAIMER = (
-    "Projekt diplome bachelor · Të dhëna të një periudhe të caktuar, pa përditësim automatik. "
+    "Projekt diplome bachelor · Të dhëna të ruajtura, pa përditësim automatik. "
     "Paneli nuk është shërbim zyrtar i institucioneve."
 )
 
@@ -397,7 +404,7 @@ def page_header(title: str, subtitle: str = "", caveat: bool = True) -> None:
             "Rreth analizës",
             [
                 ("5_Methodology.py", "Methodology", "Si funksionon analiza"),
-                ("6_Validation.py", "Validation", "Kontrollet e modeleve"),
+                ("6_Validation.py", "Validation", "Vlerësimi i modeleve"),
                 ("7_Krahasimi_i_Modeleve.py", "Krahasimi_i_Modeleve", "Krahasimi i modeleve"),
                 ("8_Fjalori.py", "Fjalori", "Fjalori i termave"),
             ],

@@ -30,13 +30,15 @@ def _flag_kind(code: str) -> str:
     rule = RULE_BY_CODE.get(code)
     if rule is None:
         return "sinjal për verifikim"
-    return "ndikon në pikët e rregullave" if rule.score_enabled else "kontroll pa pikë shtesë"
+    return (
+        "ndikon në pikët sipas rregullave" if rule.score_enabled else "kontroll që nuk shton pikë"
+    )
 
 
 st.set_page_config(page_title="Kërko tenderë · Prokurimi në Kosovë", page_icon="🔍", layout="wide")
 page_header(
     "🔍 Kërko tenderë",
-    "Gjeni një tender, shihni vlerat dhe ofertuesit e regjistruar, pastaj shqyrtoni sinjalet që kërkojnë verifikim.",
+    "Gjeni një tender dhe shqyrtoni vlerat, ofertuesit dhe arsyet e sinjalizimit të tij.",
 )
 
 dashboard = cached_dashboard_bundle()
@@ -45,9 +47,9 @@ awards = dashboard["awards"]
 filtered = sidebar_filters(gold)
 
 q = st.text_input(
-    "Kërko sipas titullit, autoritetit ose furnizuesit",
-    placeholder="P.sh. furnizim me pajisje ose emri i një komune",
-    help="Mund të përdorni edhe identifikuesin e tenderit (OCID), numrin e tenderit ose ID-në e furnizuesit.",
+    "Kërko sipas titullit, autoritetit kontraktues ose furnizuesit",
+    placeholder="P.sh. pajisje mjekësore ose emri i një komune",
+    help="Mund të kërkoni edhe me identifikuesin OCID, numrin e tenderit ose identifikuesin e furnizuesit.",
 ).strip()
 
 if q:
@@ -70,13 +72,13 @@ else:
     result = filtered.copy()
 
 SORT_LABELS = {
-    "Më të rinjtë": ("release_date", False),
-    "Më të vjetrit": ("release_date", True),
-    "Vlera më e lartë": ("estimated_value_eur", False),
-    "Vlera më e ulët": ("estimated_value_eur", True),
-    "Më shumë pikë nga sinjalet": ("rule_score", False),
-    "Pikët e kombinuara, nga më të lartat": ("ensemble_score", False),
-    "Isolation Forest, nga më të lartat": ("iso_score", False),
+    "Publikimet më të reja": ("release_date", False),
+    "Publikimet më të vjetra": ("release_date", True),
+    "Vlera e parashikuar: nga më e larta": ("estimated_value_eur", False),
+    "Vlera e parashikuar: nga më e ulëta": ("estimated_value_eur", True),
+    "Pikët sipas rregullave: nga më të lartat": ("rule_score", False),
+    "Pikët e kombinuara: nga më të lartat": ("ensemble_score", False),
+    "Isolation Forest: nga pikët më të larta": ("iso_score", False),
 }
 sort_by = st.selectbox("Rendit rezultatet", list(SORT_LABELS))
 sort_col, ascending = SORT_LABELS[sort_by]
@@ -89,10 +91,10 @@ c3.metric("Autoritete kontraktuese", fmt_number(result["procuring_entity_id"].nu
 
 if result.empty:
     st.info(
-        "Nuk u gjet asnjë tender. Provoni një fjalë më të shkurtër ose zgjeroni filtrat në anën e majtë."
+        "Nuk u gjet asnjë tender. Provoni një term tjetër kërkimi ose hiqni disa nga filtrat në menynë anësore."
     )
 else:
-    technical_columns = st.checkbox("Shfaq edhe identifikuesit dhe pikët teknike", value=False)
+    technical_columns = st.checkbox("Shfaq identifikuesit dhe hollësitë e pikëzimit", value=False)
     display_cols = [
         "title",
         "procuring_entity_name",
@@ -123,23 +125,25 @@ else:
             "release_date": st.column_config.DateColumn("Data e publikimit", format="DD.MM.YYYY"),
             "procuring_entity_name": st.column_config.TextColumn("Autoriteti kontraktues"),
             "category": st.column_config.TextColumn("Kategoria"),
-            "method": st.column_config.TextColumn("Metoda në burim"),
+            "method": st.column_config.TextColumn("Metoda e prokurimit"),
             "estimated_value_eur": st.column_config.NumberColumn(
                 "Vlera e parashikuar (€)",
                 format="localized",
                 help=METRIC_HELP["estimated_value_eur"],
             ),
             "total_awarded_eur": st.column_config.NumberColumn(
-                "Vendimet e dhënies (€)", format="localized", help=METRIC_HELP["total_awarded_eur"]
+                "Vlera sipas vendimeve (€)",
+                format="localized",
+                help=METRIC_HELP["total_awarded_eur"],
             ),
             "num_bidders": st.column_config.NumberColumn(
-                "Ofertues", help=METRIC_HELP["num_bidders"]
+                "Numri i ofertuesve", help=METRIC_HELP["num_bidders"]
             ),
             "n_awards": st.column_config.NumberColumn(
-                "Vendime / rreshta dhënieje", help=METRIC_HELP["n_awards"]
+                "Rreshta të vendimeve", help=METRIC_HELP["n_awards"]
             ),
             "rule_score": st.column_config.ProgressColumn(
-                "Pikët e rregullave", min_value=0.0, max_value=1.0, format="%.2f"
+                "Pikët sipas rregullave", min_value=0.0, max_value=1.0, format="%.2f"
             ),
             "iso_score": st.column_config.ProgressColumn(
                 "Isolation Forest", min_value=0.0, max_value=1.0, format="%.2f"
@@ -154,15 +158,15 @@ else:
         },
     )
     st.caption(
-        "— tregon vlerë të munguar ose mungesë vendimi të regjistruar. Nuk do të thotë zero. Vlerat e vendimeve nuk dëshmojnë pagesa të kryera."
+        "Shenja — tregon se vlera mungon ose se nuk është regjistruar vendim për dhënien e kontratës. Nuk nënkupton zero. Vlerat sipas vendimeve nuk dëshmojnë se janë kryer pagesa."
     )
     if len(result) > 500:
         st.caption(
-            f"Tabela shfaq 500 nga {fmt_number(len(result))} rezultate. Përdorni kërkimin ose filtrat për ta ngushtuar listën."
+            f"Tabela shfaq 500 nga {fmt_number(len(result))} rezultate. Përdorni kërkimin ose filtrat për të përzgjedhur më pak rezultate."
         )
 
 st.divider()
-st.subheader("Shqyrto një tender")
+st.subheader("Shqyrtimi i një tenderi")
 lookup = gold.set_index("ocid")
 
 
@@ -178,15 +182,19 @@ selected = st.selectbox(
     disabled=result.empty,
     placeholder="Nuk ka rezultate" if result.empty else "Zgjidh një tender",
 )
-with st.expander("Gjej drejtpërdrejt me identifikuesin OCID"):
+with st.expander("Kërko drejtpërdrejt me OCID"):
     manual = st.text_input("Identifikuesi OCID", placeholder="ocds-…").strip()
-    st.caption("Ky kërkim kontrollon të gjithë grupin e të dhënave, pavarësisht filtrave.")
+    st.caption(
+        "Kërkimi me OCID kryhet në tërë bashkësinë e të dhënave, pavarësisht filtrave të zgjedhur."
+    )
 ocid = manual or selected
 
 if ocid:
     rec = gold[gold["ocid"] == ocid]
     if rec.empty:
-        st.warning("Ky identifikues OCID nuk u gjet. Kontrolloni nëse e keni kopjuar të plotë.")
+        st.warning(
+            "Nuk u gjet tender me këtë identifikues OCID. Kontrolloni nëse e keni kopjuar saktë dhe të plotë."
+        )
     else:
         r = rec.iloc[0]
         rd = r.to_dict()
@@ -201,7 +209,7 @@ if ocid:
             help=METRIC_HELP["estimated_value_eur"],
         )
         c2.metric(
-            "Vendimet e dhënies",
+            "Vlera sipas vendimeve",
             fmt_eur(r["total_awarded_eur"]) if _has_recorded_award(r) else "—",
             help=METRIC_HELP["total_awarded_eur"],
         )
@@ -216,10 +224,10 @@ if ocid:
             if pd.notna(days) and days < 0
             else (f"{fmt_number(days)} ditë" if pd.notna(days) else "—")
         )
-        c4.metric("Periudha për oferta", duration, help=METRIC_HELP["days_tender_open"])
+        c4.metric("Afati për ofertim", duration, help=METRIC_HELP["days_tender_open"])
         if pd.notna(days) and days < 0:
             st.caption(
-                f"Datat në burim nuk përputhen: afati për oferta është {fmt_number(abs(days))} ditë para datës së fillimit. Periudha kërkon verifikim."
+                f"Datat e regjistruara nuk përputhen: afati i fundit për ofertim është {fmt_number(abs(days))} ditë para datës së fillimit. Këto data duhen verifikuar."
             )
         st.caption(
             f"{category_label(r['category'])} · {procedure_label(r['procedure_subtype'])} · OCID: {ocid}"
@@ -233,13 +241,13 @@ if ocid:
                 st.caption(_flag_kind(flag["code"]))
         else:
             st.info(
-                "Nuk është aktivizuar asnjë sinjal nga rregullat. Kjo nuk vërteton mungesën e parregullsive."
+                "Asnjë nga rregullat nuk ka sinjalizuar këtë tender. Kjo nuk vërteton se nuk ka parregullsi."
             )
 
-        st.markdown("#### Furnizuesit në vendimet e dhënies")
+        st.markdown("#### Furnizuesit sipas vendimeve")
         a = awards[awards["ocid"] == ocid].copy()
         if a.empty:
-            st.info("Nuk ka vendim dhënieje të regjistruar për këtë tender.")
+            st.info("Për këtë tender nuk është regjistruar vendim për dhënien e kontratës.")
         else:
             names = a["supplier_name"].fillna("").astype(str).str.strip()
             legal = a["supplier_legal_name"].fillna("").astype(str).str.strip()
@@ -271,27 +279,27 @@ if ocid:
                 },
             )
             st.caption(
-                "Furnizuesi është operatori ekonomik ose grupi i operatorëve i shënuar në burim. Një vendim nuk dëshmon kontratë të nënshkruar, të ekzekutuar ose të paguar."
+                "Furnizuesi është operatori ekonomik ose grupi i operatorëve i regjistruar në burim. Vendimi për dhënien e kontratës nuk dëshmon se ajo është nënshkruar apo zbatuar, ose se janë kryer pagesa."
             )
 
-        with st.expander("Krahasimi i vlerave dhe pikët teknike"):
-            st.write(f"Dallimi ndërmjet datave në burim: {fmt_number(days)} ditë.")
+        with st.expander("Krahasimi i vlerave dhe pikëzimi"):
+            st.write(f"Diferenca ndërmjet datave të regjistruara: {fmt_number(days)} ditë.")
             ratio = r["awarded_value_ratio"]
             st.metric(
-                "Vendimet kundrejt parashikimit",
+                "Vlera sipas vendimeve / vlera e parashikuar",
                 f"{fmt_number(ratio * 100, 1)}%" if pd.notna(ratio) else "—",
                 help=METRIC_HELP["awarded_value_ratio"],
             )
             st.caption(METRIC_HELP["awarded_value_ratio"])
             c1, c2, c3 = st.columns(3)
             for column, key, label in (
-                (c1, "rule_score", "Pikët e rregullave"),
+                (c1, "rule_score", "Pikët sipas rregullave"),
                 (c2, "iso_score", "Isolation Forest"),
                 (c3, "ensemble_score", "Pikët e kombinuara"),
             ):
                 column.metric(label, fmt_number(r[key], 2))
             st.caption(METRIC_HELP["ensemble_score"])
-            st.write(f"Numri i tenderit në burim: {r['tender_id']}")
+            st.write(f"Numri i tenderit në të dhënat burimore: {r['tender_id']}")
             if st.button("Shpjego pikët e këtij tenderi →", use_container_width=True):
                 st.session_state["review_ocid"] = str(ocid)
                 st.switch_page(Path(__file__).with_name("3_Anomalies.py"))

@@ -25,7 +25,7 @@ st.set_page_config(
 )
 page_header(
     "🏁 Krahasimi i modeleve",
-    "Cilat modele u përzgjodhën, sa përsëriten rezultatet e tyre dhe çfarë mat ky krahasim.",
+    "Modelet e përzgjedhura, qëndrueshmëria e rezultateve dhe kuptimi i matjeve të krahasimit.",
 )
 
 
@@ -46,7 +46,7 @@ else:
 
 if lb.empty:
     st.info("Rezultatet e krahasimit të modeleve nuk janë të disponueshme.")
-    with st.expander("Udhëzim për mirëmbajtësin"):
+    with st.expander("Udhëzime për mirëmbajtjen"):
         st.code("thesis pipeline benchmark", language="bash")
         st.caption(
             "Ekzekutimi i plotë mund të zgjasë. Prova --quick nuk zëvendëson rezultatet e plota."
@@ -87,14 +87,16 @@ tab_selection, tab_supervised, tab_details = st.tabs(
 )
 
 with tab_selection:
-    st.subheader("Cili konfigurim doli më lart për secilën familje?")
+    st.subheader("Cili konfigurim u rendit i pari në secilën familje modelesh?")
     st.caption(
-        "Shfaqet konfigurimi me pikët më të larta në secilën familje. Pikët bashkojnë "
+        "Shfaqet konfigurimi me pikët më të larta në secilën familje modelesh. Pikët përmbledhin "
         "tri matje të brendshme; shiriti më i gjatë nuk do të thotë më shumë "
         "shkelje të zbuluara."
     )
     if unsup.empty:
-        st.info("Nuk ka rezultate për modelet që kërkojnë raste të pazakonta.")
+        st.info(
+            "Nuk ka rezultate për modelet e mësimit të pambikëqyrur, që identifikojnë raste të pazakonta."
+        )
     else:
         # Keep an actual configuration row; groupby.first() could mix metrics
         # across rows when the best configuration has a missing measurement.
@@ -102,7 +104,9 @@ with tab_selection:
             unsup.sort_values("composite", ascending=False).drop_duplicates("family").copy()
         )
         best_per_family["Përzgjedhja"] = best_per_family["family"].map(
-            lambda family: "Përdoret në kombinim" if family in selected_families else "U krahasua"
+            lambda family: (
+                "Përdoret në kombinim" if family in selected_families else "Vetëm për krahasim"
+            )
         )
         fig = px.bar(
             best_per_family.sort_values("composite"),
@@ -112,7 +116,7 @@ with tab_selection:
             color="Përzgjedhja",
             color_discrete_map={
                 "Përdoret në kombinim": PALETTE["primary"],
-                "U krahasua": PALETTE["neutral"],
+                "Vetëm për krahasim": PALETTE["neutral"],
             },
             text_auto=".3f",
             labels={"composite": "Pikët e krahasimit (0–1)", "family_label_sq": "Modeli"},
@@ -129,10 +133,10 @@ with tab_selection:
         fig.update_layout(separators=", ")
         st.plotly_chart(fig, use_container_width=True)
         st.caption(
-            "Pikët = 45% përputhje me etiketat e rregullave (AUC) + "
+            "Pikët = 45% përputhje me etiketat sipas rregullave (AUC) + "
             "35% ngjashmëri e përzgjedhjeve pas ritrajnimit (Jaccard) + "
-            "20% qëndrueshmëri ndaj nisjeve të ndryshme të rastësishme. "
-            "Peshat janë zgjedhje të autorit."
+            "20% qëndrueshmëri kur ndryshon rastësia gjatë trajnimit. "
+            "Peshat janë përcaktuar nga autori."
         )
         st.subheader("Si krahasohen tri matjet kryesore?")
         compact = best_per_family.sort_values("composite", ascending=False)[
@@ -157,7 +161,7 @@ with tab_selection:
                 "composite": "Pikët e krahasimit",
                 "proxy_auc_07": "Përputhja me rregullat (AUC)",
                 "stability_jaccard": "Qëndrueshmëria (Jaccard)",
-                "seed_consistency": "Nisje të ndryshme",
+                "seed_consistency": "Qëndrueshmëria ndaj rastësisë",
             },
         )
         st.caption(
@@ -202,9 +206,9 @@ with tab_selection:
                     "composite": "Pikët e krahasimit",
                     "proxy_auc_07": "AUC ndaj rregullave ≥0,7",
                     "proxy_auc_04": "AUC ndaj rregullave ≥0,4",
-                    "precision_at_k": f"Përputhja në {precision_k} të parët",
+                    "precision_at_k": f"Përputhja në {precision_k} vendet e para",
                     "stability_jaccard": "Jaccard",
-                    "seed_consistency": "Nisje të ndryshme",
+                    "seed_consistency": "Qëndrueshmëria ndaj rastësisë",
                     "spearman_rule": "Spearman ndaj rregullave",
                     "fit_seconds": "Koha (sekonda)",
                     "n_fits": "Trajnime",
@@ -251,13 +255,13 @@ with tab_supervised:
     st.subheader("Sa mirë i riprodhojnë klasifikuesit rregullat?")
     st.markdown(
         f"Modelet trajnohen me tenderët deri në vitin **{train_end}** dhe testohen "
-        f"me tenderët nga **{test_start}** e tutje. Në të dyja grupet, përgjigjja "
-        "e krahasimit vjen nga vetë rregullat. Meqë modelet dhe rregullat përdorin "
+        f"me tenderët nga **{test_start}** e tutje. Në të dyja bashkësitë, etiketat "
+        "për krahasim përcaktohen nga vetë rregullat. Meqë modelet dhe rregullat përdorin "
         "informacion të ngjashëm, rezultate shumë të larta janë të pritshme."
     )
     st.caption(
-        "Ky kontroll kohor nuk simulon përdorim në kohë reale dhe nuk provon "
-        "zbulim shkeljesh ose përgjithësim në të dhëna të reja."
+        "Ky vlerësim me ndarje kohore nuk simulon përdorimin në kohë reale dhe nuk vërteton "
+        "aftësinë për të zbuluar shkelje ose për të përgjithësuar rezultatet në të dhëna të reja."
     )
     if sup.empty:
         st.info("Nuk ka rezultate për klasifikuesit.")
@@ -269,10 +273,10 @@ with tab_supervised:
             "oot_rocauc": f"ROC-AUC nga {test_start}",
             "oot_prauc": f"PR-AUC nga {test_start}",
             "oot_ece": f"Gabimi i kalibrimit (ECE) nga {test_start}",
-            "cv_rocauc_mean": "ROC-AUC në validimin e kryqëzuar",
-            "cv_rocauc_std": "Devijimi standard i ROC-AUC (validim i kryqëzuar)",
-            "cv_prauc_mean": "PR-AUC në validimin e kryqëzuar",
-            "cv_brier_mean": "Treguesi Brier në validimin e kryqëzuar",
+            "cv_rocauc_mean": "ROC-AUC në vlerësimin e kryqëzuar",
+            "cv_rocauc_std": "Devijimi standard i ROC-AUC (vlerësim i kryqëzuar)",
+            "cv_prauc_mean": "PR-AUC në vlerësimin e kryqëzuar",
+            "cv_brier_mean": "Treguesi Brier në vlerësimin e kryqëzuar",
             "fit_seconds": "Koha (sekonda)",
             "n_fits": "Trajnime",
         }
@@ -299,14 +303,14 @@ with tab_supervised:
             column_config={column: supervised_labels[column] for column in supervised_columns},
         )
         st.caption(
-            "Çdo rresht është një konfigurim. Vlera që mungon do të thotë se matja nuk është kryer."
+            "Çdo rresht paraqet një konfigurim. Mungesa e vlerës tregon se matja nuk është kryer."
         )
         # Missing future-period evaluations must never be replaced by CV
         # and then relabelled as held-out evidence.
         temporal = sup.dropna(subset=["cv_rocauc_mean", "oot_rocauc"])
         if not temporal.empty:
-            with st.expander("Krahaso ndarjen kohore me validimin e kryqëzuar"):
-                st.caption("Të dy boshtet matin përputhjen me etiketat e rregullave.")
+            with st.expander("Krahaso ndarjen kohore me vlerësimin e kryqëzuar"):
+                st.caption("Të dy boshtet matin përputhjen me etiketat sipas rregullave.")
                 fig = px.scatter(
                     temporal,
                     x="cv_rocauc_mean",
@@ -314,7 +318,7 @@ with tab_supervised:
                     color="family_label_sq",
                     hover_data=["params"],
                     labels={
-                        "cv_rocauc_mean": "ROC-AUC në validimin e kryqëzuar",
+                        "cv_rocauc_mean": "ROC-AUC në vlerësimin e kryqëzuar",
                         "oot_rocauc": f"ROC-AUC në tenderët nga {test_start}",
                         "family_label_sq": "Modeli",
                         "params": "Parametrat",
@@ -347,16 +351,17 @@ with tab_supervised:
 with tab_details:
     st.subheader("Si u bë përzgjedhja?")
     st.markdown(
-        "Për secilën familje provohen disa konfigurime. Përzgjidhet konfigurimi me "
-        "pikët më të larta dhe më pas familjet që hyjnë në kombinim. "
-        "Përzgjedhja bazohet në krahasime brenda grupit të analizuar. "
-        "Pikët dhe percentilet mbeten relative ndaj këtij grupi."
+        "Për secilën familje modelesh provohen disa konfigurime. Fillimisht përzgjidhet konfigurimi me "
+        "pikët më të larta për çdo familje, pastaj familjet që do të përdoren në kombinim. "
+        "Përzgjedhja bazohet në krahasime brenda bashkësisë së analizuar. "
+        "Pikët dhe percentilet kanë kuptim vetëm në raport me këtë bashkësi të dhënash."
     )
     st.markdown(
         f"Kontrolli i qëndrueshmërisë përdor **{election_settings.get('benchmark_bootstrap_runs', '—')} "
-        "ritrajnime me mostra të përsëritura**. Për familjet që varen nga rastësia "
-        f"përdoren **{election_settings.get('benchmark_extra_seeds', '—')} nisje shtesë**. "
-        "Ky numër i kufizuar përsëritjesh nuk jep intervale të pasigurisë."
+        "ritrajnime me mostra të nxjerra sërish nga të dhënat**. Për modelet që varen nga rastësia "
+        f"kryhen **{election_settings.get('benchmark_extra_seeds', '—')} përsëritje shtesë**, "
+        "me vlera fillestare të ndryshme të gjeneratorit të numrave të rastësishëm. "
+        "Ky numër i kufizuar përsëritjesh nuk jep intervale që matin pasigurinë."
     )
     with st.expander("Konfigurimet e përzgjedhura"):
         rows = [
@@ -390,8 +395,8 @@ with tab_details:
             st.json(selected)
         if champions.get("explainer"):
             st.markdown(
-                "**Modeli shpjegues SHAP** riprodhon etiketat e rregullave. "
-                "Ai nuk shpjegon pikët e kombinuara dhe nuk është detektor i pavarur."
+                "**Modeli shpjegues SHAP** riprodhon etiketat sipas rregullave. "
+                "Ai nuk shpjegon pikët e kombinuara dhe nuk është model i pavarur për zbulimin e anomalive."
             )
             st.json(champions["explainer"])
 
@@ -419,7 +424,7 @@ with tab_details:
         if precision:
             sensitivity_rows.append(
                 {
-                    "Skenari": f"Vetëm përputhja në {precision_k} të parët",
+                    "Skenari": f"Vetëm përputhja në {precision_k} vendet e para",
                     "Modelet e përzgjedhura": ", ".join(
                         FAMILY_LABELS_SQ.get(family, family)
                         for family in precision.get("ensemble_families", [])
@@ -438,7 +443,7 @@ with tab_details:
                 use_container_width=True,
             )
             st.caption(
-                "Jaccard 1 do të thotë se u zgjodhën të njëjtat familje. "
+                "Vlera 1 e treguesit Jaccard do të thotë se u zgjodhën të njëjtat familje modelesh. "
                 "Ky është kontroll i ndikimit të peshave; nuk mat saktësinë e modeleve."
             )
         else:
@@ -449,7 +454,7 @@ with tab_details:
         st.markdown(
             "Tabelat, konfigurimet e përzgjedhura dhe skedarët e modeleve lidhen "
             "me të njëjtin version të të dhënave dhe të kodit. Kontrolli i integritetit "
-            "kryhet përpara ngarkimit, që rezultate nga ekzekutime të ndryshme të mos "
+            "kryhet përpara ngarkimit, në mënyrë që rezultatet nga ekzekutime të ndryshme të mos "
             "përzihen. Ky kontroll teknik nuk zëvendëson verifikimin e përfundimeve."
         )
         st.code(champions.get("composite_formula", ""), language="text")

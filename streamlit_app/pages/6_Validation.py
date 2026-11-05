@@ -18,17 +18,17 @@ from _charts import fmt_columns, fmt_number
 from thesis.viz import PALETTE
 
 st.set_page_config(
-    page_title="Kontrollet e modeleve · Prokurimi në Kosovë", page_icon="🧪", layout="wide"
+    page_title="Vlerësimi i modeleve · Prokurimi në Kosovë", page_icon="🧪", layout="wide"
 )
 page_header(
-    "🧪 Kontrollet e modeleve",
-    "Kontrolle të modeleve: përsëritshmëria, ngjashmëria e renditjeve dhe lidhja me rregullat.",
+    "🧪 Vlerësimi i modeleve",
+    "Përsëritshmëria e rezultateve, ngjashmëria e renditjeve dhe përputhja me rregullat.",
 )
 
 report = cached_validation_report()
 if not report:
-    st.info("Raporti i kontrolleve të modeleve nuk është i disponueshëm.")
-    with st.expander("Udhëzim për mirëmbajtësin"):
+    st.info("Raporti i vlerësimit të modeleve nuk është i disponueshëm.")
+    with st.expander("Udhëzime për mirëmbajtjen"):
         st.code("thesis pipeline run --only ml --force", language="bash")
     st.stop()
 
@@ -72,21 +72,21 @@ st.warning(
 c1, c2, c3 = st.columns(3)
 c1.metric("Tenderë të vlerësuar", fmt_number(report.get("n_records")))
 c2.metric(
-    "Veçori hyrëse të modeleve",
+    "Veçoritë hyrëse të modeleve",
     str(report.get("n_features", "—")),
-    help="Variablat numerike që marrin modelet statistikore për çdo tender. "
+    help="Variablat numerike që modelet statistikore përdorin për çdo tender. "
     "Nuk janë të njëjtat me treguesit e rregullave të paraqitur te Sinjalet për shqyrtim.",
 )
-c3.metric("Modele në kombinim", str(len(report.get("ensemble_models", []))))
+c3.metric("Modele të kombinuara", str(len(report.get("ensemble_models", []))))
 
 tab_agreement, tab_stability, tab_details = st.tabs(
-    ["Rregullat dhe modelet", "Qëndrueshmëria e rezultateve", "Kontrolle teknike"]
+    ["Rregullat dhe modelet", "Qëndrueshmëria e rezultateve", "Vlerësime teknike"]
 )
 
 with tab_agreement:
-    st.subheader("A veçojnë rregullat dhe modelet të njëjtët tenderë?")
+    st.subheader("A përzgjedhin rregullat dhe modelet të njëjtët tenderë?")
     st.caption(
-        "Tabela krahason sinjalizimin sipas pikëve të rregullave me pikët e kombinuara. "
+        "Tabela krahason tenderët e përzgjedhur sipas rregullave me ata të përzgjedhur sipas pikëve të kombinuara. "
         "Rregullat janë edhe pjesë e kombinimit, ndaj ky krahasim nuk është verifikim i pavarur."
     )
     confusion = baseline.get("confusion") or {}
@@ -129,9 +129,9 @@ with tab_agreement:
         fig.update_xaxes(tickformat=",~f")
         st.plotly_chart(fig, use_container_width=True)
         st.caption(
-            f"Pragu i pikëve të rregullave: {fmt_number(baseline.get('rule_flag_threshold'), 1)} · "
+            f"Pragu i pikëve sipas rregullave: {fmt_number(baseline.get('rule_flag_threshold'), 1)} · "
             f"Pragu i pikëve të kombinuara: {fmt_number(baseline.get('ensemble_flag_threshold'), 1)}. "
-            "Këto pragje janë zgjedhje të analizës, jo kufij ligjorë."
+            "Këto pragje janë përcaktuar për analizën; nuk janë kufij ligjorë."
         )
         ensemble_only_share = baseline.get("pct_ensemble_that_is_ml_only")
         if isinstance(ensemble_only_share, (int, float)):
@@ -144,7 +144,7 @@ with tab_agreement:
             )
             nested = (
                 " Të gjithë tenderët e sinjalizuar nga rregullat janë edhe mbi pragun e pikëve "
-                "të kombinuara; grupet nuk kundërshtojnë njëri-tjetrin, por ndryshojnë shumë në madhësi."
+                "të kombinuara. Pra, njëri grup përfshihet brenda tjetrit, por numri i tenderëve ndryshon ndjeshëm."
                 if confusion.get("rule_only_demoted_by_ensemble", 0) == 0
                 else ""
             )
@@ -162,7 +162,7 @@ with tab_agreement:
     st.subheader("Çfarë duhet për verifikim të mëtejshëm?")
     st.markdown(
         "Një shqyrtues duhet të lexojë dokumentet e një mostre tenderësh, duke përfshirë "
-        "edhe raste pa sinjale. Përfundimet e këtij shqyrtimi duhen mbajtur veç "
+        "edhe raste pa sinjale. Përfundimet e këtij shqyrtimi duhen mbajtur të ndara "
         "nga rregullat që prodhuan sinjalet. Një rast i pashqyrtuar nuk llogaritet "
         "si rast pa shkelje."
     )
@@ -177,7 +177,7 @@ with tab_agreement:
 with tab_stability:
     st.subheader("A përzgjidhen të njëjtët tenderë kur analiza përsëritet?")
     st.caption(
-        "Modelet trajnohen sërish në mostra të të dhënave. Matësi Jaccard krahason "
+        "Modelet trajnohen sërish me mostra të të dhënave. Treguesi Jaccard krahason "
         "grupet e tenderëve të përzgjedhur: 0 = asnjë tender i përbashkët; "
         "1 = grupe të njëjta. Qëndrueshmëria nuk tregon nëse sinjalet janë të sakta."
     )
@@ -185,9 +185,9 @@ with tab_stability:
         {
             "Modeli": family_labels.get(family, family),
             "Ngjashmëria e grupeve (Jaccard)": values.get("mean_jaccard"),
-            "Pjesa e përbashkët në krye": values.get("mean_top_overlap"),
+            "Përputhja në krye të renditjes": values.get("mean_top_overlap"),
             "Përsëritje": values.get("runs"),
-            "Pjesa e mostrës": values.get("sample_frac"),
+            "Pjesa e të dhënave në mostër": values.get("sample_frac"),
             "Pragu i percentilit": values.get("flag_quantile", values.get("threshold")),
         }
         for family, values in stability_by_family.items()
@@ -215,8 +215,8 @@ with tab_stability:
             fig.update_layout(separators=", ")
             st.plotly_chart(fig, use_container_width=True)
         st.caption(
-            "Ky është kontroll me pak përsëritje në të njëjtin grup të të dhënave. "
-            "Nuk jep intervale të pasigurisë dhe nuk vërteton rezultatet në të dhëna të reja."
+            "Ky vlerësim mbështetet në një numër të kufizuar përsëritjesh brenda së njëjtës bashkësi të dhënash. "
+            "Nuk jep intervale që matin pasigurinë dhe nuk vërteton rezultatet në të dhëna të reja."
         )
         with st.expander("Parametrat dhe matjet e përsëritjeve"):
             st.dataframe(
@@ -224,9 +224,9 @@ with tab_stability:
                     stability_frame,
                     {
                         "Ngjashmëria e grupeve (Jaccard)": 3,
-                        "Pjesa e përbashkët në krye": 3,
+                        "Përputhja në krye të renditjes": 3,
                         "Përsëritje": 0,
-                        "Pjesa e mostrës": 2,
+                        "Pjesa e të dhënave në mostër": 2,
                         "Pragu i percentilit": 2,
                     },
                 ),
@@ -239,8 +239,8 @@ with tab_stability:
     if quantiles:
         st.subheader("Sa tenderë përzgjidhen kur ndryshon pragu?")
         st.caption(
-            "Një prag më i lartë e ngushton listën për shqyrtim. Përzgjedhja kërkon "
-            "pajtim mes modeleve sipas të njëjtit rregull; ndryshon vetëm pragu i renditjes."
+            "Një prag më i lartë e shkurton listën për shqyrtim. Kushti për përputhjen "
+            "ndërmjet modeleve mbetet i njëjtë; ndryshon vetëm pragu i renditjes."
         )
         sensitivity_rows = [
             {
@@ -261,26 +261,26 @@ with tab_stability:
         )
         st.caption(
             "Pjesa e tenderëve shprehet nga 0 në 1; 0,05 do të thotë 5%. "
-            "Pragu 95% përzgjedh kryesisht 5% e tenderëve në krye të renditjes së secilit model."
+            "Pragu 95% veçon afërsisht 5% të tenderëve me renditjen më të lartë në secilin model."
         )
 
 with tab_details:
     st.caption(
-        "Këto matje ndihmojnë shqyrtimin akademik. Një etiketë e rregullave është "
-        "një rezultat i llogaritur nga vetë sistemi, jo një shkelje e verifikuar."
+        "Këto matje ndihmojnë shqyrtimin akademik. Një etiketë sipas rregullave është "
+        "një rezultat i llogaritur nga vetë sistemi, jo dëshmi e një shkeljeje të verifikuar."
     )
-    with st.expander("Sa mirë i riprodhon klasifikuesi etiketat e rregullave?"):
+    with st.expander("Sa mirë i riprodhon klasifikuesi etiketat sipas rregullave?"):
         st.markdown(
-            "Validimi i kryqëzuar e ndan grupin në pjesë për trajnim dhe testim. "
-            "ROC-AUC dhe PR-AUC krahasohen me etiketat e rregullave. Vlerat e larta "
+            "Gjatë vlerësimit të kryqëzuar, të dhënat ndahen në pjesë për trajnim dhe testim. "
+            "ROC-AUC dhe PR-AUC krahasohen me etiketat sipas rregullave. Vlerat e larta "
             "tregojnë se klasifikuesi riprodhon rregullat; nuk matin zbulimin e mashtrimit. "
             "Ky klasifikues përdoret për shpjegimin SHAP të rregullave."
         )
         st.caption(
-            f"Pragu i etiketës së rregullave: {_metric_text(report.get('rule_label_threshold'), 1)}"
+            f"Pragu i etiketës sipas rregullave: {_metric_text(report.get('rule_label_threshold'), 1)}"
         )
         if cv.get("rocauc_mean") is None:
-            st.info("Validimi i kryqëzuar nuk është i disponueshëm.")
+            st.info("Vlerësimi i kryqëzuar nuk është i disponueshëm.")
         else:
             c1, c2, c3 = st.columns(3)
             c1.metric("ROC-AUC mesatare", _metric_text(cv.get("rocauc_mean"), 4))
@@ -305,7 +305,7 @@ with tab_details:
                 barmode="group",
                 height=300,
                 xaxis_title="Ndarja për testim",
-                yaxis_title="Matja kundrejt etiketave të rregullave",
+                yaxis_title="Matja kundrejt etiketave sipas rregullave",
                 yaxis_range=[0, 1],
                 legend={"orientation": "h", "y": 1.15},
                 margin={"l": 10, "r": 15, "t": 40, "b": 15},
@@ -320,7 +320,7 @@ with tab_details:
     with st.expander("Sa ngjajnë renditjet e modeleve me njëra-tjetrën?"):
         st.markdown(
             "Korrelacioni Spearman është 1 për renditje të njëjta dhe −1 për renditje "
-            "të kundërta. Vlera pranë 0 tregon pak lidhje mes renditjeve. "
+            "të kundërta. Vlera afër zeros tregon lidhje të dobët ndërmjet renditjeve. "
             "Dallimet nuk provojnë se kombinimi i modeleve është më i saktë."
         )
         if agree.get("spearman_matrix"):
@@ -345,16 +345,16 @@ with tab_details:
         else:
             st.info("Matrica e ngjashmërisë nuk është e disponueshme.")
 
-    with st.expander("Sa ndryshojnë rezultatet kur hiqen disa tregues?"):
+    with st.expander("Sa ndryshojnë rezultatet kur hiqen disa veçori hyrëse?"):
         st.markdown(
-            "Modelet ritrajnohen me më pak tregues dhe krahasohen renditjet. "
-            "Krahasimi i fushave para rezultatit të procedurës përdor sërish të njëjtin "
-            "grup historik; nuk provon se modeli do të funksionojë në të ardhmen."
+            "Modelet ritrajnohen me më pak veçori hyrëse dhe renditjet e tyre krahasohen. "
+            "Edhe vlerësimi vetëm me fushat që i paraprijnë rezultatit të procedurës përdor të njëjtën "
+            "bashkësi historike; ai nuk provon se modeli do të funksionojë në të ardhmen."
         )
         subsets = (report.get("deployed_score_feature_ablation") or {}).get("subsets") or {}
         subset_labels = {
             "raw_fact_only": "Vetëm treguesit bazë",
-            "pre_outcome_fields_snapshot": "Pa fushat e rezultatit të procedurës",
+            "pre_outcome_fields_snapshot": "Pa të dhënat për rezultatin e procedurës",
         }
         if not subsets:
             st.info("Ky kontroll nuk është i disponueshëm.")
@@ -392,10 +392,10 @@ with tab_details:
                 )
             st.caption("Treguesit teknikë: " + ", ".join(subset.get("features_used", [])))
 
-    with st.expander("Kalibrimi kundrejt etiketës së rregullave"):
+    with st.expander("Kalibrimi kundrejt etiketës sipas rregullave"):
         st.markdown(
-            "Vija krahason parashikimin e klasifikuesit me shpeshtësinë e etiketës së "
-            "rregullave. ECE afër zeros tregon përputhje me këtë etiketë. "
+            "Grafiku krahason parashikimin e klasifikuesit me shpeshtësinë e etiketave pozitive "
+            "sipas rregullave. Një vlerë e ECE-së afër zeros tregon përputhje me këto etiketa. "
             "As parashikimi dhe as ECE nuk janë probabilitet i një shkeljeje reale."
         )
         bins_df = pd.DataFrame(calib.get("bins") or [])
@@ -423,8 +423,8 @@ with tab_details:
             )
             fig.update_layout(
                 height=360,
-                xaxis_title="Parashikimi mesatar për etiketën e rregullave",
-                yaxis_title="Pjesa me etiketë pozitive të rregullave",
+                xaxis_title="Parashikimi mesatar për etiketën sipas rregullave",
+                yaxis_title="Shpeshtësia e etiketave pozitive sipas rregullave",
                 xaxis_range=[0, 1],
                 yaxis_range=[0, 1],
                 legend={"orientation": "h", "y": 1.15},

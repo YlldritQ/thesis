@@ -25,36 +25,36 @@ from _charts import (
 st.set_page_config(page_title="Përmbledhja · Prokurimi në Kosovë", page_icon="📊", layout="wide")
 page_header(
     "📊 Përmbledhja e prokurimit",
-    "Si ndryshojnë numri, vlera dhe konkurrenca në tenderët e përzgjedhur?",
+    "Si ndryshojnë numri dhe vlera e tenderëve të përzgjedhur dhe sa konkurrencë ka mes ofertuesve?",
 )
 
 gold = cached_gold()
 filtered = sidebar_filters(gold)
 st.caption(
-    f"PËRZGJEDHJA AKTUALE · {fmt_number(len(filtered))} nga {fmt_number(len(gold))} tenderë · Të gjithë grafikët më poshtë ndjekin filtrat."
+    f"REZULTATET E FILTRIMIT · {fmt_number(len(filtered))} nga {fmt_number(len(gold))} tenderë · Të gjithë grafikët më poshtë pasqyrojnë filtrat e zgjedhur."
 )
 if filtered.empty:
     st.info(
-        "Asnjë tender nuk përputhet me filtrat. Zgjidhni një periudhë më të gjerë ose përdorni «Pastro filtrat»."
+        "Asnjë tender nuk përputhet me filtrat e zgjedhur. Zgjidhni një periudhë më të gjerë ose përdorni «Hiq filtrat»."
     )
     st.stop()
 
 cols = st.columns(4)
-cols[0].metric("Tenderë të përzgjedhur", fmt_number(len(filtered)))
+cols[0].metric("Tenderë pas filtrimit", fmt_number(len(filtered)))
 cols[1].metric("Vlera e parashikuar", fmt_eur(filtered["estimated_value_eur"].sum(min_count=1)))
 cols[2].metric(
-    "Vlera e vendimeve të dhënies",
+    "Vlera sipas vendimeve",
     fmt_eur(filtered["total_awarded_eur"].sum(min_count=1)),
-    help="Shuma në vendimet e regjistruara për dhënie të kontratës; nuk është shumë e paguar.",
+    help="Shuma e vlerave të shënuara në vendimet për dhënien e kontratës. Nuk përfaqëson pagesa të kryera.",
 )
 cols[3].metric(
-    "Me vendim dhënieje",
+    "Me vendim për dhënien e kontratës",
     fmt_number(filtered["n_awards"].ge(1).sum()),
-    delta=f"{fmt_number(filtered['n_awards'].ge(1).mean() * 100, 1)}% e përzgjedhjes",
+    delta=f"{fmt_number(filtered['n_awards'].ge(1).mean() * 100, 1)}% e tenderëve të filtruar",
     delta_color="off",
 )
 st.caption(
-    "Vendimet e dhënies nuk dëshmojnë nënshkrimin apo pagesën e kontratave. Diferenca ndaj vlerës së parashikuar nuk mat kursimin."
+    "Vendimet për dhënien e kontratës nuk dëshmojnë se kontratat janë nënshkruar apo zbatuar, ose se janë kryer pagesa. Dallimi krahasuar me vlerën e parashikuar nuk tregon domosdoshmërisht kursim."
 )
 
 monthly = monthly_summary(filtered)
@@ -67,11 +67,13 @@ with activity:
     right.plotly_chart(time_series_value(monthly), use_container_width=True)
     unknown_dates = int(filtered["release_date"].isna().sum())
     st.caption(
-        f"Sipas datës së publikimit. Muajt pa të dhëna lihen bosh. {fmt_number(unknown_dates)} tenderë pa datë publikimi përfshihen në treguesit kryesorë, por jo në grafikët kohorë."
+        f"Grafikët bazohen në datën e publikimit; muajt pa të dhëna shfaqen bosh. {fmt_number(unknown_dates)} tenderë pa datë publikimi përfshihen në treguesit kryesorë, por jo në grafikët kohorë."
     )
     left, right = st.columns(2)
     left.plotly_chart(
-        category_bar(filtered, "estimated_value_eur", "Për cilat kategori parashihen fondet?"),
+        category_bar(
+            filtered, "estimated_value_eur", "Si ndahet vlera e parashikuar sipas kategorive?"
+        ),
         use_container_width=True,
     )
     right.plotly_chart(
@@ -79,7 +81,7 @@ with activity:
         use_container_width=True,
     )
     st.caption(
-        "Procedura përcaktohet nga kodi i prokurimit dhe përshkrimi në burim. Rastet pa klasifikim mbeten të dukshme si «E papërcaktuar»."
+        "Procedura përcaktohet sipas kodit të prokurimit dhe përshkrimit në burim. Tenderët pa klasifikim paraqiten me shënimin «E papërcaktuar»."
     )
 
 with competition:
@@ -94,7 +96,7 @@ with competition:
     cols[0].metric(
         "Me të dhëna për ofertuesit",
         fmt_number(observed_count),
-        delta=f"{fmt_number(coverage, 1)}% e përzgjedhjes",
+        delta=f"{fmt_number(coverage, 1)}% e tenderëve të filtruar",
         delta_color="off",
     )
     cols[1].metric(
@@ -118,7 +120,7 @@ with competition:
                 line={"color": PALETTE["secondary"]},
                 connectgaps=False,
                 customdata=monthly["observed_bidders"],
-                hovertemplate="%{x|%m/%Y}<br>%{y:.1f}% me një ofertues<br>Baza: %{customdata:,.0f} tenderë me të dhëna<extra></extra>",
+                hovertemplate="%{x|%m/%Y}<br>%{y:.1f}% me një ofertues<br>Llogaritur mbi %{customdata:,.0f} tenderë me të dhëna<extra></extra>",
             )
         )
         fig.update_layout(xaxis_title=None, yaxis_title="% e tenderëve me të dhëna për ofertuesit")
@@ -126,10 +128,10 @@ with competition:
         st.plotly_chart(style_chart(fig), use_container_width=True)
     else:
         st.info(
-            "Për këtë përzgjedhje mungojnë të dhënat e ofertuesve. Nuk mund të llogaritet pjesëmarrja."
+            "Për tenderët e filtruar mungojnë të dhënat për ofertuesit. Pjesëmarrja nuk mund të llogaritet."
         )
     st.caption(
-        "Përqindja përdor vetëm tenderët me të dhëna për ofertuesit. Mungesa e të dhënave nuk do të thotë se nuk pati oferta. Një ofertues është sinjal për shqyrtim, jo provë parregullsie."
+        "Përqindja llogaritet vetëm për tenderët me të dhëna për ofertuesit. Mungesa e këtyre të dhënave nuk do të thotë se nuk janë dorëzuar oferta. Pjesëmarrja e vetëm një ofertuesi është arsye për shqyrtim, por nuk provon parregullsi."
     )
     coverage_fig = go.Figure(
         go.Bar(
@@ -140,7 +142,7 @@ with competition:
         )
     )
     coverage_fig.update_layout(
-        title="Sa të plota janë të dhënat e ofertuesve?",
+        title="Sa të plota janë të dhënat për ofertuesit?",
         yaxis_title="% e të gjithë tenderëve të muajit",
     )
     coverage_fig.update_yaxes(range=[0, 100], ticksuffix="%")
@@ -149,19 +151,19 @@ with competition:
 with distribution:
     left, right = st.columns([2, 1])
     with left:
-        st.subheader("Çfarë vlerash kanë tenderët?")
+        st.subheader("Si shpërndahen vlerat e tenderëve?")
         st.plotly_chart(value_histogram(filtered["estimated_value_eur"]), use_container_width=True)
         missing_values = int(filtered["estimated_value_eur"].isna().sum())
         st.caption(
-            f"Intervale të vlerës së parashikuar, në euro. {fmt_number(missing_values)} tenderë pa vlerë të publikuar nuk përfshihen në këtë grafik."
+            f"Tenderët grupohen sipas intervaleve të vlerës së parashikuar, në euro. {fmt_number(missing_values)} tenderë pa vlerë të publikuar nuk përfshihen në grafik."
         )
     with right:
         median = filtered["estimated_value_eur"].median()
         p90 = filtered["estimated_value_eur"].quantile(0.9)
-        st.metric("Vlera e mesit (mediana)", fmt_eur(median))
-        st.caption("Gjysma e vlerave janë më të vogla ose të barabarta me këtë shumë.")
-        st.metric("90% e vlerave janë deri në", fmt_eur(p90))
-        st.caption("Vetëm 10% e vlerave e kalojnë këtë kufi.")
+        st.metric("Vlera mediane", fmt_eur(median))
+        st.caption("Të paktën gjysma e vlerave janë më të vogla ose të barabarta me këtë shumë.")
+        st.metric("Kufiri i 90% të vlerave", fmt_eur(p90))
+        st.caption("Rreth 90% e vlerave nuk e kalojnë këtë kufi.")
     st.plotly_chart(
         top_n_bar(
             filtered,
@@ -173,10 +175,10 @@ with distribution:
         use_container_width=True,
     )
     st.caption(
-        "Kjo renditje tregon vlerën e parashikuar në të dhënat e përzgjedhura; nuk mat performancën e institucioneve."
+        "Renditja bazohet në vlerën e parashikuar të tenderëve të filtruar; nuk mat performancën e institucioneve."
     )
 
-with st.expander("Shkarko të dhënat e kësaj përzgjedhjeje"):
+with st.expander("Shkarko të dhënat e filtruara"):
     export_columns = [
         "ocid",
         "title",
@@ -197,5 +199,5 @@ with st.expander("Shkarko të dhënat e kësaj përzgjedhjeje"):
         use_container_width=True,
     )
     st.caption(
-        "Eksporti përfshin të gjithë tenderët e përzgjedhur, përfshirë vlerat që mungojnë. Emrat teknikë të kolonave ruhen për ripërdorim në analizë."
+        "Skedari përfshin të gjithë tenderët e filtruar, edhe ata me vlera të munguara. Emrat teknikë të kolonave ruhen, që të dhënat të mund të përdoren në analiza të tjera."
     )

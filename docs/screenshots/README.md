@@ -1,12 +1,12 @@
 # Pamje të projektit për prezantim
 
-Pamjet janë marrë drejtpërdrejt nga paneli më **4 nëntor 2026**, me ndërfaqen
-në shqip dhe pa filtra të përzgjedhur. Ato përdorin kopjen statike të përfshirë
+Pamjet janë marrë drejtpërdrejt nga paneli më **5 nëntor 2026**, pas rishikimit
+gjuhësor, me ndërfaqen në shqip dhe pa filtra të përzgjedhur. Ato përdorin kopjen statike të përfshirë
 në depo: 75 710 procedura prokurimi, me data publikimi nga marsi 2016 deri në
 mars 2026. Nuk paraqesin të dhëna të përditësuara në kohë reale.
 
-Për emailin rekomandohen **02-grafiket.jpg** dhe **03-sinjalet.jpg**. Dy pamjet
-e tjera mund të përdoren si shtesë gjatë prezantimit.
+Këto katër pamje paraqesin projektin në përgjithësi. Për prezantimin e një
+rasti të veçantë, përdorni edhe pamjen e tenderit dhe shpjegimin e pikëve të tij.
 
 | Skedari | Çfarë paraqet | Përshkrim për figurën |
 |---|---|---|

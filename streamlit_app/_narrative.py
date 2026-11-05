@@ -15,33 +15,38 @@ from thesis.narrative import explain_flags as _source_flags
 METRIC_HELP = {
     **_SOURCE_HELP,
     "estimated_value_eur": "Vlera që autoriteti kontraktues ka parashikuar për tenderin. "
-    "Nuk është shpenzim i kryer.",
+    "Nuk përfaqëson shpenzim të realizuar.",
     "total_awarded_eur": "Shuma e vlerave në vendimet e regjistruara për dhënie të kontratës. "
-    "Një vendim dhënieje nuk dëshmon se kontrata është nënshkruar, ekzekutuar ose paguar. "
-    "Kur nuk ka vendim të regjistruar, shfaqet —.",
-    "awarded_value_ratio": "Vlera e vendimeve të dhënies pjesëtuar me vlerën e parashikuar. "
-    "100% do të thotë se dy vlerat janë të barabarta. Lote ose vendime të pjesshme "
-    "mund ta bëjnë krahasimin të paplotë; raporti nuk mat kursim ose tejkalim shpenzimesh.",
+    "Vendimi nuk dëshmon se kontrata është nënshkruar apo zbatuar, ose se janë kryer pagesa. "
+    "Nëse nuk ka vendim të regjistruar, shfaqet shenja —.",
+    "awarded_value_ratio": "Vlera sipas vendimeve, e pjesëtuar me vlerën e parashikuar. "
+    "Një raport prej 100% tregon se të dyja vlerat janë të barabarta. "
+    "Lotet ose vendimet e pjesshme mund ta bëjnë krahasimin të paplotë. "
+    "Ky raport nuk mat kursimin apo tejkalimin e shpenzimeve.",
     "num_bidders": "Numri i ofertuesve të regjistruar në burim. Një ofertues mund të jetë "
     "operator ekonomik ose grup operatorësh. Shenja — tregon se numri mungon, jo se është zero.",
-    "n_awards": "Numri i vendimeve ose rreshtave të dhënies të regjistruar për tenderin. "
+    "n_awards": "Numri i vendimeve për dhënien e kontratës ose i rreshtave përkatës të regjistruar për tenderin. "
     "Nuk është numri i kontratave të nënshkruara ose i pagesave.",
-    "winner_top_share": "Pjesa e vlerës së vendimeve të dhënies që lidhet me furnizuesin "
-    "kryesor. 100% do të thotë se e gjithë vlera e regjistruar lidhet me të njëjtin identitet.",
-    "days_tender_open": "Ditët ndërmjet fillimit dhe afatit për dorëzimin e ofertave, "
-    "sipas datave të publikuara. Kuptimi varet nga lloji i procedurës dhe korrigjimet e mundshme.",
+    "winner_top_share": "Pjesa e vlerës sipas vendimeve që i takon furnizuesit "
+    "kryesor. Një vlerë prej 100% tregon se e gjithë shuma lidhet me të njëjtin furnizues, "
+    "sipas identifikimit në burim.",
+    "days_tender_open": "Numri i ditëve nga fillimi deri në përfundimin e afatit për dorëzimin e ofertave, "
+    "sipas datave të publikuara. Interpretimi varet nga procedura dhe korrigjimet e mundshme.",
     "days_to_first_award": "Ditët nga afati për dorëzimin e ofertave deri te vendimi i parë "
-    "i dhënies. Vlerat negative kërkojnë verifikim të datave në dokumentet burimore.",
-    "ensemble_score": "Pikë nga 0 në 1 që kombinon rregullat dhe modelet statistikore. "
-    "Sa më e lartë, aq më lart renditet tenderi për shqyrtim në këtë grup të dhënash. "
-    "Nuk është probabilitet shkeljeje dhe nuk ndryshon kur përdorni filtrat e faqes.",
-    "rule_score": "Pikë nga 0 në 1, sipas sinjaleve për shqyrtim dhe peshave të zgjedhura "
-    "nga autori. Kontrollet e cilësisë së të dhënave nuk shtojnë pikë. Nuk mat probabilitet shkeljeje.",
+    "për dhënien e kontratës. Nëse vlera është negative, datat duhen verifikuar në dokumentet burimore.",
+    "ensemble_score": "Vlerë nga 0 në 1, e llogaritur nga renditjet e modeleve, rregullat "
+    "dhe krahasimi me tenderë të ngjashëm. Sa më e lartë të jetë, aq më lart renditet tenderi "
+    "për shqyrtim brenda kësaj bashkësie të dhënash. "
+    "Nuk tregon probabilitetin e shkeljes dhe nuk ndryshon kur përdorni filtrat e faqes.",
+    "rule_score": "Vlerë nga 0 në 1, e llogaritur nga sinjalet për shqyrtim "
+    "dhe peshat e caktuara nga autori. Kontrollet e cilësisë së të dhënave nuk shtojnë pikë. "
+    "Kjo vlerë nuk tregon probabilitetin e shkeljes.",
     "context_score": "Sa ndryshon tenderi nga tenderë të ngjashëm të të njëjtit autoritet, "
-    "në të njëjtën kategori dhe procedurë. Ndryshimi statistikor kërkon shpjegim në kontekst.",
-    "supplier_hhi": "Tregues i përqendrimit të vlerës së vendimeve te furnizuesit, nga "
+    "në të njëjtën kategori dhe me të njëjtën procedurë. Dallimi statistikor duhet interpretuar "
+    "duke marrë parasysh rrethanat e tenderit.",
+    "supplier_hhi": "Tregues i përqendrimit të vlerës sipas vendimeve ndërmjet furnizuesve, nga "
     "afër 0 deri në 10 000. Vlera më të larta tregojnë përqendrim te më pak furnizues. "
-    "Varet nga identifikimi i furnizuesve dhe nuk është matje e konkurrencës së një tregu.",
+    "Varet nga identifikimi i furnizuesve dhe nuk mat drejtpërdrejt konkurrencën në treg.",
     "single_bidder_pct": "Përqindja e tenderëve me vetëm një ofertues, ndër tenderët ku "
     "numri i ofertuesve është publikuar. Tenderët me numër të panjohur nuk përfshihen në llogaritje.",
 }
@@ -58,37 +63,37 @@ FLAG_NARRATIVE = {
     "SINGLE_BIDDER": (
         "Vetëm një ofertues",
         "Është regjistruar vetëm një ofertues. Kuptimi varet nga procedura, vlera dhe tregu; "
-        "ky sinjal merr peshë më të ulët se një ofertues i vetëm në procedurë të hapur.",
+        "në llogaritjen e pikëve, ky sinjal ka peshë më të vogël se sinjali për një ofertues të vetëm në procedurë të hapur.",
         1,
     ),
     "ZERO_BIDDER": (
         "Asnjë ofertues i regjistruar",
-        "Burimi shënon zero ofertues dhe nuk përmban vendim dhënieje. Kontrolloni nëse "
+        "Burimi shënon zero ofertues dhe nuk përmban vendim për dhënien e kontratës. Kontrolloni nëse "
         "procedura është anuluar, është ende në zhvillim ose të dhënat janë të paplota.",
         1,
     ),
     "RATIO_ABOVE_ESTIMATE": (
-        "Vlera e vendimeve tejkalon parashikimin",
+        "Vlera sipas vendimeve tejkalon parashikimin",
         "Shuma e regjistruar është nga 105% deri në 400% e vlerës së parashikuar. "
         "Verifikoni nëse lotet dhe vendimet janë të krahasueshme para se ta interpretoni ndryshimin.",
         1,
     ),
     "IMPLAUSIBLE_ESTIMATE": (
         "Dallim shumë i madh ndërmjet vlerave",
-        "Vlera në vendimet e dhënies është mbi katërfishin e vlerës së parashikuar. "
+        "Vlera sipas vendimeve është më shumë se katërfishi i vlerës së parashikuar. "
         "Mund të ketë gabim në njësinë, shumën ose fushën e publikuar. Krahasimi i këtyre "
         "vlerave kërkon verifikim në dokumentet burimore.",
         1,
     ),
     "RATIO_BELOW_50": (
-        "Vlera e vendimeve është nën gjysmën e parashikimit",
-        "Vlera e regjistruar është të paktën 1%, por më pak se 50% e parashikimit. "
+        "Vlera sipas vendimeve është nën gjysmën e parashikimit",
+        "Vlera e regjistruar është të paktën 1%, por më pak se 50% e vlerës së parashikuar. "
         "Mund të mbulojë vetëm disa lote ose vendime të pjesshme. Nuk mjafton për të matur kursimin.",
         1,
     ),
     "NEGATIVE_DAYS_TO_AWARD": (
         "Vendimi daton para afatit për oferta",
-        "Data e vendimit të dhënies është para afatit për dorëzimin e ofertave. "
+        "Data e vendimit për dhënien e kontratës është para afatit për dorëzimin e ofertave. "
         "Verifikoni kuptimin dhe saktësinë e të dy datave në dokumentet burimore.",
         1,
     ),
@@ -113,13 +118,13 @@ FLAG_NARRATIVE = {
     ),
     "HIGH_VALUE_SINGLE": (
         "Vlerë e lartë dhe vetëm një ofertues",
-        "Tenderi është ndër 1% me vlerën më të lartë në kategorinë e vet dhe ka vetëm "
+        "Tenderi bën pjesë në 1% të tenderëve me vlerën më të lartë në kategorinë e vet dhe ka vetëm "
         "një ofertues. Ky kombinim merr përparësi për shqyrtim; nuk provon shkelje.",
         2,
     ),
     "END_BEFORE_START_OPEN": (
         "Afati për oferta është para datës së fillimit",
-        "Në procedurën e hapur, data e përfundimit del para datës së fillimit. "
+        "Në procedurën e hapur, data e regjistruar e përfundimit është më e hershme se data e fillimit. "
         "Kjo mospërputhje kërkon kontroll të datave në burim.",
         1,
     ),
@@ -131,14 +136,15 @@ FLAG_NARRATIVE = {
     ),
     "WINNER_TAKES_ALL_LARGE": (
         "Së paku 95% e vlerës lidhet me një furnizues",
-        "Tenderi ka vlerë të parashikuar së paku 100 000 €, disa lote dhe vendime dhënieje; së paku 95% e vlerës "
-        "lidhet me një identitet furnizuesi. Lidhja ndërmjet loteve dhe vendimeve mbështetet "
+        "Tenderi ka vlerë të parashikuar të paktën 100 000 €, disa lote dhe vendime për dhënien e kontratës. "
+        "Të paktën 95% e vlerës lidhet me të njëjtin furnizues, sipas identifikimit në burim. "
+        "Lidhja ndërmjet loteve dhe vendimeve mbështetet "
         "vetëm në tituj; verifikoni dokumentet para interpretimit.",
         2,
     ),
     "UNAWARDED_HIGH_VALUE": (
         "Tender me vlerë të lartë, pa vendim të regjistruar",
-        "Tenderi është ndër 5% me vlerën më të lartë në kategorinë e vet dhe nuk ka vendim dhënieje në të dhënat "
+        "Tenderi bën pjesë në 5% të tenderëve me vlerën më të lartë në kategorinë e vet dhe nuk ka vendim për dhënien e kontratës në të dhënat "
         "e analizuara. Mund të jetë anuluar, në zhvillim ose me vendim të papublikuar.",
         1,
     ),
@@ -173,7 +179,7 @@ def contract_severity(row_or_score: Any) -> dict[str, Any]:
     result["label"] = (
         labels.get(result["label"], result["label"])
         .replace("rishikim", "shqyrtim")
-        .replace("në snapshot", "në grupin e të dhënave")
+        .replace("në snapshot", "në bashkësinë e të dhënave")
     )
     return result
 
@@ -192,9 +198,9 @@ def plain_summary(row: dict[str, Any]) -> str:
         awarded = pd.notna(count) and float(count) >= 1
     award_value = row.get("total_awarded_eur")
     if awarded and pd.notna(award_value):
-        parts.append(f"Vlera në vendimet e dhënies është **{fmt_eur(award_value)}**.")
+        parts.append(f"Vlera sipas vendimeve është **{fmt_eur(award_value)}**.")
     elif not awarded:
-        parts.append("Nuk ka vendim dhënieje të regjistruar në të dhënat e analizuara.")
+        parts.append("Nuk ka vendim për dhënien e kontratës në të dhënat e analizuara.")
     bidders = row.get("num_bidders")
     if pd.isna(bidders):
         parts.append("Numri i ofertuesve nuk është publikuar.")
@@ -210,6 +216,7 @@ def plain_summary(row: dict[str, Any]) -> str:
 DATA_LIMITATION_BIDS = (
     "Burimi nuk jep çmimin e secilës ofertë. Prandaj nuk mund të krahasojmë çmimin e "
     "fituesit me ofertat e tjera. Krahasimi me vlerën e parashikuar mund të përfshijë lote "
-    "ose vendime të pjesshme dhe nuk mat mbiçmim, kursim ose pagesë. Vendimi i dhënies "
-    "nuk dëshmon se kontrata është nënshkruar, ekzekutuar ose paguar."
+    "ose vendime të pjesshme dhe nuk mat mbiçmimin, kursimin apo pagesat. "
+    "Vendimi për dhënien e kontratës nuk dëshmon se ajo është nënshkruar apo zbatuar, "
+    "ose se janë kryer pagesa."
 )
