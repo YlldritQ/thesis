@@ -390,7 +390,7 @@ if ocid and (gold["ocid"] == ocid).any():
             f"{fmt_number(centered_total, 6)}; pikët e kombinuara të publikuara = "
             f"{fmt_number(r['ensemble_score'], 6)}. "
             "Ky zbërthim matematikor riprodhon saktësisht pikët e publikuara. Ai tregon cilët "
-            "përbërës e rritën ose e ulën vlerësimin, por nuk shpjegon shkaqet dhe nuk jep probabilitet apo provë të një shkeljeje."
+            "përbërës i rritën ose i ulën pikët kundrejt vlerës bazë, por nuk shpjegon shkaqet dhe nuk jep probabilitet apo provë të një shkeljeje."
         )
         explanation_table = fmt_columns(
             component_explanation[

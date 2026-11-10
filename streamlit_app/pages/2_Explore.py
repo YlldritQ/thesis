@@ -94,7 +94,9 @@ if result.empty:
         "Nuk u gjet asnjë tender. Provoni një term tjetër kërkimi ose hiqni disa nga filtrat në menynë anësore."
     )
 else:
-    technical_columns = st.checkbox("Shfaq identifikuesit dhe hollësitë e pikëzimit", value=False)
+    technical_columns = st.checkbox(
+        "Shfaq identifikuesit, numrin e vendimeve dhe pikët", value=False
+    )
     display_cols = [
         "title",
         "procuring_entity_name",
@@ -282,7 +284,7 @@ if ocid:
                 "Furnizuesi është operatori ekonomik ose grupi i operatorëve i regjistruar në burim. Vendimi për dhënien e kontratës nuk dëshmon se ajo është nënshkruar apo zbatuar, ose se janë kryer pagesa."
             )
 
-        with st.expander("Krahasimi i vlerave dhe pikëzimi"):
+        with st.expander("Vlerësimi i tenderit dhe krahasimi i vlerave"):
             st.write(f"Diferenca ndërmjet datave të regjistruara: {fmt_number(days)} ditë.")
             ratio = r["awarded_value_ratio"]
             st.metric(

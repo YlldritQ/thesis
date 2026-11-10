@@ -114,7 +114,7 @@ Burimi OCDS → bronze → silver → gold / veçoritë e tenderëve
                                             ↓
                                     krahasimi i modeleve
                                             ↓
-                                   pikëzimi dhe shpjegimet
+                          vlerësimi i tenderëve dhe shpjegimi i pikëve
                                             ↓
                                       paneli Streamlit
 ```

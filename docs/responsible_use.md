@@ -83,12 +83,12 @@ procedurës, statusit të dhënies, vitit dhe brezit të vlerës — jo si një
 përqindje e vetme kombëtare dhe as si e barasvlershme me një tregues
 referues të BE-së.
 
-Pikët e kombinuara, percentilet e modeleve dhe filtri i pajtimit të modeleve
-janë relative ndaj grupit të ruajtur të të dhënave. Nëse ndryshon grupi me të
-cilin krahasohet, mund të ndryshojë edhe renditja e të njëjtit tender. Nuk ka
-statistika referuese të ngrira dhe me version për pikëzimin e vazhdueshëm të
-tenderëve të rinj; çdo ekzekutim i plotë krijon renditje të reja brenda grupit
-të vet të analizuar.
+Pikët e kombinuara, percentilet e modeleve dhe filtri sipas përputhjes së
+rezultateve të modeleve varen nga bashkësia e të dhënave që analizohet. Nëse
+ndryshon bashkësia e të dhënave, mund të ndryshojë edhe renditja e të njëjtit
+tender. Projekti nuk ruan statistika referuese fikse, me version të përcaktuar,
+për vlerësimin e vazhdueshëm të tenderëve të rinj. Çdo ekzekutim i plotë i
+analizës prodhon një renditje të re brenda bashkësisë përkatëse të të dhënave.
 
 Identiteti i furnizuesve paraqitet në tri mënyra, për të kontrolluar
 ndjeshmërinë e rezultateve: ID-ja e biznesit me emrin; ID-ja e biznesit me

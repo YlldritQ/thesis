@@ -143,7 +143,7 @@ RULE_TABLE_COLUMNS = {
     "description": "Përshkrimi",
     "weight": "Pesha",
     "reference": "Referenca",
-    "score_enabled": "Ndikon në pikëzim",
+    "score_enabled": "Ndikon në pikët sipas rregullave",
     "signal_type": "Lloji",
     "threshold_rationale": "Arsyetimi i pragut",
     "limitations": "Kufizimet",
