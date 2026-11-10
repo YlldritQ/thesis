@@ -25,7 +25,7 @@ releases remain 1.3.0 and still validate.
   një test mbulon kalimin ndërmjet faqeve.
 - U shtuan katër pamje të panelit në shqip, përshkrimet për prezantim dhe
   dy pamje në README.
-- U përshtatën udhëzimet për depon publike dhe nisjen e panelit pa pyetjen
+- U përshtatën udhëzimet për repon publike dhe nisjen e panelit pa pyetjen
   fillestare të Streamlit për emailin.
 
 ### Final review — 22 October 2026

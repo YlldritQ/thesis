@@ -2,7 +2,7 @@
 
 Pamjet janë marrë drejtpërdrejt nga paneli më **5 nëntor 2026**, pas rishikimit
 gjuhësor, me ndërfaqen në shqip dhe pa filtra të përzgjedhur. Ato përdorin kopjen statike të përfshirë
-në depo: 75 710 procedura prokurimi, me data publikimi nga marsi 2016 deri në
+në repo: 75 710 procedura prokurimi, me data publikimi nga marsi 2016 deri në
 mars 2026. Nuk paraqesin të dhëna të përditësuara në kohë reale.
 
 Këto katër pamje paraqesin projektin në përgjithësi. Për prezantimin e një

@@ -6,7 +6,7 @@ më të hollësishëm. Projekti lidh një proces të riprodhueshëm të përpuni
 dhënave me rregulla të shpjegueshme, krahasim modelesh dhe grafikë ndërveprues.
 
 Paneli përdor një **kopje statike të të dhënave**, me rezultatet dhe modelet e
-përfshira në këtë depo. Mund ta hapni pa shkarkuar të dhëna të reja dhe pa
+përfshira në këtë repo. Mund ta hapni pa shkarkuar të dhëna të reja dhe pa
 i ritrajnuar modelet.
 
 **Pikët e anomalive ndihmojnë në përzgjedhjen e rasteve për shqyrtim; ato nuk
@@ -62,7 +62,7 @@ dhe [metodologjia](docs/methodology.md).
 ## Hapja e panelit
 
 Nevojiten Git dhe [uv](https://docs.astral.sh/uv/getting-started/installation/).
-Depoja është publike dhe mund të klonohet pa llogari në GitHub. Komandat më
+Repoja është publike dhe mund të klonohet pa llogari në GitHub. Komandat më
 poshtë përdorin Python 3.11; `uv` e siguron nëse mungon. Paketa mbështet Python 3.9–3.12.
 
 ```bash
